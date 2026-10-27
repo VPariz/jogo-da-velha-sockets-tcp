@@ -1,0 +1,64 @@
+================================================================================
+INSTITUTO MILITAR DE ENGENHARIA - IME
+DISCIPLINA: REDES DE COMPUTADORES I (2026.2)
+PROFESSOR: CEL. PAULO CESAR SALGADO VIDAL
+TRABALHO DE SOCKETS TCP: JOGO DA VELHA CLIENTE-SERVIDOR (VALOR: 3,0 VE)
+================================================================================
+
+EQUIPE DE DESENVOLVIMENTO:
+- Pedro Augusto (Peu)
+- Joao Victor Pariz
+- Mateus Roma
+
+CONTEUDO DESTE PACOTE:
+1. servidor_velha.c        - Codigo-fonte do Servidor (TCP / Winsock2)
+2. cliente_velha.c         - Codigo-fonte do Cliente (TCP / Winsock2)
+3. servidor_velha.exe      - Executavel compilado do Servidor
+4. cliente_velha.exe       - Executavel compilado do Cliente
+5. compilar.bat            - Script de compilacao automatica via MinGW GCC
+6. RELATORIO_JOGO_DA_VELHA.pdf - Relatorio tecnico oficial completo em PDF
+7. RELATORIO.md            - Documento em Markdown com detalhes de projeto
+
+--------------------------------------------------------------------------------
+INSTRUCOES DE COMPILACAO:
+--------------------------------------------------------------------------------
+No Windows com MinGW instalado, execute compilar.bat ou rode no terminal:
+   gcc -Wall -Wextra servidor_velha.c -o servidor_velha.exe -lws2_32
+   gcc -Wall -Wextra cliente_velha.c -o cliente_velha.exe -lws2_32
+
+--------------------------------------------------------------------------------
+INSTRUCOES DE EXECUCAO:
+--------------------------------------------------------------------------------
+CENARIO 1: REDE LOCAL DO LABORATORIO (DOIS COMPUTADORES DISTINTOS)
+1. No Computador do Servidor:
+   Execute: .\servidor_velha.exe
+   O programa exibira na tela os enderecos IPs locais da maquina (ex: 172.16.1.160).
+
+2. No Computador do Cliente:
+   Execute: .\cliente_velha.exe <IP_DO_SERVIDOR>
+   (Exemplo: .\cliente_velha.exe 172.16.1.160)
+   Ou apenas execute .\cliente_velha.exe e digite o IP quando solicitado.
+
+CENARIO 2: TESTE LOCAL NO MESMO COMPUTADOR (LOOPBACK)
+1. Abra um terminal e execute:
+   .\servidor_velha.exe
+
+2. Abra um segundo terminal e execute:
+   .\cliente_velha.exe
+   Pressione <Enter> para aceitar o IP padrao (127.0.0.1).
+
+--------------------------------------------------------------------------------
+DINAMICA DO JOGO:
+--------------------------------------------------------------------------------
+- As casas sao numeradas de 1 a 9 no teclado numerico:
+   1 | 2 | 3
+  ---+---+---
+   4 | 5 | 6
+  ---+---+---
+   7 | 8 | 9
+- O Servidor sorteia quem comeca a jogar e sincroniza via mensagem START.
+- O Servidor joga com 'O' e o Cliente joga com 'X'.
+- A cada rodada os movimentos sao enviados via pacote MOVE:<N>.
+- O termino (vitoria de X, vitoria de O ou empate/velha) e avaliado
+  automaticamente por ambos os programas.
+================================================================================

@@ -1,0 +1,193 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\geometry{top=2cm, bottom=2cm, left=2.2cm, right=2.2cm}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{float}
+
+% Cores do documento
+\definecolor{mainblue}{rgb}{0.08, 0.28, 0.52}
+\definecolor{codegreen}{rgb}{0.13, 0.55, 0.13}
+\definecolor{codegray}{rgb}{0.5, 0.5, 0.5}
+\definecolor{codepurple}{rgb}{0.58, 0, 0.82}
+\definecolor{termbg}{rgb}{0.10, 0.10, 0.10}
+\definecolor{termfg}{rgb}{0.92, 0.92, 0.92}
+
+\lstdefinestyle{terminal}{
+    backgroundcolor=\color{termbg},
+    basicstyle=\scriptsize\ttfamily\color{termfg},
+    breaklines=true,
+    numbers=none,
+    frame=single,
+    rulecolor=\color{gray},
+    showspaces=false,
+    showstringspaces=false,
+    extendedchars=true,
+    literate={á}{{\'a}}1 {à}{{\`a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {ê}{{\^e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {õ}{{\~o}}1 {ú}{{\'u}}1 {ç}{{\c{c}}}1 {Á}{{\'A}}1 {À}{{\`A}}1 {Ã}{{\~A}}1 {É}{{\'E}}1 {Ê}{{\^E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Õ}{{\~O}}1 {Ú}{{\'U}}1 {Ç}{{\c{C}}}1,
+    captionpos=b
+}
+
+\lstdefinestyle{customc}{
+    backgroundcolor=\color{white},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{mainblue}\bfseries,
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize\ttfamily,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    frame=single,
+    rulecolor=\color{lightgray}
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=mainblue,
+    filecolor=mainblue,
+    urlcolor=mainblue,
+    citecolor=mainblue
+}
+
+\title{
+    \vspace{-1.5cm}
+    \textbf{\Large INSTITUTO MILITAR DE ENGENHARIA --- IME}\\[0.2cm]
+    \textbf{\large SEÇÃO DE ENGENHARIA ELÉTRICA E ELETRÔNICA}\\[0.1cm]
+    \textbf{\normalsize CURSO DE ENGENHARIA ELETRÔNICA --- REDES DE COMPUTADORES I}\\[0.8cm]
+    \rule{\linewidth}{1.2pt}\\[0.4cm]
+    \textbf{\LARGE RELATÓRIO TÉCNICO DE IMPLEMENTAÇÃO}\\[0.2cm]
+    \textbf{\Large APLICAÇÃO DISTRIBUÍDA: JOGO DA VELHA VIA SOCKETS TCP (C / WINSOCK)}\\[0.3cm]
+    \rule{\linewidth}{1.2pt}
+}
+
+\author{
+    \textbf{Equipe de Desenvolvimento:}\\[0.2cm]
+    \begin{tabular}{ll}
+        \textbf{Integrante 1:} & Pedro Augusto (Peu) \\
+        \textbf{Integrante 2:} & João Victor Pariz \\
+        \textbf{Integrante 3:} & Mateus Roma \\
+    \end{tabular}\\[0.4cm]
+    \textbf{Docente Responsável:} Cel. Paulo César Salgado Vidal
+}
+
+\date{27 de Outubro de 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Este documento apresenta a especificação, arquitetura, modelagem do protocolo e resultados de validação da aplicação em rede para o \textbf{Jogo da Velha (Tic-Tac-Toe)} desenvolvida em conformidade com as diretrizes da disciplina Redes de Computadores I. A solução foi projetada no paradigma Cliente-Servidor utilizando a linguagem C e a biblioteca nativa Winsock2 no sistema operacional Windows. Implementou-se um protocolo de camada de aplicação síncrono sobre o protocolo de transporte orientado à conexão TCP, assegurando integridade e ordenação das jogadas, sorteio aleatório do primeiro jogador pelo nó servidor, validação distribuída do tabuleiro e rotinas robustas de tratamento de exceções de rede e sanitização de entrada do usuário.
+\end{abstract}
+
+\vspace{0.3cm}
+
+\section{Introdução e Objetivos}
+
+A programação com sockets constitui a interface de programação de aplicações (API) fundamental que viabiliza a comunicação entre processos executando em sistemas finais distintos em uma rede baseada na pilha TCP/IP.
+
+O objetivo deste projeto consiste em conceber e implementar uma aplicação interativa para dois jogadores em computadores separados, concretizando as seguintes etapas:
+\begin{enumerate}
+    \item Estabelecimento de conexão confiável entre os hosts utilizando a primitiva orientada a fluxo de bytes (TCP).
+    \item Definição de um protocolo textual de camada de aplicação para coordenação da partida.
+    \item Sorteio e sincronização da ordem inicial de jogada (\textit{coin toss}).
+    \item Garantia de sincronia estrita de estados do tabuleiro $3 \times 3$ entre Cliente e Servidor.
+    \item Validação de regras (vitória, empate e detecção de células ocupadas) de forma autônoma e convergente em ambos os nós.
+\end{enumerate}
+
+\section{Arquitetura e Protocolo da Camada de Aplicação}
+
+\subsection{Escolha do Protocolo de Transporte (TCP)}
+O jogo exige entrega estritamente ordenada e garantida dos comandos de movimento. Uma perda de pacote na transmissão de uma jogada ou uma inversão de pacotes corromperia irreparavelmente a sequência de turnos. Por essa razão, optou-se pela utilização do protocolo TCP (\textit{Transmission Control Protocol}), porta padrão $6000$, usufruindo de controle de fluxo, confirmação de entrega e recuperação contra perdas.
+
+\subsection{Diagrama de Estados e Troca de Mensagens}
+A comunicação é estruturada através das mensagens textuais delimitadas por quebra de linha (\texttt{\textbackslash n}):
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{lcp{8.5cm}}
+\toprule
+\textbf{Mensagem} & \textbf{Sentido} & \textbf{Significado e Ação} \\
+\midrule
+\texttt{START:SERVER\textbackslash n} & Servidor $\to$ Cliente & Notifica que o Servidor iniciará a rodada como jogador ativo. \\
+\texttt{START:CLIENT\textbackslash n} & Servidor $\to$ Cliente & Notifica que o Cliente iniciará a rodada como jogador ativo. \\
+\texttt{MOVE:<N>\textbackslash n}       & Bidirecional            & Transmite a coordenada da célula escolhida ($N \in \{1, \dots, 9\}$). \\
+\bottomrule
+\end{tabularx}
+\caption{Protocolo da Camada de Aplicação do Jogo da Velha.}
+\label{tab:protocolo}
+\end{table}
+
+\subsection{Mapeamento Numérico do Tabuleiro}
+O tabuleiro é apresentado aos usuários em uma matriz $3 \times 3$, indexada de 1 a 9 para facilitar a digitação imediata no teclado numérico:
+\begin{center}
+\begin{verbatim}
+ 1 | 2 | 3 
+---+---+---
+ 4 | 5 | 6 
+---+---+---
+ 7 | 8 | 9 
+\end{verbatim}
+\end{center}
+O Servidor assume por padrão a representação com a peça \textbf{'O'}, enquanto o Cliente opera com a peça \textbf{'X'}.
+
+\section{Decisões de Engenharia e Robustez}
+
+\subsection{Detecção Automática de IPs da Máquina Servidora}
+Para eliminar o atrito durante a apresentação em bancada no laboratório do IME, o código do servidor executa chamadas nativas às APIs \texttt{gethostname()} e \texttt{gethostbyname()}. Antes de entrar no estado de escuta (\texttt{listen}), o programa imprime na tela todos os endereços IPv4 locais associados às interfaces de rede ativas. Com isso, o integrante responsável pelo Cliente sabe imediatamente qual IP digitar, sem necessidade de abrir outro terminal para rodar \texttt{ipconfig}.
+
+\subsection{Sorteio Pseudoaleatório com Semente Dinâmica}
+A determinação de quem joga primeiro é realizada exclusivamente pelo Servidor por meio da função \texttt{rand()} alimentada pelo relógio do sistema via \texttt{srand((unsigned)time(NULL))}. Imediatamente após a chamada de \texttt{accept()}, o Servidor sorteia o valor ($0$ para Servidor, $1$ para Cliente) e transmite a mensagem de controle correspondente. O Cliente aguarda no bloqueio inicial de \texttt{recv()} até receber essa diretriz, impedindo qualquer condição de corrida (\textit{race condition}).
+
+\subsection{Sanitização de Buffer e Validação de Entradas}
+Para prevenir comportamentos anômalos causados por entradas inadequadas do usuário (ex.: digitação de letras, espaços em branco ou múltiplos dígitos), a leitura do terminal é feita com captura de caractere e limpeza completa do buffer \texttt{stdin}. Uma jogada só é processada se pertencer ao intervalo $[1, 9]$ e se a posição correspondente contiver o espaço vazio \texttt{' '}.
+
+\subsection{Tratamento de Desconexão Graciosa}
+Caso um dos nós seja encerrado abruptamente durante a partida, o nó remanescente detecta o retorno de erro ou código zero na primitiva \texttt{recv()}, emitindo aviso amigável de perda de conexão e finalizando os recursos com \texttt{closesocket()} e \texttt{WSACleanup()}, prevenindo vazamentos de recursos no sistema operacional.
+
+\section{Guia de Compilação e Operação}
+
+\subsection{Compilação com MinGW GCC (Windows)}
+Ambos os módulos compilam diretamente com o compilador GCC padrão do MinGW, vinculando a biblioteca Winsock (\texttt{-lws2\_32}):
+\begin{lstlisting}[style=terminal]
+gcc -Wall -Wextra servidor_velha.c -o servidor_velha.exe -lws2_32
+gcc -Wall -Wextra cliente_velha.c -o cliente_velha.exe -lws2_32
+\end{lstlisting}
+
+\subsection{Roteiro de Demonstração em Laboratório}
+\begin{enumerate}
+    \item \textbf{Inicialização do Servidor (Máquina 1):}
+    \begin{lstlisting}[style=terminal]
+.\servidor_velha.exe
+    \end{lstlisting}
+    O servidor apresentará na tela o nome do host e o IP da rede local (exemplo: \texttt{172.16.1.160}).
+    
+    \item \textbf{Inicialização do Cliente (Máquina 2):}
+    \begin{lstlisting}[style=terminal]
+.\cliente_velha.exe 172.16.1.160
+    \end{lstlisting}
+    Caso o IP não seja passado por argumento, o programa solicita interativamente a digitação do IP, admitindo \texttt{127.0.0.1} como padrão ao teclar \texttt{<Enter>}.
+    
+    \item \textbf{Execução da Partida:}
+    Ambos os consoles exibem o tabuleiro em tempo real, informando de quem é a vez. Ao final (vitória de um dos jogadores ou empate), os resultados são exibidos simultaneamente e a sessão é encerrada de forma limpa.
+\end{enumerate}
+
+\section{Conclusão}
+A aplicação foi validada em ambiente local e em rede cabeada/Wi-Fi, cumprindo integralmente todos os requisitos estabelecidos para a atividade prática de Sockets da disciplina. A robustez do protocolo, a clareza da interface de texto e a independência de recompilação para mudança de parâmetros de rede asseguram uma apresentação confiável e ágil em sala de aula.
+
+\end{document}
