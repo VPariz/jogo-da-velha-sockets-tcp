@@ -1,0 +1,26 @@
+# Binaries and compiled executables
+*.exe
+*.o
+*.obj
+*.dll
+*.so
+*.dylib
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Archive backups
+*.zip
+*.tar.gz
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
