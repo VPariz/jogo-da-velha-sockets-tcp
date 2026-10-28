@@ -1,13 +1,14 @@
-# Client-Server Tic-Tac-Toe in C over TCP Sockets (Winsock2)
+# Client-Server Tic-Tac-Toe in C over TCP Sockets (POSIX & Winsock2)
 
+[![Build & CI](https://github.com/VPariz/jogo-da-velha-sockets-tcp/actions/workflows/ci.yml/badge.svg)](https://github.com/VPariz/jogo-da-velha-sockets-tcp/actions/workflows/ci.yml)
 [![Language](https://img.shields.io/badge/Language-C-00599C?style=flat-square&logo=c&logoColor=white)](https://en.wikipedia.org/wiki/C_(programming_language))
-[![Sockets](https://img.shields.io/badge/Networking-Winsock2_TCP-2D3748?style=flat-square)](https://learn.microsoft.com/en-us/windows/win32/winsock/windows-sockets-start-page-2)
-[![Platform](https://img.shields.io/badge/Platform-Windows_%7C_MinGW-0078D6?style=flat-square&logo=windows&logoColor=white)](https://www.mingw-w64.org/)
+[![Sockets](https://img.shields.io/badge/Networking-POSIX_%7C_Winsock2_TCP-2D3748?style=flat-square)](https://en.wikipedia.org/wiki/Berkeley_sockets)
+[![Platform](https://img.shields.io/badge/Platform-Linux_%7C_Windows-informational?style=flat-square&logo=linux&logoColor=white)](https://kernel.org/)
 [![Institution](https://img.shields.io/badge/IME-Computer_Networks_I-104911?style=flat-square)](https://ime.eb.mil.br/)
-[![Presentation](https://img.shields.io/badge/Slide_Deck-HTML5_Presentation-E34F26?style=flat-square&logo=html5&logoColor=white)](index.html)
+[![Slide Deck](https://img.shields.io/badge/Slide_Deck-HTML5_Presentation-E34F26?style=flat-square&logo=html5&logoColor=white)](index.html)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-A network application for a two-player **Tic-Tac-Toe (Jogo da Velha)** game written in C using low-level **TCP Sockets (Winsock2 API)**. Developed as a major evaluation project for the **Computer Networks I** course at the **Military Institute of Engineering (IME)**.
+A cross-platform network application for two-player **Tic-Tac-Toe (Jogo da Velha)** written in C using low-level **TCP Sockets (POSIX & Winsock2)** with dual-stack compatibility, custom application-layer protocol, pseudo-random turn synchronization, and independent matrix verification. Developed for the **Computer Networks I** course at the **Military Institute of Engineering (IME)**.
 
 ---
 
