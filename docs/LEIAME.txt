@@ -2,13 +2,11 @@
 INSTITUTO MILITAR DE ENGENHARIA - IME
 DISCIPLINA: REDES DE COMPUTADORES I (2026.2)
 PROFESSOR: CEL. PAULO CESAR SALGADO VIDAL
-TRABALHO DE SOCKETS TCP: JOGO DA VELHA CLIENTE-SERVIDOR
+TRABALHO DE SOCKETS TCP: JOGO DA VELHA CLIENTE-SERVIDOR (VALOR: 3,0 VE)
 ================================================================================
 
-EQUIPE DE DESENVOLVIMENTO:
-- Pedro Augusto (Peu)
+AUTOR:
 - Joao Victor Pariz
-- Mateus Roma
 
 CONTEUDO DESTE PACOTE:
 1. servidor_velha.c        - Codigo-fonte do Servidor (TCP / Winsock2)

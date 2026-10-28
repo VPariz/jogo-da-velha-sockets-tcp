@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apresentação: Jogo da Velha TCP em C | IME</title>
+  <title>Jogo da Velha TCP em C | Apresentação</title>
   <style>
     :root {
       --bg: #0b1120;
@@ -24,11 +24,16 @@
       padding: 0;
     }
 
+    html, body {
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden; /* Apresentação em tela fixa: sem rolagem */
+    }
+
     body {
       background-color: var(--bg);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       user-select: none;
@@ -39,7 +44,7 @@
       position: fixed;
       top: 0;
       left: 0;
-      height: 4px;
+      height: 3px;
       width: 0%;
       background: var(--accent);
       z-index: 100;
@@ -48,16 +53,19 @@
 
     /* Header */
     header {
-      padding: 12px 28px;
+      height: 46px;
+      flex-shrink: 0;
+      padding: 0 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--border);
       background: rgba(11, 17, 32, 0.95);
+      z-index: 10;
     }
     .brand {
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       color: var(--accent);
       display: flex;
       align-items: center;
@@ -66,17 +74,22 @@
     .badge {
       background: rgba(56, 189, 248, 0.12);
       border: 1px solid rgba(56, 189, 248, 0.3);
-      padding: 3px 8px;
+      padding: 2px 7px;
       border-radius: 4px;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+    }
+    .team {
+      font-size: 0.82rem;
+      color: var(--text-muted);
     }
     .nav-btn {
       background: var(--card-bg);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 6px 14px;
+      padding: 4px 12px;
       border-radius: 6px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       cursor: pointer;
       transition: all 0.2s;
     }
@@ -88,86 +101,97 @@
     /* Deck & Slides */
     #deck {
       flex: 1;
+      min-height: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px 20px 75px 20px;
-      max-width: 1220px;
+      padding: 10px 20px;
+      max-width: 1200px;
       margin: 0 auto;
       width: 100%;
+      overflow: hidden;
     }
 
     .slide {
       display: none;
       width: 100%;
+      max-height: 100%;
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 32px 40px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-      animation: fadeIn 0.22s ease-out;
+      padding: 18px 24px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+      animation: fadeIn 0.18s ease-out;
+      overflow-y: auto;
     }
     .slide.active {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .slide::-webkit-scrollbar {
+      width: 5px;
+    }
+    .slide::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
+      from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     /* Typography */
     .slide-subtitle {
       color: var(--accent);
-      font-size: 0.82rem;
+      font-size: 0.76rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      margin-bottom: 6px;
-    }
-    h1 {
-      font-size: 2.2rem;
-      font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 14px;
-      color: #ffffff;
+      margin-bottom: 3px;
     }
     h2 {
-      font-size: 1.6rem;
+      font-size: 1.38rem;
       font-weight: 700;
-      margin-bottom: 14px;
+      margin-bottom: 4px;
       color: #ffffff;
     }
     h3 {
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       font-weight: 600;
       color: var(--accent);
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
     p {
       color: var(--text-muted);
-      font-size: 1rem;
-      line-height: 1.6;
-      margin-bottom: 16px;
+      font-size: 0.89rem;
+      line-height: 1.45;
+      margin-bottom: 10px;
     }
 
     /* Grids & Cards */
     .grid-2 {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 22px;
-      align-items: start;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 14px;
+      align-items: stretch;
     }
-    .grid-3 {
+    .grid-2-even {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      align-items: stretch;
     }
     .card {
       background: rgba(7, 13, 26, 0.6);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 18px 20px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     /* Code Snippets */
@@ -175,13 +199,13 @@
       background: var(--code-bg);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 14px 16px;
+      padding: 10px 12px;
       overflow-x: auto;
       font-family: var(--font-mono);
-      font-size: 0.83rem;
-      line-height: 1.5;
+      font-size: 0.77rem;
+      line-height: 1.34;
       color: #e2e8f0;
-      margin-bottom: 10px;
+      margin-bottom: 0;
     }
     .kw { color: #f472b6; font-weight: 600; }
     .fn { color: #60a5fa; font-weight: 600; }
@@ -191,19 +215,22 @@
     .hl {
       background: rgba(56, 189, 248, 0.15);
       border-left: 3px solid var(--accent);
-      padding-left: 6px;
+      padding-left: 5px;
       display: block;
-      margin: 2px 0;
+      margin: 1px 0;
     }
 
     ul, ol {
       color: var(--text-muted);
-      font-size: 0.92rem;
-      line-height: 1.7;
-      margin-left: 20px;
+      font-size: 0.86rem;
+      line-height: 1.5;
+      margin-left: 18px;
     }
     li strong {
       color: var(--text);
+    }
+    li + li {
+      margin-top: 4px;
     }
 
     /* Diagram Canvas */
@@ -211,43 +238,51 @@
       background: rgba(7, 13, 26, 0.7);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 16px;
+      padding: 6px 10px;
       display: flex;
       justify-content: center;
+      align-items: center;
     }
     svg.seq-diagram {
       width: 100%;
-      max-width: 960px;
+      max-width: 900px;
+      max-height: min(52vh, 350px);
       height: auto;
     }
 
     /* Bottom Footer Bar */
     footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      padding: 10px 28px;
+      height: 42px;
+      flex-shrink: 0;
+      padding: 0 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-top: 1px solid var(--border);
       background: rgba(11, 17, 32, 0.95);
+      z-index: 10;
     }
     .counter {
       font-family: var(--font-mono);
-      font-size: 0.88rem;
+      font-size: 0.82rem;
       color: var(--text-muted);
     }
     .controls {
       display: flex;
+      align-items: center;
       gap: 10px;
     }
+    .hint {
+      color: var(--text-muted);
+      font-size: 0.76rem;
+      margin-right: 6px;
+    }
 
-    @media (max-width: 900px) {
-      .grid-2, .grid-3 { grid-template-columns: 1fr; }
-      .slide { padding: 22px; }
-      h1 { font-size: 1.6rem; }
+    @media (max-width: 850px) {
+      .grid-2, .grid-2-even { grid-template-columns: 1fr; }
+      .slide { padding: 14px; }
+      h2 { font-size: 1.2rem; }
+      .hint, .team { display: none; }
     }
   </style>
 </head>
@@ -255,13 +290,14 @@
 
   <div id="progress-bar"></div>
 
-  <!-- Header -->
+  <!-- Header: Identificação limpa sem poluir os slides -->
   <header>
     <div class="brand">
       <span class="badge">IME • REDES I</span>
-      <span>Jogo da Velha Cliente-Servidor (TCP em C)</span>
+      <span>Jogo da Velha TCP (Sockets em C)</span>
     </div>
-    <div>
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <span class="team">Pedro Augusto • João Victor Pariz • Mateus Roma</span>
       <button class="nav-btn" onclick="toggleFullScreen()">Tela Cheia ⛶</button>
     </div>
   </header>
@@ -270,76 +306,38 @@
   <main id="deck">
 
     <!-- ==========================================
-         SLIDE 1: CAPA
+         SLIDE 1: COMO O JOGO FUNCIONA NA REDE
          ========================================== -->
     <section class="slide active">
-      <div class="slide-subtitle">Engenharia Eletrônica • Redes de Computadores I</div>
-      <h1>Jogo da Velha Cliente-Servidor</h1>
-      <p style="font-size: 1.12rem; max-width: 820px; margin-bottom: 26px;">
-        Apresentação prática da implementação do jogo em Linguagem C utilizando Sockets TCP.
-      </p>
-
-      <div class="grid-3">
-        <div class="card">
-          <h3>Equipe</h3>
-          <p style="font-size: 0.92rem; margin-bottom: 0; line-height: 1.8;">
-            • Pedro Augusto (Peu)<br>
-            • João Victor Pariz<br>
-            • Mateus Roma
-          </p>
-        </div>
-        <div class="card">
-          <h3>Disciplina & Docente</h3>
-          <p style="font-size: 0.92rem; margin-bottom: 0; line-height: 1.8;">
-            • Prof. Cel. Vidal<br>
-            • Redes de Computadores I<br>
-            • Instituto Militar de Engenharia
-          </p>
-        </div>
-        <div class="card">
-          <h3>Código-Fonte</h3>
-          <p style="font-size: 0.92rem; margin-bottom: 0; line-height: 1.8;">
-            • <code>servidor_velha.c</code><br>
-            • <code>cliente_velha.c</code><br>
-            • Compilação MinGW GCC (Winsock2)
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SLIDE 2: COMO O JOGO FUNCIONA
-         ========================================== -->
-    <section class="slide">
       <div class="slide-subtitle">Visão Geral</div>
       <h2>Como Funciona o Jogo na Rede</h2>
       <p>
         Dois computadores disputam uma partida conectando-se diretamente via TCP na porta 6000:
       </p>
 
-      <div class="grid-2">
+      <div class="grid-2-even">
         <div class="card">
           <h3>Papel de Cada Programa</h3>
           <ul>
-            <li><strong>Servidor (Peça 'O'):</strong> É aberto primeiro, libera a porta 6000 e fica aguardando o adversário se conectar.</li>
-            <li><strong>Cliente (Peça 'X'):</strong> É aberto em seguida, conecta no IP do servidor e aguarda o início.</li>
-            <li><strong>Sorteio Inicial:</strong> O servidor joga a moeda (<code>rand() % 2</code>) e avisa quem faz a primeira jogada.</li>
+            <li><strong>Servidor (Peça 'O'):</strong> É aberto primeiro, libera a porta 6000 e fica aguardando o oponente conectar.</li>
+            <li><strong>Cliente (Peça 'X'):</strong> Conecta no IP do servidor e aguarda a mensagem com o sorteio inicial.</li>
+            <li><strong>Sorteio Imparcial:</strong> O servidor joga a moeda (<code>rand() % 2</code>) e avisa quem faz a primeira jogada.</li>
           </ul>
         </div>
 
         <div class="card">
-          <h3>Mensagens Trocadas (Protocolo Simples)</h3>
+          <h3>Mensagens Trocadas (Protocolo em Texto)</h3>
           <ul>
-            <li><code>START:SERVER</code> ou <code>START:CLIENT</code>: Enviado uma única vez no início para sincronizar quem começa.</li>
+            <li><code>START:SERVER</code> ou <code>START:CLIENT</code>: Enviado uma única vez no início para sincronizar a vez.</li>
             <li><code>MOVE:<1-9></code>: Enviado a cada jogada com o número da casa escolhida (exemplo: <code>MOVE:5\n</code>).</li>
-            <li><strong>Tabuleiro Local:</strong> Cada computador atualiza sua tela e confere vitória ou empate após cada movimento.</li>
+            <li><strong>Validação Local:</strong> Cada computador atualiza sua tela e confere vitória ou empate após cada movimento.</li>
           </ul>
         </div>
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 3: DIAGRAMA DE CONEXÃO E MENSAGENS
+         SLIDE 2: DIAGRAMA DE CONEXÃO E MENSAGENS
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">Fluxo de Comunicação</div>
@@ -406,7 +404,7 @@
           <line x1="690" y1="285" x2="260" y2="285" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
           <text x="475" y="277" fill="#34d399" font-size="12" font-weight="bold" text-anchor="middle" font-family="monospace">recv() marca 'X'  ◄─────────  send("MOVE:1\n")</text>
 
-          <text x="475" y="318" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="sans-serif">Cada lado confere vitória ou empate a cada jogada</text>
+          <text x="475" y="318" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="sans-serif">Cada nó confere vitória ou empate a cada jogada</text>
 
           <!-- Step 4: Teardown -->
           <rect x="70" y="355" width="180" height="42" rx="4" fill="#070d1a" stroke="#334155"/>
@@ -424,7 +422,7 @@
     </section>
 
     <!-- ==========================================
-         SLIDE 4: CÓDIGO DO SERVIDOR
+         SLIDE 3: CÓDIGO DO SERVIDOR
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">servidor_velha.c</div>
@@ -439,7 +437,7 @@ listen_sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
 <span class="com">// 2. Aguarda o cliente conectar</span>
 client_sd = <span class="fn">accept</span>(listen_sd, (<span class="kw">struct</span> sockaddr *)&cliAddr, &cliLen);
-<span class="hl"><span class="fn">closesocket</span>(listen_sd); <span class="com">// Fecha a escuta: ja temos os 2 jogadores</span></span>
+<span class="hl"><span class="fn">closesocket</span>(listen_sd); <span class="com">// Fecha a escuta: ja temos 2 jogadores</span></span>
 
 <span class="com">// 3. Sorteia quem comeca a jogar</span>
 <span class="fn">srand</span>((<span class="kw">unsigned</span>)<span class="fn">time</span>(NULL));
@@ -455,17 +453,17 @@ client_sd = <span class="fn">accept</span>(listen_sd, (<span class="kw">struct</
         <div class="card">
           <h3>O que essa parte faz</h3>
           <ul>
-            <li><strong>socket, bind, listen:</strong> Inicializa a rede e coloca a porta 6000 pronta para receber uma conexão.</li>
-            <li><strong>accept():</strong> O servidor pausa nessa linha até o cliente conectar. Quando conecta, cria um socket específico para a conversa (<code>client_sd</code>).</li>
-            <li><strong>closesocket(listen_sd):</strong> Como a partida é exclusiva entre 2 jogadores, não precisamos aceitar mais ninguém, então fechamos a escuta.</li>
-            <li><strong>Sorteio:</strong> <code>rand() % 2</code> gera 0 ou 1 para decidir de forma justa quem começa.</li>
+            <li><strong>socket, bind, listen:</strong> Inicializa a rede e coloca a porta 6000 pronta para receber conexões.</li>
+            <li><strong>accept():</strong> Pausa nessa linha até o cliente conectar. Retorna um socket exclusivo (<code>client_sd</code>) para o jogo.</li>
+            <li><strong>closesocket(listen_sd):</strong> Fecha a porta de escuta, pois o jogo é exclusivo entre dois nós.</li>
+            <li><strong>Sorteio:</strong> <code>rand() % 2</code> gera 0 ou 1 para decidir imparcialmente quem começa.</li>
           </ul>
         </div>
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 5: CÓDIGO DO CLIENTE
+         SLIDE 4: CÓDIGO DO CLIENTE
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">cliente_velha.c</div>
@@ -496,24 +494,24 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         <div class="card">
           <h3>O que essa parte faz</h3>
           <ul>
-            <li><strong>IP Flexível:</strong> O cliente pode receber o IP por linha de comando (ex: <code>.\cliente_velha 192.168.1.15</code>) ou digitando na hora.</li>
-            <li><strong>Teste Rápido no Mesmo PC:</strong> Se apenas apertar <span style="color:var(--accent);">Enter</span>, o programa assume <code>127.0.0.1</code> automaticamente, facilitando testar em uma máquina só.</li>
-            <li><strong>connect():</strong> Dispara o pedido de conexão TCP com o servidor.</li>
-            <li><strong>recv():</strong> Fica aguardando a mensagem do servidor informando quem começa a rodada.</li>
+            <li><strong>IP Flexível:</strong> Aceita o IP como argumento (<code>.\cliente_velha 192.168.1.15</code>) ou perguntando na tela.</li>
+            <li><strong>Teste Rápido:</strong> Se apenas apertar <span style="color:var(--accent);">Enter</span>, usa <code>127.0.0.1</code> automaticamente.</li>
+            <li><strong>connect():</strong> Dispara a conexão TCP com o servidor.</li>
+            <li><strong>recv():</strong> Fica aguardando o servidor sortear a moeda. Se receber <code>START:CLIENT</code>, ele joga primeiro.</li>
           </ul>
         </div>
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 6: O CICLO DE TURNOS
+         SLIDE 5: O CICLO DE TURNOS
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">Lógica do Jogo</div>
       <h2>Alternância de Turnos</h2>
       <p>Um laço <code>while (jogo_ativo)</code> que alterna entre quem faz a jogada e quem fica esperando:</p>
 
-      <div class="grid-2">
+      <div class="grid-2-even">
         <pre><span class="com">// === QUANDO EH A MINHA VEZ ===</span>
 <span class="kw">if</span> (minha_vez) {
     <span class="com">// 1. Le e valida a jogada (1 a 9)</span>
@@ -528,7 +526,7 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     <span class="com">// 3. Checa se o jogo acabou</span>
     <span class="kw">if</span> (<span class="fn">verificar_termino</span>(tabuleiro) != -<span class="num">1</span>)
         jogo_ativo = <span class="num">0</span>;
-    minha_vez = <span class="num">0</span>; <span class="com">// Passa a vez para o outro</span>
+    minha_vez = <span class="num">0</span>; <span class="com">// Passa a vez</span>
 }
 </pre>
 
@@ -551,7 +549,7 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         <span class="com">// 3. Checa se o jogo acabou</span>
         <span class="kw">if</span> (<span class="fn">verificar_termino</span>(tabuleiro) != -<span class="num">1</span>)
             jogo_ativo = <span class="num">0</span>;
-        minha_vez = <span class="num">1</span>; <span class="com">// Agora eh a minha vez</span>
+        minha_vez = <span class="num">1</span>; <span class="com">// Minha vez</span>
     }
 }
 </pre>
@@ -559,7 +557,7 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     </section>
 
     <!-- ==========================================
-         SLIDE 7: REGRAS E FIM DE JOGO
+         SLIDE 6: REGRAS E FIM DE JOGO
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">verificar_termino()</div>
@@ -568,20 +566,18 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
       <div class="grid-2">
         <pre><span class="kw">int</span> <span class="fn">verificar_termino</span>(<span class="kw">const</span> <span class="kw">char</span> tab[<span class="num">9</span>]) {
-    <span class="com">// As 8 retas possiveis de vitoria</span>
-    <span class="kw">const</span> <span class="kw">int</span> linhas[<span class="num">8</span>][<span class="num">3</span>] = {
-        {<span class="num">0</span>, <span class="num">1</span>, <span class="num">2</span>}, {<span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>}, {<span class="num">6</span>, <span class="num">7</span>, <span class="num">8</span>}, <span class="com">// 3 Linhas</span>
-        {<span class="num">0</span>, <span class="num">3</span>, <span class="num">6</span>}, {<span class="num">1</span>, <span class="num">4</span>, <span class="num">7</span>}, {<span class="num">2</span>, <span class="num">5</span>, <span class="num">8</span>}, <span class="com">// 3 Colunas</span>
-        {<span class="num">0</span>, <span class="num">4</span>, <span class="num">8</span>}, {<span class="num">2</span>, <span class="num">4</span>, <span class="num">6</span>}             <span class="com">// 2 Diagonais</span>
+    <span class="kw">const</span> <span class="kw">int</span> L[<span class="num">8</span>][<span class="num">3</span>] = {
+        {<span class="num">0</span>,<span class="num">1</span>,<span class="num">2</span>}, {<span class="num">3</span>,<span class="num">4</span>,<span class="num">5</span>}, {<span class="num">6</span>,<span class="num">7</span>,<span class="num">8</span>}, <span class="com">// 3 Linhas</span>
+        {<span class="num">0</span>,<span class="num">3</span>,<span class="num">6</span>}, {<span class="num">1</span>,<span class="num">4</span>,<span class="num">7</span>}, {<span class="num">2</span>,<span class="num">5</span>,<span class="num">8</span>}, <span class="com">// 3 Colunas</span>
+        {<span class="num">0</span>,<span class="num">4</span>,<span class="num">8</span>}, {<span class="num">2</span>,<span class="num">4</span>,<span class="num">6</span>}             <span class="com">// 2 Diagonais</span>
     };
 
     <span class="hl"><span class="com">// 1. Confere se alguma reta tem 3 pecas iguais</span></span>
     <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i < <span class="num">8</span>; i++) {
-        <span class="kw">int</span> a = linhas[i][<span class="num">0</span>], b = linhas[i][<span class="num">1</span>], c = linhas[i][<span class="num">2</span>];
-        <span class="kw">if</span> (tab[a] != <span class="str">' '</span> && tab[a] == tab[b] && tab[b] == tab[c]) {
-            <span class="kw">if</span> (tab[a] == <span class="str">'X'</span>) <span class="kw">return</span> <span class="num">1</span>; <span class="com">// Vitoria de X</span>
-            <span class="kw">if</span> (tab[a] == <span class="str">'O'</span>) <span class="kw">return</span> <span class="num">2</span>; <span class="com">// Vitoria de O</span>
-        }
+        <span class="kw">if</span> (tab[L[i][<span class="num">0</span>]] != <span class="str">' '</span> &&
+            tab[L[i][<span class="num">0</span>]] == tab[L[i][<span class="num">1</span>]] &&
+            tab[L[i][<span class="num">1</span>]] == tab[L[i][<span class="num">2</span>]])
+            <span class="kw">return</span> (tab[L[i][<span class="num">0</span>]] == <span class="str">'X'</span>) ? <span class="num">1</span> : <span class="num">2</span>;
     }
 
     <span class="hl"><span class="com">// 2. Se houver alguma casa vazia, o jogo continua</span></span>
@@ -589,28 +585,28 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         <span class="kw">if</span> (tab[i] == <span class="str">' '</span>) <span class="kw">return</span> -<span class="num">1</span>;
     }
 
-    <span class="kw">return</span> <span class="num">0</span>; <span class="com">// Tabuleiro cheio sem vencedor: Deu velha!</span>
+    <span class="kw">return</span> <span class="num">0</span>; <span class="com">// Tabuleiro cheio sem vencedor: Empate!</span>
 }
 </pre>
 
         <div class="card">
           <h3>O que essa parte faz</h3>
           <ul>
-            <li><strong>Validação Local:</strong> Tanto o Servidor quanto o Cliente executam essa função após cada jogada. Como ambos mantêm o mesmo tabuleiro sincronizado, chegam ao mesmo resultado sem precisar de mensagens extras.</li>
-            <li><strong>Valores de Retorno:</strong><br>
+            <li><strong>Validação Local:</strong> Servidor e Cliente executam essa função após cada movimento no próprio tabuleiro sincronizado.</li>
+            <li><strong>Códigos de Retorno:</strong><br>
               • <code>1</code>: Vitória de 'X' (Cliente)<br>
               • <code>2</code>: Vitória de 'O' (Servidor)<br>
               • <code>0</code>: Empate (deu velha)<br>
-              • <code>-1</code>: Jogo segue em andamento
+              • <code>-1</code>: Partida continua em andamento
             </li>
-            <li><strong>Fim de Jogo:</strong> Quando o retorno é diferente de -1, o jogo encerra o laço e fecha a conexão.</li>
+            <li><strong>Encerramento:</strong> Se for diferente de -1, o laço termina e os sockets são fechados.</li>
           </ul>
         </div>
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 8: VALIDAÇÃO DE ENTRADA
+         SLIDE 7: VALIDAÇÃO DE ENTRADA
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">obter_jogada_usuario()</div>
@@ -618,20 +614,20 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
       <p>Como o código trata o que o usuário digita para não quebrar a execução:</p>
 
       <div class="grid-2">
-        <pre><span class="com">// 1. Leitura segura com fgets (evita travar se digitar letras)</span>
+        <pre><span class="com">// 1. Leitura segura com fgets (nao trava se digitar letras)</span>
 <span class="fn">fgets</span>(linha, <span class="kw">sizeof</span>(linha), stdin);
 
 <span class="com">// 2. Remove quebras de linha e espacos extras</span>
 linha[<span class="fn">strcspn</span>(linha, <span class="str">"\r\n"</span>)] = <span class="str">'\0'</span>;
 
 <span class="hl"><span class="com">// 3. Exige exatamente um digito de '1' a '9'</span></span>
-<span class="kw">if</span> (<span class="fn">strlen</span>(inicio) != <span class="num">1</span> || inicio[<span class="num">0</span>] < <span class="str">'1'</span> || inicio[<span class="num">0</span>] > <span class="str">'9'</span>) {
+<span class="kw">if</span> (<span class="fn">strlen</span>(linha) != <span class="num">1</span> || linha[<span class="num">0</span>] < <span class="str">'1'</span> || linha[<span class="num">0</span>] > <span class="str">'9'</span>) {
     <span class="fn">printf</span>(<span class="str">"Entrada invalida! Digite apenas de 1 a 9.\n"</span>);
     <span class="kw">continue</span>; <span class="com">// Pede para digitar novamente</span>
 }
 
 <span class="com">// 4. Converte o caractere no indice do vetor (0 a 8)</span>
-<span class="kw">int</span> celula = inicio[<span class="num">0</span>] - <span class="str">'1'</span>;
+<span class="kw">int</span> celula = linha[<span class="num">0</span>] - <span class="str">'1'</span>;
 
 <span class="hl"><span class="com">// 5. Nao permite jogar em casa ja preenchida</span></span>
 <span class="kw">if</span> (tabuleiro[celula] != <span class="str">' '</span>) {
@@ -643,39 +639,12 @@ linha[<span class="fn">strcspn</span>(linha, <span class="str">"\r\n"</span>)] =
         <div class="card">
           <h3>Por que não usamos <code>scanf("%d")</code>?</h3>
           <ul>
-            <li><strong>O Problema do <code>scanf</code>:</strong> Se o usuário digitar acidentalmente uma letra (como 'a' ou uma palavra inteira), o <code>scanf("%d")</code> falha, não remove os caracteres do teclado e o programa entra em loop infinito.</li>
-            <li><strong>A Vantagem do <code>fgets</code>:</strong> Lemos a linha digitada como texto comum. Assim, qualquer digitação errada é tratada com calma e o programa apenas pede o número de novo.</li>
-            <li><strong>Subtrair '1':</strong> Como os caracteres '1' a '9' são sequenciais na tabela ASCII, subtrair <code>'1'</code> transforma o caractere diretamente no índice de 0 a 8 do nosso vetor.</li>
-            <li><strong>Posição Livre:</strong> Checa se a casa está com espaço <code>' '</code> antes de confirmar a jogada.</li>
+            <li><strong>O Problema do <code>scanf</code>:</strong> Se digitar uma letra, o <code>scanf</code> falha, não consome a entrada e o código entra em loop infinito.</li>
+            <li><strong>A Vantagem do <code>fgets</code>:</strong> Lê a linha inteira como texto. Qualquer erro é detectado e o código apenas pede o número de novo.</li>
+            <li><strong>Subtrair '1':</strong> Como os caracteres '1' a '9' são sequenciais na tabela ASCII, subtrair <code>'1'</code> converte diretamente para o índice de 0 a 8.</li>
+            <li><strong>Posição Livre:</strong> Checa <code>tabuleiro[celula] != ' '</code> antes de aceitar.</li>
           </ul>
         </div>
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SLIDE 9: DEMONSTRAÇÃO PRÁTICA
-         ========================================== -->
-    <section class="slide">
-      <div class="slide-subtitle">Demonstração & Encerramento</div>
-      <h2>Execução Real no Terminal</h2>
-      <p>Os dois nós conectados e rodando sincronizados:</p>
-
-      <div class="grid-2">
-        <div class="card" style="padding: 10px;">
-          <h3 style="font-size: 0.95rem; margin-bottom: 6px;">Servidor (Peça 'O')</h3>
-          <img src="assets/screenshot_server.jpeg" alt="Servidor" style="width: 100%; height: 210px; object-fit: contain; background: #000; border-radius: 6px;">
-        </div>
-        <div class="card" style="padding: 10px;">
-          <h3 style="font-size: 0.95rem; margin-bottom: 6px;">Cliente (Peça 'X')</h3>
-          <img src="assets/screenshot_client.jpeg" alt="Cliente" style="width: 100%; height: 210px; object-fit: contain; background: #000; border-radius: 6px;">
-        </div>
-      </div>
-
-      <div class="card" style="text-align: center; margin-top: 18px; padding: 18px; border-color: rgba(56, 189, 248, 0.4);">
-        <h2 style="font-size: 1.3rem; margin-bottom: 6px;">Vamos rodar o código e ver na prática! 🚀</h2>
-        <p style="font-size: 0.92rem; margin-bottom: 0; color: var(--accent);">
-          Pedro Augusto • João Victor Pariz • Mateus Roma
-        </p>
       </div>
     </section>
 
@@ -683,8 +652,9 @@ linha[<span class="fn">strcspn</span>(linha, <span class="str">"\r\n"</span>)] =
 
   <!-- Bottom Navigation -->
   <footer>
-    <div class="counter" id="counter">Slide 1 de 9</div>
+    <div class="counter" id="counter">Slide 1 de 7</div>
     <div class="controls">
+      <span class="hint">Navegação: ◀ ▶ ou Teclado</span>
       <button class="nav-btn" id="prev-btn" onclick="prevSlide()">◀ Anterior</button>
       <button class="nav-btn" id="next-btn" onclick="nextSlide()">Próximo ▶</button>
     </div>

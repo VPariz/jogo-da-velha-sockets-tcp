@@ -75,12 +75,8 @@
 }
 
 \author{
-    \textbf{Equipe de Desenvolvimento:}\\[0.2cm]
-    \begin{tabular}{ll}
-        \textbf{Integrante 1:} & Pedro Augusto (Peu) \\
-        \textbf{Integrante 2:} & João Victor Pariz \\
-        \textbf{Integrante 3:} & Mateus Roma \\
-    \end{tabular}\\[0.4cm]
+    \textbf{Autor:}\\[0.2cm]
+    João Victor Pariz\\[0.4cm]
     \textbf{Docente Responsável:} Cel. Paulo César Salgado Vidal
 }
 
@@ -149,7 +145,7 @@ O Servidor assume por padrão a representação com a peça \textbf{'O'}, enquan
 \section{Decisões de Engenharia e Robustez}
 
 \subsection{Detecção Automática de IPs da Máquina Servidora}
-Para eliminar o atrito durante a apresentação em bancada no laboratório do IME, o código do servidor executa chamadas nativas às APIs \texttt{gethostname()} e \texttt{gethostbyname()}. Antes de entrar no estado de escuta (\texttt{listen}), o programa imprime na tela todos os endereços IPv4 locais associados às interfaces de rede ativas. Com isso, o integrante responsável pelo Cliente sabe imediatamente qual IP digitar, sem necessidade de abrir outro terminal para rodar \texttt{ipconfig}.
+Para eliminar o atrito durante a apresentação em bancada no laboratório do IME, o código do servidor executa chamadas nativas às APIs \texttt{gethostname()} e \texttt{gethostbyname()}. Antes de entrar no estado de escuta (\texttt{listen}), o programa imprime na tela todos os endereços IPv4 locais associados às interfaces de rede ativas. Com isso, quem estiver executando o Cliente sabe imediatamente qual IP digitar, sem necessidade de abrir outro terminal para rodar \texttt{ipconfig}.
 
 \subsection{Sorteio Pseudoaleatório com Semente Dinâmica}
 A determinação de quem joga primeiro é realizada exclusivamente pelo Servidor por meio da função \texttt{rand()} alimentada pelo relógio do sistema via \texttt{srand((unsigned)time(NULL))}. Imediatamente após a chamada de \texttt{accept()}, o Servidor sorteia o valor ($0$ para Servidor, $1$ para Cliente) e transmite a mensagem de controle correspondente. O Cliente aguarda no bloqueio inicial de \texttt{recv()} até receber essa diretriz, impedindo qualquer condição de corrida (\textit{race condition}).
