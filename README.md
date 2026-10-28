@@ -4,6 +4,7 @@
 [![Sockets](https://img.shields.io/badge/Networking-Winsock2_TCP-2D3748?style=flat-square)](https://learn.microsoft.com/en-us/windows/win32/winsock/windows-sockets-start-page-2)
 [![Platform](https://img.shields.io/badge/Platform-Windows_%7C_MinGW-0078D6?style=flat-square&logo=windows&logoColor=white)](https://www.mingw-w64.org/)
 [![Institution](https://img.shields.io/badge/IME-Computer_Networks_I-104911?style=flat-square)](https://ime.eb.mil.br/)
+[![Presentation](https://img.shields.io/badge/Slide_Deck-HTML5_Presentation-E34F26?style=flat-square&logo=html5&logoColor=white)](index.html)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
 A network application for a two-player **Tic-Tac-Toe (Jogo da Velha)** game written in C using low-level **TCP Sockets (Winsock2 API)**. Developed as a major evaluation project for the **Computer Networks I** course at the **Military Institute of Engineering (IME)**.
@@ -92,6 +93,8 @@ sequenceDiagram
 
 ```
 jogo-da-velha-sockets-tcp/
+├── index.html                   # Interactive HTML slide deck for project defense/presentation
+├── apresentacao.html            # Direct mirror of index.html
 ├── servidor_velha.c             # Server source: listener, IP autodiscovery, coin toss & turn loop
 ├── cliente_velha.c              # Client source: connection, interactive terminal UI & move receiver
 ├── compilar.bat                 # Automated Windows batch compiler via MinGW GCC
@@ -109,6 +112,22 @@ jogo-da-velha-sockets-tcp/
 ├── LICENSE                      # MIT License
 └── README.md
 ```
+
+---
+
+## 🖥️ Interactive HTML Presentation (Slide Deck)
+
+An interactive HTML slide presentation is available in [`index.html`](index.html) (also accessible as [`apresentacao.html`](apresentacao.html)).
+It was created specifically for classroom presentations and project defense, containing:
+* **TCP Socket Lifecycle:** Interactive timeline of `WSAStartup`, `socket`, `bind`, `listen`, `accept`, `connect`, `send`, `recv`, `closesocket`, `WSACleanup`.
+* **Network Byte Order & Endianness:** Detailed breakdown of `sockaddr_in`, `htons`, `htonl`, `inet_ntoa` and `inet_addr`.
+* **Automatic Local IP Detection:** Explanation of `gethostname()` / `gethostbyname()` for zero-config lab demos.
+* **Application Layer Protocol:** Message semantics (`START:SERVER\n`, `START:CLIENT\n`, `MOVE:<1-9>\n`).
+* **Source Code Walkthrough:** Side-by-side interactive tab comparison between Server and Client loops.
+* **Defensive I/O Programming:** Detailed explanation of `fgets` vs `scanf`, input trimming, buffer draining, and cell occupancy checks.
+* **Slide Features:** Fullscreen mode (<kbd>F</kbd>), keyboard navigation (<kbd>&larr;</kbd>/<kbd>&rarr;</kbd>/<kbd>Space</kbd>), and slide index drawer (<kbd>M</kbd>).
+
+To present: simply open `index.html` in any browser!
 
 ---
 
