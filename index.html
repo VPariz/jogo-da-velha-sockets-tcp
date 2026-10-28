@@ -3,24 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apresentação Técnica: Jogo da Velha TCP em C | IME Redes I</title>
+  <title>Apresentação: Jogo da Velha TCP em C | IME</title>
   <style>
     :root {
-      --bg-dark: #070a13;
-      --bg-card: #0d1527;
-      --bg-card-hover: #15223c;
-      --text-main: #f8fafc;
+      --bg: #0b1120;
+      --card-bg: #131d35;
+      --text: #f1f5f9;
       --text-muted: #94a3b8;
-      --accent-blue: #38bdf8;
-      --accent-cyan: #22d3ee;
-      --accent-green: #34d399;
-      --accent-amber: #fbbf24;
-      --accent-red: #f87171;
-      --accent-purple: #c084fc;
-      --border-color: #1e293b;
-      --border-glow: rgba(56, 189, 248, 0.2);
-      --code-bg: #030712;
-      --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+      --accent: #38bdf8;
+      --green: #34d399;
+      --border: #1e293b;
+      --code-bg: #070d1a;
+      --font-mono: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
     }
 
     * {
@@ -30,116 +24,74 @@
     }
 
     body {
-      background-color: var(--bg-dark);
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(52, 211, 153, 0.06) 0px, transparent 50%);
-      color: var(--text-main);
+      background-color: var(--bg);
+      color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow-x: hidden;
       user-select: none;
     }
 
     /* Top Progress Bar */
-    #progress-container {
+    #progress-bar {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
       height: 4px;
-      background: rgba(255, 255, 255, 0.05);
-      z-index: 100;
-    }
-    #progress-bar {
-      height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue), var(--accent-green));
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+      background: var(--accent);
+      z-index: 100;
       transition: width 0.3s ease;
     }
 
-    /* Header Controls */
+    /* Header */
     header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 10px 24px;
+      padding: 14px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(7, 10, 19, 0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-color);
-      z-index: 90;
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 17, 32, 0.95);
     }
-    .header-title {
-      font-size: 0.92rem;
-      font-weight: 600;
-      color: var(--accent-blue);
+    .brand {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--accent);
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    .header-badge {
+    .badge {
       background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: var(--accent-blue);
-      padding: 3px 10px;
-      border-radius: 9999px;
-      font-size: 0.74rem;
-      font-weight: 700;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
     }
-    .header-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-    .btn {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 6px 12px;
+    .nav-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 14px;
       border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 500;
+      font-size: 0.85rem;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
       transition: all 0.2s;
     }
-    .btn:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--accent-blue);
-      color: var(--accent-blue);
-      transform: translateY(-1px);
-    }
-    .btn-active {
-      background: rgba(56, 189, 248, 0.15) !important;
-      border-color: var(--accent-blue) !important;
-      color: var(--accent-blue) !important;
-    }
-    .slide-counter {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-left: 6px;
-      min-width: 60px;
-      text-align: right;
+    .nav-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
     }
 
-    /* Presentation Deck Container */
+    /* Deck & Slides */
     #deck {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 64px 20px 75px 20px;
-      max-width: 1320px;
+      padding: 30px 20px 80px 20px;
+      max-width: 1200px;
       margin: 0 auto;
       width: 100%;
     }
@@ -147,413 +99,154 @@
     .slide {
       display: none;
       width: 100%;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 30px 38px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 1px 1px var(--border-glow);
-      animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 36px 44px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.25s ease-out;
     }
     .slide.active {
       display: block;
     }
 
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(10px); }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Slide Typography */
-    .slide-tag {
-      display: inline-block;
-      text-transform: uppercase;
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
+    /* Typography */
+    .slide-subtitle {
+      color: var(--accent);
+      font-size: 0.85rem;
       font-weight: 700;
-      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       margin-bottom: 6px;
     }
-    .spec-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: var(--accent-blue);
-      font-family: var(--font-mono);
-      font-size: 0.74rem;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 9999px;
-      margin-bottom: 8px;
-    }
     h1 {
-      font-size: 2.1rem;
+      font-size: 2.2rem;
       font-weight: 800;
       line-height: 1.2;
-      margin-bottom: 12px;
-      background: linear-gradient(135deg, #ffffff 40%, var(--accent-blue) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+      color: #ffffff;
     }
     h2 {
-      font-size: 1.55rem;
+      font-size: 1.65rem;
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
     h3 {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       font-weight: 600;
-      color: var(--accent-blue);
-      margin-bottom: 8px;
+      color: var(--accent);
+      margin-bottom: 10px;
     }
     p {
       color: var(--text-muted);
-      font-size: 0.94rem;
+      font-size: 1.02rem;
       line-height: 1.6;
-      margin-bottom: 14px;
+      margin-bottom: 18px;
     }
 
-    /* Grid Layouts */
+    /* Grids & Cards */
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      gap: 24px;
       align-items: start;
     }
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      gap: 18px;
     }
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-    }
-
-    /* Feature Cards */
     .card {
-      background: rgba(3, 7, 18, 0.55);
-      border: 1px solid var(--border-color);
-      border-radius: 9px;
-      padding: 16px 18px;
-      transition: all 0.2s ease;
-    }
-    .card:hover {
-      border-color: rgba(56, 189, 248, 0.4);
-      background: rgba(3, 7, 18, 0.75);
-    }
-    .card-icon {
-      font-size: 1.4rem;
-      margin-bottom: 8px;
-      display: inline-block;
+      background: rgba(7, 13, 26, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
     }
 
-    /* Specification Table */
-    .spec-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.86rem;
-      margin: 10px 0;
-    }
-    .spec-table th, .spec-table td {
-      padding: 9px 12px;
-      text-align: left;
-      border-bottom: 1px solid var(--border-color);
-    }
-    .spec-table th {
-      background: rgba(3, 7, 18, 0.75);
-      color: var(--accent-cyan);
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .spec-table tr:hover td {
-      background: rgba(255, 255, 255, 0.02);
-    }
-    .badge-status {
-      background: rgba(52, 211, 153, 0.15);
-      color: var(--accent-green);
-      border: 1px solid rgba(52, 211, 153, 0.35);
-      padding: 2px 7px;
-      border-radius: 4px;
-      font-weight: 700;
-      font-size: 0.75rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    /* Code Blocks */
+    /* Code Snippets */
     pre {
       background: var(--code-bg);
-      border: 1px solid #1e293b;
+      border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 14px 16px;
+      padding: 16px 18px;
       overflow-x: auto;
       font-family: var(--font-mono);
-      font-size: 0.81rem;
+      font-size: 0.86rem;
       line-height: 1.5;
       color: #e2e8f0;
-      margin-bottom: 10px;
-      position: relative;
+      margin-bottom: 12px;
     }
-    code {
-      font-family: var(--font-mono);
-      background: rgba(255, 255, 255, 0.06);
-      padding: 2px 5px;
-      border-radius: 4px;
-      font-size: 0.88em;
+    .kw { color: #f472b6; font-weight: 600; }
+    .fn { color: #60a5fa; font-weight: 600; }
+    .str { color: #34d399; }
+    .num { color: #fbbf24; }
+    .com { color: #64748b; font-style: italic; }
+    .hl {
+      background: rgba(56, 189, 248, 0.15);
+      border-left: 3px solid var(--accent);
+      padding-left: 6px;
+      display: block;
+      margin: 2px 0;
     }
-    pre code {
-      background: transparent;
-      padding: 0;
-    }
-    .code-badge {
-      position: absolute;
-      top: 8px;
-      right: 12px;
-      font-size: 0.65rem;
+
+    ul, ol {
       color: var(--text-muted);
-      text-transform: uppercase;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 2px 6px;
-      border-radius: 4px;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      margin-left: 20px;
+    }
+    li strong {
+      color: var(--text);
     }
 
-    /* Syntax Highlighting Tokens */
-    .c-kw { color: #f472b6; font-weight: 600; }     /* int, if, while, struct, return */
-    .c-fn { color: #60a5fa; font-weight: 600; }     /* functions */
-    .c-str { color: #34d399; }                      /* strings */
-    .c-num { color: #fbbf24; }                      /* numbers */
-    .c-com { color: #64748b; font-style: italic; }  /* comments */
-    .c-typ { color: #38bdf8; }                      /* types */
-    .c-hl { background: rgba(56, 189, 248, 0.15); border-left: 3px solid var(--accent-blue); padding-left: 6px; display: block; margin: 2px 0; }
-
-    /* Callouts */
-    .callout {
-      border-left: 4px solid var(--accent-blue);
-      background: rgba(56, 189, 248, 0.08);
-      padding: 10px 14px;
-      border-radius: 0 6px 6px 0;
-      margin: 10px 0;
-      font-size: 0.88rem;
-      color: #cbd5e1;
-    }
-    .callout-success {
-      border-left-color: var(--accent-green);
-      background: rgba(52, 211, 153, 0.08);
-    }
-    .callout-warning {
-      border-left-color: var(--accent-amber);
-      background: rgba(251, 191, 36, 0.08);
-    }
-
-    /* Interactive Simulator */
-    .sim-container {
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 18px;
-      background: rgba(3, 7, 18, 0.7);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 16px;
-    }
-    .board-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 75px);
-      grid-template-rows: repeat(3, 75px);
-      gap: 7px;
-      justify-content: center;
-      align-content: center;
-    }
-    .board-cell {
-      background: #1e293b;
-      border: 2px solid #334155;
-      border-radius: 7px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      color: var(--text-main);
-    }
-    .board-cell:hover:not(.occupied) {
-      background: #334155;
-      border-color: var(--accent-blue);
-      transform: scale(1.04);
-    }
-    .board-cell.cell-x { color: var(--accent-cyan); }
-    .board-cell.cell-o { color: var(--accent-amber); }
-    .sim-terminal {
-      background: #030712;
-      border: 1px solid #1e293b;
-      border-radius: 8px;
-      padding: 12px;
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      display: flex;
-      flex-direction: column;
-      height: 250px;
-    }
-    .sim-terminal-log {
-      flex: 1;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      padding-right: 4px;
-    }
-    .log-tx { color: var(--accent-green); }
-    .log-rx { color: var(--accent-cyan); }
-    .log-sys { color: var(--accent-amber); }
-
-    /* Bottom Control Bar */
+    /* Bottom Footer Bar */
     footer {
       position: fixed;
       bottom: 0;
       left: 0;
       width: 100%;
-      padding: 8px 24px;
+      padding: 12px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(7, 10, 19, 0.92);
-      backdrop-filter: blur(12px);
-      border-top: 1px solid var(--border-color);
-      z-index: 90;
+      border-top: 1px solid var(--border);
+      background: rgba(11, 17, 32, 0.95);
     }
-    .footer-hints {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      display: flex;
-      gap: 14px;
-    }
-    .key-badge {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 2px 6px;
-      border-radius: 4px;
+    .counter {
       font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: #e2e8f0;
-    }
-    .footer-nav {
-      display: flex;
-      gap: 8px;
-    }
-
-    /* Modal Drawers */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      z-index: 200;
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(5px);
-    }
-    .modal-overlay.open {
-      display: flex;
-    }
-    .modal-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      width: 90%;
-      max-width: 650px;
-      max-height: 82vh;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-    }
-    .modal-header {
-      padding: 12px 18px;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .modal-body {
-      padding: 14px 18px;
-      overflow-y: auto;
-    }
-
-    .speaker-card {
-      background: rgba(3, 7, 18, 0.5);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 10px;
-    }
-    .speaker-card h4 {
-      color: var(--accent-cyan);
       font-size: 0.88rem;
-      margin-bottom: 6px;
+      color: var(--text-muted);
     }
-
-    .menu-item {
-      padding: 8px 12px;
-      border-radius: 6px;
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--text-main);
-      text-align: left;
-      font-size: 0.84rem;
-      cursor: pointer;
+    .controls {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: all 0.15s;
-    }
-    .menu-item:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--border-color);
-    }
-    .menu-item.active {
-      background: rgba(56, 189, 248, 0.15);
-      border-color: var(--accent-blue);
-      color: var(--accent-blue);
-      font-weight: 600;
+      gap: 10px;
     }
 
     @media (max-width: 900px) {
-      .grid-2, .grid-3, .grid-4, .sim-container { grid-template-columns: 1fr; }
-      .slide { padding: 20px; }
-      h1 { font-size: 1.6rem; }
-      .footer-hints { display: none; }
-      .header-title span:last-child { display: none; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .slide { padding: 24px; }
+      h1 { font-size: 1.7rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Progress Bar -->
-  <div id="progress-container">
-    <div id="progress-bar"></div>
-  </div>
+  <div id="progress-bar"></div>
 
   <!-- Header -->
   <header>
-    <div class="header-title">
-      <span class="header-badge">IME • REDES I</span>
-      <span>Apresentação de Implementação: Jogo da Velha TCP</span>
+    <div class="brand">
+      <span class="badge">IME • REDES I</span>
+      <span>Jogo da Velha Cliente-Servidor (TCP em C)</span>
     </div>
-    <div class="header-actions">
-      <button class="btn" onclick="toggleNotes()" id="btn-notes" title="Guia de Apresentação (Tecla N)">Roteiro de Fala 🎙️</button>
-      <button class="btn" onclick="toggleMenu()" title="Índice dos Slides (Tecla M)">Índice 📑</button>
-      <button class="btn" onclick="toggleFullScreen()" title="Tela Cheia (Tecla F)">Tela Cheia ⛶</button>
-      <span class="slide-counter" id="counter">1 / 14</span>
+    <div>
+      <button class="nav-btn" onclick="toggleFullScreen()">Tela Cheia ⛶</button>
     </div>
   </header>
 
@@ -561,614 +254,340 @@
   <main id="deck">
 
     <!-- ==========================================
-         SLIDE 1: CAPA OFICIAL
+         SLIDE 1: CAPA
          ========================================== -->
-    <section class="slide active" data-index="1">
-      <span class="slide-tag">Instituto Militar de Engenharia • Engenharia Eletrônica (2026.2)</span>
-      <h1>Jogo da Velha Cliente-Servidor via Sockets TCP</h1>
-      <p style="font-size: 1.05rem; max-width: 860px; margin-bottom: 20px;">
-        Apresentação técnica da arquitetura, estruturas de dados e implementação detalhada em Linguagem C 
-        para a disciplina de <strong>Redes de Computadores I</strong> (Prof. Cel. Paulo César Salgado Vidal).
+    <section class="slide active">
+      <div class="slide-subtitle">Engenharia Eletrônica • Redes de Computadores I (2026.2)</div>
+      <h1>Jogo da Velha Cliente-Servidor</h1>
+      <p style="font-size: 1.15rem; max-width: 800px; margin-bottom: 28px;">
+        Apresentação prática da implementação em Linguagem C utilizando Sockets TCP.
       </p>
-
-      <div class="grid-3" style="margin-top: 16px;">
-        <div class="card">
-          <div class="card-icon">👨‍💻</div>
-          <h3>Equipe de Autores</h3>
-          <p style="font-size: 0.86rem; margin-bottom: 0; line-height: 1.7;">
-            • <strong>Pedro Augusto (Peu)</strong><br>
-            • <strong>João Victor Pariz</strong><br>
-            • <strong>Mateus Roma</strong>
-          </p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🏛️</div>
-          <h3>Instituição & Docente</h3>
-          <p style="font-size: 0.86rem; margin-bottom: 0; line-height: 1.7;">
-            • Instituto Militar de Engenharia (IME)<br>
-            • <strong>Prof. Cel. Vidal</strong><br>
-            • Trabalho Prático para VE (3,0 Pontos)
-          </p>
-        </div>
-        <div class="card">
-          <div class="card-icon">📁</div>
-          <h3>Solução Implementada</h3>
-          <p style="font-size: 0.86rem; margin-bottom: 0; line-height: 1.7;">
-            • <code>servidor_velha.c</code> (408 linhas)<br>
-            • <code>cliente_velha.c</code> (383 linhas)<br>
-            • Compilação MinGW GCC sem warnings
-          </p>
-        </div>
-      </div>
-
-      <div class="callout callout-success" style="margin-top: 22px;">
-        🎯 <strong>Objetivo da Sessão:</strong> Apresentar a conformidade com as diretrizes do projeto, o fluxo das funções desenvolvidas, as decisões de projeto em C e o funcionamento da máquina de estados distribuída.
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SLIDE 2: MATRIZ DE REQUISITOS E CONFORMIDADE
-         ========================================== -->
-    <section class="slide" data-index="2">
-      <span class="slide-tag">Módulo 1 • Requisitos de Projeto</span>
-      <h2>Matriz de Conformidade com a Especificação</h2>
-      <p>Mapeamento entre as diretrizes do trabalho e a implementação correspondente nos módulos em C:</p>
-
-      <table class="spec-table">
-        <thead>
-          <tr>
-            <th>Requisito</th>
-            <th>Especificação Técnica</th>
-            <th>Implementação no Código C</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Conexão & Setup</strong></td>
-            <td>Servidor inicia em escuta passiva; Cliente conecta ativamente; ambos iniciam o tabuleiro.</td>
-            <td><code>bind()</code> na porta 6000, <code>listen(sd, 1)</code>, <code>connect()</code> e loop de inicialização.</td>
-            <td><span class="badge-status">Conforme</span></td>
-          </tr>
-          <tr>
-            <td><strong>Ordem de Jogada</strong></td>
-            <td>Sorteio aleatório no servidor com envio de mensagem de controle ao cliente.</td>
-            <td>Semente temporal <code>time(NULL)</code>, sorteio <code>rand() % 2</code> e pacotes <code>START:...</code>.</td>
-            <td><span class="badge-status">Conforme</span></td>
-          </tr>
-          <tr>
-            <td><strong>Ciclo de Turnos</strong></td>
-            <td>Alternância síncrona, exibição visual, envio e recepção de coordenadas.</td>
-            <td>Pacote <code>MOVE:<N>\n</code>, chamadas bloqueantes a <code>recv()</code> e sincronização do vetor.</td>
-            <td><span class="badge-status">Conforme</span></td>
-          </tr>
-          <tr>
-            <td><strong>Detecção de Término</strong></td>
-            <td>Validação de vitória, derrota e empate a cada movimento em ambos os nós.</td>
-            <td>Função <code>verificar_termino()</code> inspecionando localmente as 8 linhas vencedoras.</td>
-            <td><span class="badge-status">Conforme</span></td>
-          </tr>
-          <tr>
-            <td><strong>Interface Gráfica</strong></td>
-            <td>Grade guia numerada 1 a 9 e prompts: <code>Vez de [O/X] célula > </code>.</td>
-            <td>Função <code>exibir_tabuleiro_guia()</code> e impressão com <code>fflush(stdout)</code>.</td>
-            <td><span class="badge-status">Conforme</span></td>
-          </tr>
-          <tr>
-            <td><strong>Sanitização e Erros</strong></td>
-            <td>Rejeição de entradas inválidas e tratamento de exceções de rede.</td>
-            <td>Leitura com <code>fgets</code>, dreno de buffer, trim e captura com <code>WSAGetLastError()</code>.</td>
-            <td><span class="badge-status">Conforme</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- ==========================================
-         SLIDE 3: CÓDIGO - ESTRUTURA DO TABULEIRO
-         ========================================== -->
-    <section class="slide" data-index="3">
-      <span class="spec-pill">Especificação: Estrutura do Tabuleiro</span>
-      <h2>Representação do Tabuleiro em Memória</h2>
-      <p>Decisão de arquitetura em C: Por que utilizamos um vetor linear <code>char tabuleiro[9]</code> em vez de uma matriz bidimensional?</p>
-
-      <div class="grid-2">
-        <pre><span class="code-badge">Definição dos Dados</span>
-<span class="c-com">// Convencao de simbolos da especificacao</span>
-<span class="c-kw">#define</span> SIMBOLO_SERVIDOR <span class="c-str">'O'</span>
-<span class="c-kw">#define</span> SIMBOLO_CLIENTE  <span class="c-str">'X'</span>
-
-<span class="c-com">// Vetor linear alocado na pilha (stack)</span>
-<span class="c-typ">char</span> tabuleiro[<span class="c-num">9</span>];
-
-<span class="c-com">// Inicializacao com caracteres de espaco em branco</span>
-<span class="c-kw">for</span> (<span class="c-typ">int</span> i = <span class="c-num">0</span>; i < <span class="c-num">9</span>; i++) {
-    tabuleiro[i] = <span class="c-str">' '</span>;
-}
-</pre>
-
-        <div class="card">
-          <h3>Vantagens Técnicas de <code>tabuleiro[9]</code></h3>
-          <ul style="color: var(--text-muted); font-size: 0.86rem; line-height: 1.75; margin-left: 18px;">
-            <li><strong>Mapeamento em $O(1)$ Direto:</strong> A entrada do jogador é um número entre 1 e 9. O acesso ao vetor ocorre diretamente em <code>tabuleiro[jogada - 1]</code>, eliminando divisões inteiras e operações de módulo (<code>linha = (n-1)/3</code>, <code>coluna = (n-1)%3</code>).</li>
-            <li><strong>Passagem Eficiente de Parâmetro:</strong> Passado às rotinas por referência simples (<code>const char tab[9]</code>), consumindo apenas 8 bytes de ponteiro no registrador de arquitetura x64.</li>
-            <li><strong>Contiguidade de Memória:</strong> O bloco contíguo de 9 bytes otimiza o uso do cache L1 do processador durante a varredura das linhas de término.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SLIDE 4: CÓDIGO - AUTODESCOBERTA DE IPS
-         ========================================== -->
-    <section class="slide" data-index="4">
-      <span class="slide-tag">Módulo 2 • Descoberta de Rede</span>
-      <h2>Função <code>exibir_ips_locais()</code></h2>
-      <p>Inspeção programática das interfaces de rede locais para conexão direta sem comandos de sistema:</p>
-
-      <pre><span class="code-badge">servidor_velha.c (Linhas 39 a 56)</span>
-<span class="c-typ">void</span> <span class="c-fn">exibir_ips_locais</span>(<span class="c-typ">int</span> porta) {
-    <span class="c-typ">char</span> hostname[<span class="c-num">256</span>];
-    <span class="c-fn">gethostname</span>(hostname, <span class="c-kw">sizeof</span>(hostname));
-    <span class="c-typ">struct</span> hostent *host_info = <span class="c-fn">gethostbyname</span>(hostname);
-
-    <span class="c-kw">if</span> (host_info != NULL && host_info->h_addr_list != NULL) {
-        <span class="c-kw">for</span> (<span class="c-typ">int</span> i = <span class="c-num">0</span>; host_info->h_addr_list[i] != NULL; i++) {
-            <span class="c-typ">struct</span> in_addr addr;
-            <span class="c-hl"><span class="c-fn">memcpy</span>(&addr, host_info->h_addr_list[i], <span class="c-kw">sizeof</span>(<span class="c-typ">struct</span> in_addr));</span>
-            <span class="c-fn">printf</span>(<span class="c-str">"       -> %s (Rede Local)\n"</span>, <span class="c-fn">inet_ntoa</span>(addr));
-        }
-    }
-}
-</pre>
-
-      <div class="card" style="margin-top: 10px;">
-        <h3>Estrutura Interna de Resolução</h3>
-        <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 0;">
-          A estrutura <code>hostent</code> disponibiliza o membro <code>h_addr_list</code>, um ponteiro duplo para endereços binários IPv4 finalizado em <code>NULL</code>. A função itera sobre todas as interfaces ativas (Wi-Fi, Ethernet, adaptadores virtuais), copia os 4 bytes para uma estrutura <code>in_addr</code> e converte em texto decimal pontuado via <code>inet_ntoa()</code>.
-        </p>
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SLIDE 5: CÓDIGO - LEITURA SEGURA
-         ========================================== -->
-    <section class="slide" data-index="5">
-      <span class="spec-pill">Especificação: Tratamento de Entradas</span>
-      <h2>Função <code>obter_jogada_usuario()</code> (Parte 1: Leitura)</h2>
-      <p>Prevenção de estouro de buffer e controle rigoroso de fluxo de entrada:</p>
-
-      <div class="grid-2">
-        <pre><span class="code-badge">servidor_velha.c / cliente_velha.c</span>
-<span class="c-typ">int</span> <span class="c-fn">obter_jogada_usuario</span>(<span class="c-kw">const</span> <span class="c-typ">char</span> tabuleiro[<span class="c-num">9</span>], <span class="c-typ">char</span> simbolo) {
-    <span class="c-typ">char</span> linha[<span class="c-num">128</span>];
-    <span class="c-typ">int</span> celula;
-
-    <span class="c-kw">while</span> (<span class="c-num">1</span>) {
-        <span class="c-fn">printf</span>(<span class="c-str">"Vez de %c célula > "</span>, simbolo);
-        <span class="c-hl"><span class="c-fn">fflush</span>(stdout); <span class="c-com">// Garante saida imediata no terminal</span></span>
-
-        <span class="c-hl"><span class="c-kw">if</span> (<span class="c-fn">fgets</span>(linha, <span class="c-kw">sizeof</span>(linha), stdin) == NULL) {</span>
-            <span class="c-fn">clearerr</span>(stdin);
-            <span class="c-kw">continue</span>;
-        }
-
-        <span class="c-hl"><span class="c-com">// Dreno do buffer se a entrada ultrapassar 127 bytes:</span></span>
-        <span class="c-kw">if</span> (<span class="c-fn">strchr</span>(linha, <span class="c-str">'\n'</span>) == NULL) {
-            <span class="c-typ">int</span> c;
-            <span class="c-kw">while</span> ((c = <span class="c-fn">getchar</span>()) != <span class="c-str">'\n'</span> && c != EOF);
-        }
-        ...
-</pre>
-
-        <div class="card">
-          <h3>Tratamento de Vulnerabilidades em C</h3>
-          <ul style="color: var(--text-muted); font-size: 0.84rem; line-height: 1.75; margin-left: 18px;">
-            <li><strong>Inadequação do <code>scanf</code>:</strong> Caso caracteres não numéricos sejam digitados, <code>scanf("%d")</code> falha na conversão, deixa os bytes no buffer <code>stdin</code> e gera um laço de repetição infinito.</li>
-            <li><strong>Delimitação Estrita com <code>fgets</code>:</strong> Limita a leitura a 127 caracteres úteis mais o terminador <code>'\0'</code>, neutralizando riscos de estouro de memória.</li>
-            <li><strong>Rotina de Dreno com <code>getchar()</code>:</strong> Caso uma sequência excessivamente longa seja inserida, o dreno descarta o restante da linha até a próxima quebra, evitando contaminação de rodadas futuras.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SLIDE 6: CÓDIGO - TRIM E VALIDAÇÃO
-         ========================================== -->
-    <section class="slide" data-index="6">
-      <span class="spec-pill">Especificação: Validação de Caracteres e Ocupação</span>
-      <h2>Função <code>obter_jogada_usuario()</code> (Parte 2: Trim e Validação)</h2>
-      <p>Normalização de terminação de linha, eliminação de espaços e validação de ocupação:</p>
-
-      <div class="grid-2">
-        <pre><span class="code-badge">Continuação da Função</span>
-        <span class="c-com">// 1. Remove terminadores de linha Windows (\r\n) ou Unix (\n)</span>
-        linha[<span class="c-fn">strcspn</span>(linha, <span class="c-str">"\r\n"</span>)] = <span class="c-str">'\0'</span>;
-
-        <span class="c-com">// 2. Normalizacao (Trim) de espacos e tabs a esquerda</span>
-        <span class="c-typ">char</span> *inicio = linha;
-        <span class="c-kw">while</span> (*inicio == <span class="c-str">' '</span> || *inicio == <span class="c-str">'\t'</span>) inicio++;
-
-        <span class="c-com">// 3. Normalizacao (Trim) de espacos e tabs a direita</span>
-        <span class="c-typ">char</span> *fim = inicio + <span class="c-fn">strlen</span>(inicio) - <span class="c-num">1</span>;
-        <span class="c-kw">while</span> (fim > inicio && (*fim == <span class="c-str">' '</span> || *fim == <span class="c-str">'\t'</span>)) {
-            *fim = <span class="c-str">'\0'</span>;
-            fim--;
-        }
-
-        <span class="c-hl"><span class="c-com">// 4. Exige EXATAMENTE 1 unico caractere numerico de '1' a '9'</span></span>
-        <span class="c-kw">if</span> (<span class="c-fn">strlen</span>(inicio) != <span class="c-num">1</span> || inicio[<span class="c-num">0</span>] < <span class="c-str">'1'</span> || inicio[<span class="c-num">0</span>] > <span class="c-str">'9'</span>) {
-            <span class="c-fn">printf</span>(<span class="c-str">"Entrada invalida! Digite apenas um unico numero de 1 a 9.\n"</span>);
-            <span class="c-kw">continue</span>;
-        }
-
-        celula = (inicio[<span class="c-num">0</span>] - <span class="c-str">'1'</span>); <span class="c-com">// Mapeamento para indice 0 a 8</span>
-
-        <span class="c-hl"><span class="c-com">// 5. Verificacao de celula previamente ocupada</span></span>
-        <span class="c-kw">if</span> (tabuleiro[celula] != <span class="c-str">' '</span>) {
-            <span class="c-fn">printf</span>(<span class="c-str">"Posicao invalida! A celula %d ja esta ocupada (%c).\n"</span>,
-                   celula + <span class="c-num">1</span>, tabuleiro[celula]);
-            <span class="c-kw">continue</span>;
-        }
-
-        <span class="c-kw">return</span> celula + <span class="c-num">1</span>;
-</pre>
-
-        <div class="card">
-          <h3>Garantias da Validação</h3>
-          <ul style="color: var(--text-muted); font-size: 0.84rem; line-height: 1.8; margin-left: 18px;">
-            <li><strong>Robustez contra Espaços:</strong> Entradas como <code>"  5  "</code> são devidamente limpas e aceitas sem falhas.</li>
-            <li><strong>Rejeição de Múltiplos Caracteres:</strong> Entradas compostas (ex: <code>"12"</code>, <code>"abc"</code> ou <code>"1 2"</code>) são bloqueadas pela condição <code>strlen(inicio) != 1</code>.</li>
-            <li><strong>Conversão Aritmética de Ponteiro:</strong> O cálculo <code>inicio[0] - '1'</code> mapeia os valores ASCII contíguos (códigos 49 a 57) no índice inteiro 0-8 de forma atômica e eficiente.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SLIDE 7: CÓDIGO - MATRIZ DAS 8 RETAS
-         ========================================== -->
-    <section class="slide" data-index="7">
-      <span class="spec-pill">Especificação: Verificação de Vitória e Empate</span>
-      <h2>Função <code>verificar_termino()</code>: Matriz das 8 Retas</h2>
-      <p>Algoritmo em $O(1)$ determinístico que avalia as 8 linhas de vitória e a condição de empate:</p>
-
-      <pre><span class="code-badge">servidor_velha.c / cliente_velha.c (Linhas 90 a 117)</span>
-<span class="c-typ">int</span> <span class="c-fn">verificar_termino</span>(<span class="c-kw">const</span> <span class="c-typ">char</span> tab[<span class="c-num">9</span>]) {
-    <span class="c-com">// As 8 combinacoes vitoriosas possiveis</span>
-    <span class="c-kw">const</span> <span class="c-typ">int</span> linhas[<span class="c-num">8</span>][<span class="c-num">3</span>] = {
-        {<span class="c-num">0</span>, <span class="c-num">1</span>, <span class="c-num">2</span>}, {<span class="c-num">3</span>, <span class="c-num">4</span>, <span class="c-num">5</span>}, {<span class="c-num">6</span>, <span class="c-num">7</span>, <span class="c-num">8</span>}, <span class="c-com">// 3 Horizontais</span>
-        {<span class="c-num">0</span>, <span class="c-num">3</span>, <span class="c-num">6</span>}, {<span class="c-num">1</span>, <span class="c-num">4</span>, <span class="c-num">7</span>}, {<span class="c-num">2</span>, <span class="c-num">5</span>, <span class="c-num">8</span>}, <span class="c-com">// 3 Verticais</span>
-        {<span class="c-num">0</span>, <span class="c-num">4</span>, <span class="c-num">8</span>}, {<span class="c-num">2</span>, <span class="c-num">4</span>, <span class="c-num">6</span>}             <span class="c-com">// 2 Diagonais</span>
-    };
-
-    <span class="c-hl"><span class="c-kw">for</span> (<span class="c-typ">int</span> i = <span class="c-num">0</span>; i < <span class="c-num">8</span>; i++) {</span>
-        <span class="c-typ">int</span> a = linhas[i][<span class="c-num">0</span>], b = linhas[i][<span class="c-num">1</span>], c = linhas[i][<span class="c-num">2</span>];
-        <span class="c-kw">if</span> (tab[a] != <span class="c-str">' '</span> && tab[a] == tab[b] && tab[b] == tab[c]) {
-            <span class="c-kw">if</span> (tab[a] == <span class="c-str">'X'</span>) <span class="c-kw">return</span> <span class="c-num">1</span>; <span class="c-com">// Vitoria do Cliente ('X')</span>
-            <span class="c-kw">if</span> (tab[a] == <span class="c-str">'O'</span>) <span class="c-kw">return</span> <span class="c-num">2</span>; <span class="c-com">// Vitoria do Servidor ('O')</span>
-        }
-    }
-
-    <span class="c-com">// Se resta espaco vazio, a partida continua</span>
-    <span class="c-kw">for</span> (<span class="c-typ">int</span> i = <span class="c-num">0</span>; i < <span class="c-num">9</span>; i++) {
-        <span class="c-kw">if</span> (tab[i] == <span class="c-str">' '</span>) <span class="c-kw">return</span> -<span class="c-num">1</span>;
-    }
-
-    <span class="c-kw">return</span> <span class="c-num">0</span>; <span class="c-com">// Todas as celulas preenchidas sem vencedor: Empate ("Deu velha")</span>
-}
-</pre>
-
-      <div class="callout callout-success">
-        🛡️ <strong>Validação Distribuída e Autônoma:</strong> Em consonância com o projeto, ambos os nós realizam a checagem localmente. Nenhum nó depende de confirmação remota sobre o desfecho da rodada, assegurando integridade à máquina de estados.
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SLIDE 8: CÓDIGO - SETUP DO SERVIDOR
-         ========================================== -->
-    <section class="slide" data-index="8">
-      <span class="spec-pill">Especificação: Conexão e Isolamento de Sessão</span>
-      <h2>Configuração do Servidor e Fechamento do Listener</h2>
-      <p>Gerenciamento do descritor passivo e alocação do socket de transferência:</p>
-
-      <div class="grid-2">
-        <pre><span class="code-badge">servidor_velha.c (Linhas 220 a 273)</span>
-<span class="c-com">// 1. Alocacao do socket passivo TCP</span>
-listen_sd = <span class="c-fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-
-<span class="c-com">// 2. Mitigacao de bloqueio de porta no reinicio (TIME_WAIT)</span>
-<span class="c-typ">int</span> opt = <span class="c-num">1</span>;
-<span class="c-fn">setsockopt</span>(listen_sd, SOL_SOCKET, SO_REUSEADDR, (<span class="c-kw">const</span> <span class="c-typ">char</span> *)&opt, <span class="c-kw">sizeof</span>(opt));
-
-<span class="c-com">// 3. Vinculo com porta local e definicao de fila (backlog = 1)</span>
-<span class="c-fn">bind</span>(listen_sd, (<span class="c-typ">struct</span> sockaddr *)&servAddr, <span class="c-kw">sizeof</span>(servAddr));
-<span class="c-fn">listen</span>(listen_sd, <span class="c-num">1</span>);
-
-<span class="c-hl"><span class="c-com">// 4. Accept bloqueia ate o handshake de 3 vias se completar</span></span>
-client_sd = <span class="c-fn">accept</span>(listen_sd, (<span class="c-typ">struct</span> sockaddr *)&cliAddr, &cliLen);
-
-<span class="c-hl"><span class="c-com">// 5. Fechamento imediato do socket de escuta!</span></span>
-<span class="c-fn">closesocket</span>(listen_sd);
-listen_sd = INVALID_SOCKET;
-</pre>
-
-        <div class="card">
-          <h3>Decisão de Engenharia de Redes</h3>
-          <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.7;">
-            O socket <code>listen_sd</code> tem a função restrita de aguardar o pacote inicial <code>SYN</code>. Uma vez que o método <code>accept()</code> estabelece o circuito virtual e retorna o socket de dados <code>client_sd</code>, o descritor passivo torna-se dispensável.
-          </p>
-          <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 0;">
-            O fechamento imediato com <code>closesocket(listen_sd)</code> libera a porta local no kernel e impede conexões adicionais não autorizadas durante a partida.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SLIDE 9: CÓDIGO - SORTEIO DA MOEDA
-         ========================================== -->
-    <section class="slide" data-index="9">
-      <span class="spec-pill">Especificação: Sorteio do Primeiro a Jogar</span>
-      <h2>Sorteio Aleatório e Handshake de Controle</h2>
-      <p>Determinação imparcial do jogador inicial e transmissão da mensagem de controle:</p>
-
-      <pre><span class="code-badge">servidor_velha.c (Linhas 280 a 305)</span>
-<span class="c-com">// Semente temporal: assegura variabilidade estocastica a cada execucao</span>
-<span class="c-hl"><span class="c-fn">srand</span>((<span class="c-typ">unsigned</span> <span class="c-typ">int</span>)<span class="c-fn">time</span>(NULL));</span>
-<span class="c-typ">int</span> vez_do_servidor = <span class="c-fn">rand</span>() % <span class="c-num">2</span>; <span class="c-com">// 1 = Servidor comeca, 0 = Cliente comeca</span>
-
-<span class="c-fn">memset</span>(buffer, <span class="c-num">0</span>, <span class="c-kw">sizeof</span>(buffer));
-<span class="c-kw">if</span> (vez_do_servidor) {
-    <span class="c-fn">snprintf</span>(buffer, <span class="c-kw">sizeof</span>(buffer), <span class="c-str">"START:SERVER\n"</span>);
-    <span class="c-fn">printf</span>(<span class="c-str">"Sorteio realizado: SERVIDOR (Voce) comeca a partida!\n"</span>);
-} <span class="c-kw">else</span> {
-    <span class="c-fn">snprintf</span>(buffer, <span class="c-kw">sizeof</span>(buffer), <span class="c-str">"START:CLIENT\n"</span>);
-    <span class="c-fn">printf</span>(<span class="c-str">"Sorteio realizado: CLIENTE comeca a partida!\n"</span>);
-}
-
-<span class="c-hl">rc = <span class="c-fn">send</span>(client_sd, buffer, (<span class="c-typ">int</span>)<span class="c-fn">strlen</span>(buffer), <span class="c-num">0</span>);</span>
-</pre>
-
-      <div class="card" style="margin-top: 10px;">
-        <h3>Recepção Síncrona no Nó Cliente (<code>cliente_velha.c</code>)</h3>
-        <p style="font-size: 0.86rem; color: #cbd5e1; margin-bottom: 0;">
-          O nó Cliente permanece em estado bloqueante na chamada <code>recv(sd, buffer, sizeof(buffer)-1, 0)</code> aguardando a decisão arbitral. Ao receber o pacote, analisa a ocorrência da substring <code>START:CLIENT</code> via <code>strstr()</code>, ajustando sua variável booleana de estado (<code>vez_do_cliente = 1</code> ou <code>0</code>).
-        </p>
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SLIDE 10: CÓDIGO - CICLO DE TURNOS
-         ========================================== -->
-    <section class="slide" data-index="10">
-      <span class="spec-pill">Especificação: Ciclo de Turnos</span>
-      <h2>Loop Principal: Alternância e Transmissão de Jogadas</h2>
-      <p>Envio (Turno Ativo) e Recepção Bloqueante (Turno Passivo):</p>
-
-      <pre><span class="code-badge">Loop Principal Sincronizado</span>
-<span class="c-kw">if</span> (vez_do_servidor) {
-    <span class="c-com">// --- TURNO ATIVO: Leitura local, atualizacao e envio do pacote MOVE:&lt;N&gt;\n ---</span>
-    <span class="c-typ">int</span> jogada = <span class="c-fn">obter_jogada_usuario</span>(tabuleiro, SIMBOLO_SERVIDOR);
-    tabuleiro[jogada - <span class="c-num">1</span>] = SIMBOLO_SERVIDOR;
-    <span class="c-fn">exibir_tabuleiro</span>(tabuleiro);
-
-    <span class="c-fn">snprintf</span>(buffer, <span class="c-kw">sizeof</span>(buffer), <span class="c-str">"MOVE:%d\n"</span>, jogada);
-    <span class="c-hl"><span class="c-fn">send</span>(client_sd, buffer, (<span class="c-typ">int</span>)<span class="c-fn">strlen</span>(buffer), <span class="c-num">0</span>);</span>
-
-    <span class="c-typ">int</span> status = <span class="c-fn">verificar_termino</span>(tabuleiro);
-    <span class="c-kw">if</span> (status == <span class="c-num">2</span>) { <span class="c-fn">printf</span>(<span class="c-str">"Você venceu!\n"</span>); jogo_ativo = <span class="c-num">0</span>; }
-    <span class="c-kw">else</span> <span class="c-kw">if</span> (status == <span class="c-num">0</span>) { <span class="c-fn">printf</span>(<span class="c-str">"Empate!\n"</span>); jogo_ativo = <span class="c-num">0</span>; }
-    <span class="c-kw">else</span> { vez_do_servidor = <span class="c-num">0</span>; } <span class="c-com">// Passa o turno para o Cliente</span>
-
-} <span class="c-kw">else</span> {
-    <span class="c-com">// --- TURNO PASSIVO: Bloqueio no recv() aguardando pacote remoto ---</span>
-    <span class="c-hl">rc = <span class="c-fn">recv</span>(client_sd, buffer, <span class="c-kw">sizeof</span>(buffer) - <span class="c-num">1</span>, <span class="c-num">0</span>);</span>
-    <span class="c-kw">if</span> (rc > <span class="c-num">0</span>) {
-        buffer[rc] = <span class="c-str">'\\0'</span>;
-        <span class="c-typ">int</span> jogada_cli;
-        <span class="c-kw">if</span> (<span class="c-fn">sscanf</span>(buffer, <span class="c-str">"MOVE:%d"</span>, &jogada_cli) == <span class="c-num">1</span> && tabuleiro[jogada_cli - <span class="c-num">1</span>] == <span class="c-str">' '</span>) {
-            tabuleiro[jogada_cli - <span class="c-num">1</span>] = SIMBOLO_CLIENTE;
-            <span class="c-fn">exibir_tabuleiro</span>(tabuleiro);
-            <span class="c-com">// Avalia desfecho adversario e alterna a variavel de controle</span>
-        }
-    }
-}
-</pre>
-    </section>
-
-    <!-- ==========================================
-         SLIDE 11: CÓDIGO - RETORNOS DO RECV & ENCERRAMENTO
-         ========================================== -->
-    <section class="slide" data-index="11">
-      <span class="spec-pill">Especificação: Resiliência de Rede e Término</span>
-      <h2>Tratamento de Desconexão e Liberação de Recursos</h2>
-      <p>Tratamento dos 3 casos de retorno de <code>recv()</code> e desalocação Winsock:</p>
 
       <div class="grid-3">
         <div class="card">
-          <div class="card-icon">🟢</div>
-          <h3><code>rc &gt; 0</code> (Sucesso)</h3>
-          <p style="font-size: 0.83rem;">
-            Leitura normal de bytes. O código insere <code>buffer[rc] = '\0'</code> para garantir a integridade de string antes do parsing via <code>sscanf</code>.
+          <h3>Equipe</h3>
+          <p style="font-size: 0.92rem; margin-bottom: 0; line-height: 1.8;">
+            • Pedro Augusto (Peu)<br>
+            • João Victor Pariz<br>
+            • Mateus Roma
           </p>
         </div>
         <div class="card">
-          <div class="card-icon">🟡</div>
-          <h3><code>rc == 0</code> (Término Gracioso)</h3>
-          <p style="font-size: 0.83rem;">
-            Indica encerramento voluntário pelo outro processo através de transmissão do pacote <strong>TCP FIN</strong>. O loop é interrompido sem alarme de falha.
+          <h3>Docente & Curso</h3>
+          <p style="font-size: 0.92rem; margin-bottom: 0; line-height: 1.8;">
+            • Prof. Cel. Vidal<br>
+            • Instituto Militar de Engenharia<br>
+            • Avaliação Prática para VE
           </p>
         </div>
         <div class="card">
-          <div class="card-icon">🔴</div>
-          <h3><code>rc &lt; 0</code> (Queda Abrupta)</h3>
-          <p style="font-size: 0.83rem;">
-            Interrupção anormal da conexão (ex: reset TCP ou falha no meio físico). O código captura o código numérico via <code>WSAGetLastError()</code>.
-          </p>
-        </div>
-      </div>
-
-      <pre style="margin-top: 14px;"><span class="code-badge">Desalocação Ordenada de Recursos</span>
-<span class="c-kw">if</span> (client_sd != INVALID_SOCKET) {
-    <span class="c-fn">closesocket</span>(client_sd); <span class="c-com">// Transmite o pacote TCP FIN e fecha o descritor</span>
-}
-<span class="c-fn">WSACleanup</span>();                <span class="c-com">// Decrementa o contador de referencias e libera ws2_32.dll</span>
-<span class="c-fn">getchar</span>();                   <span class="c-com">// Mantem o console aberto para inspecao final da partida</span>
-</pre>
-    </section>
-
-    <!-- ==========================================
-         SLIDE 12: SIMULADOR INTERATIVO
-         ========================================== -->
-    <section class="slide" data-index="12">
-      <span class="slide-tag">Módulo 3 • Demonstração Prática</span>
-      <h2>Simulação Interativa do Protocolo de Jogo</h2>
-      <p>Demonstração interativa da troca de mensagens da camada de aplicação e atualização de estado:</p>
-
-      <div class="sim-container">
-        <div>
-          <div class="board-grid" id="sim-board">
-            <div class="board-cell" onclick="simPlay(0)">1</div>
-            <div class="board-cell" onclick="simPlay(1)">2</div>
-            <div class="board-cell" onclick="simPlay(2)">3</div>
-            <div class="board-cell" onclick="simPlay(3)">4</div>
-            <div class="board-cell" onclick="simPlay(4)">5</div>
-            <div class="board-cell" onclick="simPlay(5)">6</div>
-            <div class="board-cell" onclick="simPlay(6)">7</div>
-            <div class="board-cell" onclick="simPlay(7)">8</div>
-            <div class="board-cell" onclick="simPlay(8)">9</div>
-          </div>
-          <div style="margin-top: 12px; display: flex; gap: 8px;">
-            <button class="btn" style="flex: 1;" onclick="simReset()">Reiniciar Partida 🔄</button>
-          </div>
-        </div>
-
-        <div class="sim-terminal">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 6px; border-bottom: 1px solid #1e293b; padding-bottom: 4px;">
-            <span style="color: var(--accent-cyan);">Captura de Pacotes TCP (Console de Rede)</span>
-            <span id="sim-status" style="color: var(--accent-amber);">Vez do Cliente ('X')</span>
-          </div>
-          <div class="sim-terminal-log" id="sim-log">
-            <div class="log-sys">[SISTEMA] Conexao TCP estabelecida em 127.0.0.1:6000</div>
-            <div class="log-rx">[REDE &lt;--] RX: START:CLIENT\n (Sorteio: Cliente comeca!)</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SLIDE 13: EVIDÊNCIAS DE EXECUÇÃO REAL
-         ========================================== -->
-    <section class="slide" data-index="13">
-      <span class="slide-tag">Módulo 4 • Evidências Técnicas</span>
-      <h2>Registros de Execução no Ambiente Windows</h2>
-      <p>Capturas reais dos terminais durante a sincronização entre nós:</p>
-
-      <div class="grid-2">
-        <div class="card" style="padding: 12px;">
-          <h3 style="margin-bottom: 8px;">Terminal do Servidor ('O')</h3>
-          <img src="assets/screenshot_server.jpeg" alt="Execucao Servidor" style="width: 100%; height: 210px; object-fit: contain; background: #000; border-radius: 6px;">
-          <p style="font-size: 0.8rem; margin: 8px 0 0 0; color: var(--text-muted);">
-            Exibição programática dos IPs locais, notificação da porta 6000 e sorteio inicial de jogada.
-          </p>
-        </div>
-
-        <div class="card" style="padding: 12px;">
-          <h3 style="margin-bottom: 8px;">Terminal do Cliente ('X')</h3>
-          <img src="assets/screenshot_client.jpeg" alt="Execucao Cliente" style="width: 100%; height: 210px; object-fit: contain; background: #000; border-radius: 6px;">
-          <p style="font-size: 0.8rem; margin: 8px 0 0 0; color: var(--text-muted);">
-            Conexão estabelecida, recepção do sorteio via rede e sincronização estrita das rodadas.
+          <h3>Estrutura dos Arquivos</h3>
+          <p style="font-size: 0.92rem; margin-bottom: 0; line-height: 1.8;">
+            • <code>servidor_velha.c</code><br>
+            • <code>cliente_velha.c</code><br>
+            • Compilação MinGW (GCC)
           </p>
         </div>
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 14: CONCLUSÃO
+         SLIDE 2: COMO O JOGO FUNCIONA
          ========================================== -->
-    <section class="slide" data-index="14">
-      <span class="slide-tag">Encerramento da Defesa</span>
-      <h1>Conclusão da Apresentação de Código</h1>
-      <p style="font-size: 1.08rem; max-width: 860px; margin-bottom: 20px;">
-        A aplicação atendeu a todas as diretrizes funcionais e técnicas estabelecidas para o projeto:
+    <section class="slide">
+      <div class="slide-subtitle">Visão Geral</div>
+      <h2>Como o Jogo Funciona na Rede</h2>
+      <p>
+        O jogo coloca dois computadores em disputa direta através de uma conexão TCP confiável na porta 6000:
       </p>
 
-      <div class="grid-4" style="margin-bottom: 20px;">
+      <div class="grid-2">
         <div class="card">
-          <div class="card-icon">⚡</div>
-          <h3>Fluxo Confiável</h3>
-          <p style="font-size: 0.82rem;">Comunicação ponto a ponto sobre TCP/IP sem perda ou desordem.</p>
+          <h3>Papéis de Cada Lado</h3>
+          <ul>
+            <li><strong>Servidor (Peça 'O'):</strong> É iniciado primeiro, aguarda conexões e descobre seus IPs locais automaticamente.</li>
+            <li><strong>Cliente (Peça 'X'):</strong> Inicia em seguida, conecta ao IP do servidor e aguarda o sorteio.</li>
+            <li><strong>Sorteio Inicial:</strong> O servidor joga uma moeda (<code>rand() % 2</code>) e avisa quem começa.</li>
+          </ul>
         </div>
+
         <div class="card">
-          <div class="card-icon">🛡️</div>
-          <h3>Validação de I/O</h3>
-          <p style="font-size: 0.82rem;">Leitura segura via <code>fgets</code> com dreno de buffer e normalização.</p>
+          <h3>Troca de Mensagens (Protocolo)</h3>
+          <ul>
+            <li><code>START:SERVER</code> ou <code>START:CLIENT</code>: Enviado no início para sincronizar a ordem.</li>
+            <li><code>MOVE:<1-9></code>: Enviado a cada jogada com a célula escolhida (ex: <code>MOVE:5\n</code>).</li>
+            <li><strong>Validação Local:</strong> Ambos os programas atualizam o tabuleiro e checam vitória/empate localmente.</li>
+          </ul>
         </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 3: CÓDIGO DO SERVIDOR
+         ========================================== -->
+    <section class="slide">
+      <div class="slide-subtitle">servidor_velha.c</div>
+      <h2>O Nó Servidor: Conexão e Sorteio</h2>
+      <p>Como o servidor inicializa a rede, aguarda o cliente e sorteia quem começa:</p>
+
+      <div class="grid-2">
+        <pre><span class="com">// 1. Cria o socket TCP e aguarda conexao</span>
+listen_sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+<span class="fn">bind</span>(listen_sd, (<span class="kw">struct</span> sockaddr *)&servAddr, <span class="kw">sizeof</span>(servAddr));
+<span class="fn">listen</span>(listen_sd, <span class="num">1</span>);
+
+<span class="com">// 2. Bloqueia ate o cliente conectar</span>
+client_sd = <span class="fn">accept</span>(listen_sd, (<span class="kw">struct</span> sockaddr *)&cliAddr, &cliLen);
+<span class="hl"><span class="fn">closesocket</span>(listen_sd); <span class="com">// Fecha o listener, jogo eh para 2!</span></span>
+
+<span class="com">// 3. Sorteio aleatorio da moeda</span>
+<span class="fn">srand</span>((<span class="kw">unsigned</span>)<span class="fn">time</span>(NULL));
+<span class="kw">int</span> vez_do_servidor = <span class="fn">rand</span>() % <span class="num">2</span>;
+
+<span class="hl"><span class="com">// 4. Envia mensagem de inicio ao cliente</span></span>
+<span class="kw">if</span> (vez_do_servidor)
+    <span class="fn">send</span>(client_sd, <span class="str">"START:SERVER\n"</span>, <span class="num">13</span>, <span class="num">0</span>);
+<span class="kw">else</span>
+    <span class="fn">send</span>(client_sd, <span class="str">"START:CLIENT\n"</span>, <span class="num">13</span>, <span class="num">0</span>);
+</pre>
+
         <div class="card">
-          <div class="card-icon">🧠</div>
-          <h3>Algoritmo em $O(1)$</h3>
-          <p style="font-size: 0.82rem;">Avaliação autônoma das 8 linhas vitoriosas e empate em ambos os nós.</p>
+          <h3>Pontos Importantes do Código</h3>
+          <ul>
+            <li><strong>SO_REUSEADDR:</strong> Usamos <code>setsockopt</code> para liberar a porta 6000 imediatamente se precisarmos reiniciar o servidor.</li>
+            <li><strong>Fechamento do Listener:</strong> Logo após o <code>accept()</code>, fechamos <code>listen_sd</code> porque a partida já tem 2 jogadores. Isso economiza recursos e bloqueia conexões invasoras.</li>
+            <li><strong>Sorteio Imparcial:</strong> O <code>time(NULL)</code> garante que cada partida tenha um resultado genuinamente imprevisível.</li>
+          </ul>
         </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 4: CÓDIGO DO CLIENTE
+         ========================================== -->
+    <section class="slide">
+      <div class="slide-subtitle">cliente_velha.c</div>
+      <h2>O Nó Cliente: Conexão e Sincronia</h2>
+      <p>Como o cliente se conecta ao servidor e descobre se joga primeiro:</p>
+
+      <div class="grid-2">
+        <pre><span class="com">// 1. Entrada flexivel de IP (argumento ou prompt)</span>
+<span class="kw">if</span> (<span class="fn">strlen</span>(server_ip_str) == <span class="num">0</span>) {
+    <span class="fn">printf</span>(<span class="str">"Digite o IP do servidor [Enter para 127.0.0.1]: "</span>);
+    <span class="fn">fgets</span>(server_ip_str, <span class="kw">sizeof</span>(server_ip_str), stdin);
+    <span class="com">// Se teclar Enter -> conecta na mesma maquina</span>
+}
+
+<span class="com">// 2. Conecta ao servidor TCP</span>
+sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+<span class="hl"><span class="fn">connect</span>(sd, (<span class="kw">struct</span> sockaddr *)&servAddr, <span class="kw">sizeof</span>(servAddr));</span>
+
+<span class="com">// 3. Aguarda o resultado do sorteio da moeda</span>
+<span class="hl"><span class="fn">recv</span>(sd, buffer, <span class="kw">sizeof</span>(buffer) - <span class="num">1</span>, <span class="num">0</span>);</span>
+
+<span class="kw">if</span> (<span class="fn">strstr</span>(buffer, <span class="str">"START:CLIENT"</span>)) {
+    vez_do_cliente = <span class="num">1</span>; <span class="com">// Voce comeca!</span>
+} <span class="kw">else</span> {
+    vez_do_cliente = <span class="num">0</span>; <span class="com">// Servidor comeca</span>
+}
+</pre>
+
         <div class="card">
-          <div class="card-icon">🌐</div>
-          <h3>Portabilidade</h3>
-          <p style="font-size: 0.82rem;">Detecção dinâmica de IPs sem necessidade de recompilação.</p>
+          <h3>Facilidade para a Apresentação</h3>
+          <ul>
+            <li><strong>Sem Recompilar:</strong> Para jogar entre computadores diferentes no laboratório, basta passar o IP (ex: <code>.\cliente_velha.exe 172.16.1.160</code>).</li>
+            <li><strong>Teste Local com 1 Clique:</strong> Se estiver no mesmo PC, basta dar <span style="color:var(--accent);">Enter</span> e o código assume <code>127.0.0.1</code> automaticamente.</li>
+            <li><strong>Bloqueio no <code>recv()</code>:</strong> O cliente não toma nenhuma decisão até que o servidor termine o sorteio e envie a mensagem de controle.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 5: O CICLO DE TURNOS
+         ========================================== -->
+    <section class="slide">
+      <div class="slide-subtitle">A Máquina de Estados</div>
+      <h2>O Ciclo de Turnos: Envio e Recepção</h2>
+      <p>O coração do jogo é um laço <code>while (jogo_ativo)</code> que alterna entre quem joga e quem aguarda:</p>
+
+      <div class="grid-2">
+        <pre><span class="com">// === QUANDO EH A MINHA VEZ ===</span>
+<span class="kw">if</span> (minha_vez) {
+    <span class="com">// 1. Le e valida a jogada (1 a 9)</span>
+    <span class="kw">int</span> jogada = <span class="fn">obter_jogada_usuario</span>(tabuleiro, MEU_SIMBOLO);
+    tabuleiro[jogada - <span class="num">1</span>] = MEU_SIMBOLO;
+    <span class="fn">exibir_tabuleiro</span>(tabuleiro);
+
+    <span class="hl"><span class="com">// 2. Envia a coordenada pela rede</span></span>
+    <span class="fn">snprintf</span>(buffer, <span class="kw">sizeof</span>(buffer), <span class="str">"MOVE:%d\n"</span>, jogada);
+    <span class="fn">send</span>(socket_sd, buffer, <span class="fn">strlen</span>(buffer), <span class="num">0</span>);
+
+    <span class="com">// 3. Checa se o jogo acabou</span>
+    <span class="kw">if</span> (<span class="fn">verificar_termino</span>(tabuleiro) != -<span class="num">1</span>)
+        jogo_ativo = <span class="num">0</span>;
+    minha_vez = <span class="num">0</span>; <span class="com">// Passa a vez</span>
+}
+</pre>
+
+        <pre><span class="com">// === QUANDO EH A VEZ DO ADVERSARIO ===</span>
+<span class="kw">else</span> {
+    <span class="fn">printf</span>(<span class="str">"Aguardando jogada do adversario...\n"</span>);
+
+    <span class="hl"><span class="com">// 1. Bloqueia ate receber dados da rede</span></span>
+    <span class="kw">int</span> rc = <span class="fn">recv</span>(socket_sd, buffer, <span class="kw">sizeof</span>(buffer)-<span class="num">1</span>, <span class="num">0</span>);
+
+    <span class="kw">if</span> (rc > <span class="num">0</span>) {
+        buffer[rc] = <span class="str">'\0'</span>;
+        <span class="kw">int</span> jogada_adv;
+        <span class="fn">sscanf</span>(buffer, <span class="str">"MOVE:%d"</span>, &jogada_adv);
+
+        <span class="com">// 2. Marca no tabuleiro local</span>
+        tabuleiro[jogada_adv - <span class="num">1</span>] = SIMBOLO_ADV;
+        <span class="fn">exibir_tabuleiro</span>(tabuleiro);
+
+        <span class="com">// 3. Checa se o jogo acabou</span>
+        <span class="kw">if</span> (<span class="fn">verificar_termino</span>(tabuleiro) != -<span class="num">1</span>)
+            jogo_ativo = <span class="num">0</span>;
+        minha_vez = <span class="num">1</span>; <span class="com">// Agora eh a minha vez!</span>
+    }
+}
+</pre>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 6: REGRAS E FIM DE JOGO
+         ========================================== -->
+    <section class="slide">
+      <div class="slide-subtitle">verificar_termino()</div>
+      <h2>Lógica de Vitória e Empate</h2>
+      <p>A função que avalia as 8 linhas de vitória e a ocorrência de empate em tempo constante $O(1)$:</p>
+
+      <div class="grid-2">
+        <pre><span class="kw">int</span> <span class="fn">verificar_termino</span>(<span class="kw">const</span> <span class="kw">char</span> tab[<span class="num">9</span>]) {
+    <span class="com">// Matriz com as 8 retas possiveis de vitoria</span>
+    <span class="kw">const</span> <span class="kw">int</span> linhas[<span class="num">8</span>][<span class="num">3</span>] = {
+        {<span class="num">0</span>, <span class="num">1</span>, <span class="num">2</span>}, {<span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>}, {<span class="num">6</span>, <span class="num">7</span>, <span class="num">8</span>}, <span class="com">// 3 Horizontais</span>
+        {<span class="num">0</span>, <span class="num">3</span>, <span class="num">6</span>}, {<span class="num">1</span>, <span class="num">4</span>, <span class="num">7</span>}, {<span class="num">2</span>, <span class="num">5</span>, <span class="num">8</span>}, <span class="com">// 3 Verticais</span>
+        {<span class="num">0</span>, <span class="num">4</span>, <span class="num">8</span>}, {<span class="num">2</span>, <span class="num">4</span>, <span class="num">6</span>}             <span class="com">// 2 Diagonais</span>
+    };
+
+    <span class="hl"><span class="com">// 1. Checa se alguem fechou uma reta</span></span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i < <span class="num">8</span>; i++) {
+        <span class="kw">int</span> a = linhas[i][<span class="num">0</span>], b = linhas[i][<span class="num">1</span>], c = linhas[i][<span class="num">2</span>];
+        <span class="kw">if</span> (tab[a] != <span class="str">' '</span> && tab[a] == tab[b] && tab[b] == tab[c]) {
+            <span class="kw">if</span> (tab[a] == <span class="str">'X'</span>) <span class="kw">return</span> <span class="num">1</span>; <span class="com">// Vitoria de X</span>
+            <span class="kw">if</span> (tab[a] == <span class="str">'O'</span>) <span class="kw">return</span> <span class="num">2</span>; <span class="com">// Vitoria de O</span>
+        }
+    }
+
+    <span class="hl"><span class="com">// 2. Se ha casa vazia, o jogo continua</span></span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i < <span class="num">9</span>; i++) {
+        <span class="kw">if</span> (tab[i] == <span class="str">' '</span>) <span class="kw">return</span> -<span class="num">1</span>;
+    }
+
+    <span class="kw">return</span> <span class="num">0</span>; <span class="com">// Todas cheias sem vencedor: Empate!</span>
+}
+</pre>
+
+        <div class="card">
+          <h3>Como Tratamos o Encerramento</h3>
+          <ul>
+            <li><strong>Validação Independente:</strong> Servidor e Cliente executam essa função em seus computadores. Nenhum nó precisa mandar mensagem de "você perdeu" — o tabuleiro decide.</li>
+            <li><strong>Mensagens na Tela:</strong><br>
+              • Se status for minha vitória: <em>"Você venceu!"</em><br>
+              • Se status for do oponente: <em>"Você perdeu!"</em><br>
+              • Se status for 0: <em>"Empate!"</em>
+            </li>
+            <li><strong>Fechamento:</strong> Logo após, chamamos <code>closesocket()</code> e <code>WSACleanup()</code>.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 7: VALIDAÇÃO DE ENTRADA
+         ========================================== -->
+    <section class="slide">
+      <div class="slide-subtitle">obter_jogada_usuario()</div>
+      <h2>Validação e Sanitização de Entrada</h2>
+      <p>Como garantimos que o jogo não trave e rejeite qualquer digitação incorreta:</p>
+
+      <div class="grid-2">
+        <pre><span class="com">// 1. Leitura segura com fgets (evita estouro de buffer)</span>
+<span class="fn">fgets</span>(linha, <span class="kw">sizeof</span>(linha), stdin);
+
+<span class="com">// 2. Se digitou mais de 127 caracteres, drena o buffer</span>
+<span class="kw">if</span> (<span class="fn">strchr</span>(linha, <span class="str">'\n'</span>) == NULL) {
+    <span class="kw">int</span> c;
+    <span class="kw">while</span> ((c = <span class="fn">getchar</span>()) != <span class="str">'\n'</span> && c != EOF);
+}
+
+<span class="com">// 3. Remove quebras de linha e espacos nas bordas</span>
+linha[<span class="fn">strcspn</span>(linha, <span class="str">"\r\n"</span>)] = <span class="str">'\0'</span>;
+
+<span class="hl"><span class="com">// 4. Exige EXATAMENTE 1 unico caractere de '1' a '9'</span></span>
+<span class="kw">if</span> (<span class="fn">strlen</span>(inicio) != <span class="num">1</span> || inicio[<span class="num">0</span>] < <span class="str">'1'</span> || inicio[<span class="num">0</span>] > <span class="str">'9'</span>) {
+    <span class="fn">printf</span>(<span class="str">"Entrada invalida! Digite apenas de 1 a 9.\n"</span>);
+    <span class="kw">continue</span>;
+}
+
+<span class="hl"><span class="com">// 5. Impede jogar em casa ja ocupada</span></span>
+<span class="kw">if</span> (tabuleiro[celula] != <span class="str">' '</span>) {
+    <span class="fn">printf</span>(<span class="str">"Posicao ocupada! Escolha outra.\n"</span>);
+    <span class="kw">continue</span>;
+}
+</pre>
+
+        <div class="card">
+          <h3>Por que NÃO usamos <code>scanf("%d")</code>?</h3>
+          <ul>
+            <li><strong>O Problema do <code>scanf</code>:</strong> Se o usuário digitar acidentalmente uma letra (ex: <code>"a"</code>), o <code>scanf</code> falha, não consome a entrada e o programa entra em loop infinito.</li>
+            <li><strong>A Solução com <code>fgets</code>:</strong> Lemos a linha como texto, limpamos os espaços e validamos se é exatamente um dígito entre 1 e 9.</li>
+            <li><strong>Proteção de Célula:</strong> O código checa <code>tabuleiro[celula] != ' '</code> antes de aceitar a jogada.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 8: DEMONSTRAÇÃO PRÁTICA
+         ========================================== -->
+    <section class="slide">
+      <div class="slide-subtitle">Demonstração & Encerramento</div>
+      <h2>Execução Real no Laboratório</h2>
+      <p>Os dois nós conectados e rodando perfeitamente sincronizados:</p>
+
+      <div class="grid-2">
+        <div class="card" style="padding: 10px;">
+          <h3 style="font-size: 0.95rem; margin-bottom: 6px;">Servidor (Peça 'O')</h3>
+          <img src="assets/screenshot_server.jpeg" alt="Servidor" style="width: 100%; height: 210px; object-fit: contain; background: #000; border-radius: 6px;">
+        </div>
+        <div class="card" style="padding: 10px;">
+          <h3 style="font-size: 0.95rem; margin-bottom: 6px;">Cliente (Peça 'X')</h3>
+          <img src="assets/screenshot_client.jpeg" alt="Cliente" style="width: 100%; height: 210px; object-fit: contain; background: #000; border-radius: 6px;">
         </div>
       </div>
 
-      <div class="card" style="text-align: center; padding: 22px; background: rgba(56, 189, 248, 0.04); border-color: rgba(56, 189, 248, 0.3);">
-        <h2 style="margin-bottom: 6px; justify-content: center;">Agradecemos a atenção do Prof. Cel. Vidal e da turma! 🤝</h2>
-        <p style="margin-bottom: 10px; color: var(--accent-blue);">
+      <div class="card" style="text-align: center; margin-top: 18px; padding: 18px; border-color: rgba(56, 189, 248, 0.4);">
+        <h2 style="font-size: 1.3rem; margin-bottom: 6px;">Vamos rodar o código ao vivo! 🚀</h2>
+        <p style="font-size: 0.92rem; margin-bottom: 0; color: var(--accent);">
           Pedro Augusto • João Victor Pariz • Mateus Roma
         </p>
-        <span class="header-badge" style="font-size: 0.82rem; padding: 4px 14px;">
-          Repositório: github.com/VPariz/jogo-da-velha-sockets-tcp
-        </span>
       </div>
     </section>
 
   </main>
 
-  <!-- Bottom Navigation Bar -->
+  <!-- Bottom Navigation -->
   <footer>
-    <div class="footer-hints">
-      <span>Navegação: <span class="key-badge">←</span> <span class="key-badge">→</span> ou <span class="key-badge">Espaço</span></span>
-      <span>Roteiro de Fala: <span class="key-badge">N</span></span>
-      <span>Menu: <span class="key-badge">M</span></span>
-      <span>Tela Cheia: <span class="key-badge">F</span></span>
-    </div>
-    <div class="footer-nav">
-      <button class="btn" id="prev-btn" onclick="prevSlide()">◀ Anterior</button>
-      <button class="btn" id="next-btn" onclick="nextSlide()">Próximo ▶</button>
+    <div class="counter" id="counter">Slide 1 de 8</div>
+    <div class="controls">
+      <button class="nav-btn" id="prev-btn" onclick="prevSlide()">◀ Anterior</button>
+      <button class="nav-btn" id="next-btn" onclick="nextSlide()">Próximo ▶</button>
     </div>
   </footer>
-
-  <!-- Slide Index Drawer Modal -->
-  <div class="modal-overlay" id="menu-modal" onclick="if(event.target === this) toggleMenu()">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 style="margin: 0; color: #fff;">Índice dos Slides</h3>
-        <button class="btn" onclick="toggleMenu()" style="padding: 4px 8px;">✕</button>
-      </div>
-      <div class="modal-body" id="menu-list" style="display: flex; flex-direction: column; gap: 4px;">
-        <!-- Filled by JS -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Speaker Notes Modal -->
-  <div class="modal-overlay" id="notes-modal" onclick="if(event.target === this) toggleNotes()">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 style="margin: 0; color: #fff;">🎙️ Roteiro de Fala do Apresentador</h3>
-        <button class="btn" onclick="toggleNotes()" style="padding: 4px 8px;">✕</button>
-      </div>
-      <div class="modal-body" id="notes-content">
-        <!-- Filled dynamically per slide -->
-      </div>
-    </div>
-  </div>
 
   <script>
     const slides = document.querySelectorAll('.slide');
@@ -1179,59 +598,19 @@ listen_sd = INVALID_SOCKET;
     const progressBar = document.getElementById('progress-bar');
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
-    const menuList = document.getElementById('menu-list');
-
-    // Formal, high-level academic speaker notes
-    const speakerNotes = {
-      1: "Cumprimentar o Cel. Vidal e a turma: 'Bom dia Cel. Vidal, bom dia turma. Apresentamos hoje a implementação técnica do Jogo da Velha Cliente-Servidor em Linguagem C utilizando Sockets TCP. Nosso foco é detalhar a arquitetura do software, a sanitização de dados e o cumprimento integral dos requisitos especificados.'",
-      2: "Explicar a tabela de conformidade: 'Neste quadro resumimos como cada diretriz de projeto foi materializada em rotinas específicas do código, cobrindo conexão, ordem de jogada, protocolo da camada de aplicação e tratamento robusto de exceções.'",
-      3: "Explicar a estrutura de dados: 'Optamos por alocar um vetor contíguo char tabuleiro[9] na stack. Essa decisão assegura mapeamento atômico em O(1) diretamente da entrada do usuário para o índice do vetor (tabuleiro[jogada - 1]), sem exigir divisões de linha e coluna, além de otimizar a passagem de ponteiros em registradores de 64 bits.'",
-      4: "Explicar a autodescoberta de IPs: 'Implementamos a rotina exibir_ips_locais() utilizando as funções gethostname e gethostbyname da API Winsock. A função itera pela lista h_addr_list e formata cada endereço com inet_ntoa, permitindo ao usuário identificar imediatamente os IPs disponíveis para conexão sem dependência de comandos externos.'",
-      5: "Explicar a sanitização de entrada (Parte 1): 'Para garantir robustez, evitamos intencionalmente o uso de scanf(), cujo comportamento em entradas não numéricas pode corromper o fluxo de execução. Utilizamos fgets com buffer limitado a 128 bytes e implementamos um dreno com getchar() caso uma entrada exceda esse limite.'",
-      6: "Explicar a sanitização de entrada (Parte 2): 'Normalizamos as quebras de linha com strcspn para suporte uniforme a CRLF e LF, realizamos o trim de espaços em branco e verificamos rigorosamente o intervalo numérico e o tamanho unitário da entrada antes de inspecionar a disponibilidade da célula.'",
-      7: "Explicar a função de verificação de término: 'A avaliação do estado é executada pela matriz constante linhas[8][3], inspecionando as 3 linhas horizontais, 3 verticais e 2 diagonais em tempo constante O(1). Ambos os nós realizam essa checagem de forma autônoma e descentralizada.'",
-      8: "Explicar a inicialização do Servidor: 'Configuramos o socket passivo com SO_REUSEADDR para permitir reinicializações imediatas. Um aspecto importante de projeto é que, logo após a conclusão do accept(), fechamos o descritor de escuta com closesocket, isolando a sessão e liberando a porta.'",
-      9: "Explicar o sorteio inicial: 'O nó Servidor gera uma semente aleatória com time(NULL) e executa o sorteio binário. Em seguida, transmite a mensagem de controle START:SERVER ou START:CLIENT via send(). O Cliente recebe a mensagem no recv() bloqueante e sincroniza seu estado.'",
-      10: "Explicar o ciclo de turnos: 'O jogador ativo insere a jogada, atualiza o vetor local e envia o pacote formatado MOVE:<N>\\n. O nó receptor permanece em chamada bloqueante ao recv(), valida os dados recebidos e atualiza sua representação local.'",
-      11: "Explicar o tratamento de retornos de rede: 'A aplicação trata com precisão os três cenários de recv(): retorno positivo indica leitura de dados; retorno zero indica encerramento gracioso via TCP FIN; e retorno negativo indica queda abrupta de conexão tratada via WSAGetLastError(). Ao final, closesocket e WSACleanup liberam a infraestrutura.'",
-      12: "Demonstrar o simulador em tela: 'Para ilustrar o comportamento da máquina de estados, incluímos este simulador diretamente na apresentação, onde podemos visualizar a geração dos comandos e a alternância de turnos.'",
-      13: "Apresentar as evidências reais de execução dos terminais em ambiente Windows, destacando a conformidade com as orientações do trabalho.",
-      14: "Concluir a apresentação formal agradecendo ao docente e à turma, colocando-se à disposição para a execução prática dos arquivos compilados e para eventuais questionamentos técnicos."
-    };
-
-    // Build Menu List
-    slides.forEach((slide, idx) => {
-      const num = idx + 1;
-      const title = slide.querySelector('h1, h2').innerText.replace(/[^\w\sÀ-ÿ]/gi, '').trim();
-      const btn = document.createElement('button');
-      btn.className = 'menu-item' + (num === 1 ? ' active' : '');
-      btn.innerHTML = `<span><strong>${num}.</strong> ${title}</span> <span>➔</span>`;
-      btn.onclick = () => {
-        goToSlide(num);
-        toggleMenu();
-      };
-      menuList.appendChild(btn);
-    });
 
     function updatePresentation() {
       slides.forEach((s, idx) => {
         s.classList.toggle('active', (idx + 1) === currentSlide);
       });
 
-      counterEl.textContent = `${currentSlide} / ${totalSlides}`;
+      counterEl.textContent = `Slide ${currentSlide} de ${totalSlides}`;
       progressBar.style.width = `${((currentSlide - 1) / (totalSlides - 1)) * 100}%`;
 
       prevBtn.disabled = currentSlide === 1;
       nextBtn.disabled = currentSlide === totalSlides;
-      prevBtn.style.opacity = currentSlide === 1 ? '0.5' : '1';
-      nextBtn.style.opacity = currentSlide === totalSlides ? '0.5' : '1';
-
-      const menuItems = menuList.querySelectorAll('.menu-item');
-      menuItems.forEach((item, idx) => {
-        item.classList.toggle('active', (idx + 1) === currentSlide);
-      });
-
-      updateNotesContent();
+      prevBtn.style.opacity = currentSlide === 1 ? '0.4' : '1';
+      nextBtn.style.opacity = currentSlide === totalSlides ? '0.4' : '1';
     }
 
     function nextSlide() {
@@ -1248,39 +627,6 @@ listen_sd = INVALID_SOCKET;
       }
     }
 
-    function goToSlide(n) {
-      if (n >= 1 && n <= totalSlides) {
-        currentSlide = n;
-        updatePresentation();
-      }
-    }
-
-    function toggleMenu() {
-      document.getElementById('menu-modal').classList.toggle('open');
-    }
-
-    function toggleNotes() {
-      const modal = document.getElementById('notes-modal');
-      const btn = document.getElementById('btn-notes');
-      modal.classList.toggle('open');
-      btn.classList.toggle('btn-active', modal.classList.contains('open'));
-    }
-
-    function updateNotesContent() {
-      const notesEl = document.getElementById('notes-content');
-      const text = speakerNotes[currentSlide] || "Sem notas cadastradas.";
-      const title = slides[currentSlide - 1].querySelector('h1, h2').innerText;
-      notesEl.innerHTML = `
-        <div class="speaker-card">
-          <h4>Slide ${currentSlide}: ${title}</h4>
-          <p style="font-size: 0.92rem; line-height: 1.65; color: #e2e8f0; margin-bottom: 0;">${text}</p>
-        </div>
-        <div style="font-size: 0.78rem; color: var(--text-muted); text-align: right;">
-          Pressione <span class="key-badge">N</span> para fechar ou abrir este roteiro.
-        </div>
-      `;
-    }
-
     function toggleFullScreen() {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(err => console.log(err));
@@ -1291,119 +637,7 @@ listen_sd = INVALID_SOCKET;
       }
     }
 
-    // ==========================================
-    // Interactive Simulator Logic
-    // ==========================================
-    let simBoard = ['', '', '', '', '', '', '', '', ''];
-    let simTurn = 'X';
-    let simActive = true;
-
-    function simPlay(cellIdx) {
-      if (!simActive || simBoard[cellIdx] !== '') return;
-
-      const logEl = document.getElementById('sim-log');
-      const statusEl = document.getElementById('sim-status');
-      const cells = document.querySelectorAll('.board-cell');
-
-      simBoard[cellIdx] = 'X';
-      cells[cellIdx].textContent = 'X';
-      cells[cellIdx].classList.add('cell-x', 'occupied');
-
-      logEl.innerHTML += `<div class="log-tx">[send()] TX: MOVE:${cellIdx + 1}\\n (Cliente preencheu celula ${cellIdx + 1})</div>`;
-      logEl.scrollTop = logEl.scrollHeight;
-
-      if (checkSimWinner('X')) {
-        logEl.innerHTML += `<div class="log-sys">🏆 [verificar_termino == 1] Vitoria do Cliente ('X')!</div>`;
-        statusEl.textContent = 'Fim de Jogo: Vitória do Cliente!';
-        statusEl.style.color = 'var(--accent-cyan)';
-        simActive = false;
-        return;
-      }
-
-      if (simBoard.every(c => c !== '')) {
-        logEl.innerHTML += `<div class="log-sys">🤝 [verificar_termino == 0] Empate! Nenhuma casa vazia.</div>`;
-        statusEl.textContent = 'Fim de Jogo: Empate!';
-        statusEl.style.color = 'var(--accent-amber)';
-        simActive = false;
-        return;
-      }
-
-      statusEl.textContent = 'Aguardando Servidor (\'O\')...';
-      statusEl.style.color = 'var(--accent-amber)';
-
-      setTimeout(() => {
-        if (!simActive) return;
-        const available = [];
-        simBoard.forEach((val, i) => { if (val === '') available.push(i); });
-        if (available.length === 0) return;
-
-        const serverIdx = available[Math.floor(Math.random() * available.length)];
-        simBoard[serverIdx] = 'O';
-        cells[serverIdx].textContent = 'O';
-        cells[serverIdx].classList.add('cell-o', 'occupied');
-
-        logEl.innerHTML += `<div class="log-rx">[recv()] RX: MOVE:${serverIdx + 1}\\n (Servidor preencheu celula ${serverIdx + 1})</div>`;
-        logEl.scrollTop = logEl.scrollHeight;
-
-        if (checkSimWinner('O')) {
-          logEl.innerHTML += `<div class="log-sys">💀 [verificar_termino == 2] Vitoria do Servidor ('O')!</div>`;
-          statusEl.textContent = 'Fim de Jogo: Vitória do Servidor!';
-          statusEl.style.color = 'var(--accent-amber)';
-          simActive = false;
-          return;
-        }
-
-        if (simBoard.every(c => c !== '')) {
-          logEl.innerHTML += `<div class="log-sys">🤝 [verificar_termino == 0] Empate!</div>`;
-          statusEl.textContent = 'Fim de Jogo: Empate!';
-          statusEl.style.color = 'var(--accent-amber)';
-          simActive = false;
-          return;
-        }
-
-        statusEl.textContent = 'Vez do Cliente (\'X\')';
-        statusEl.style.color = 'var(--accent-cyan)';
-      }, 500);
-    }
-
-    function checkSimWinner(symbol) {
-      const wins = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8],
-        [0, 3, 6], [1, 4, 7], [2, 5, 8],
-        [0, 4, 8], [2, 4, 6]
-      ];
-      return wins.some(([a, b, c]) => simBoard[a] === symbol && simBoard[b] === symbol && simBoard[c] === symbol);
-    }
-
-    function simReset() {
-      simBoard = ['', '', '', '', '', '', '', '', ''];
-      simActive = true;
-      const cells = document.querySelectorAll('.board-cell');
-      cells.forEach((c, idx) => {
-        c.textContent = idx + 1;
-        c.className = 'board-cell';
-      });
-      const logEl = document.getElementById('sim-log');
-      logEl.innerHTML = `
-        <div class="log-sys">[SISTEMA] Tabuleiro reiniciado.</div>
-        <div class="log-rx">[REDE &lt;--] RX: START:CLIENT\\n (Sorteio: Cliente joga primeiro)</div>
-      `;
-      const statusEl = document.getElementById('sim-status');
-      statusEl.textContent = 'Vez do Cliente (\'X\')';
-      statusEl.style.color = 'var(--accent-cyan)';
-    }
-
-    // Keyboard controls
     window.addEventListener('keydown', (e) => {
-      if (document.getElementById('menu-modal').classList.contains('open')) {
-        if (e.key === 'Escape') toggleMenu();
-        return;
-      }
-      if (document.getElementById('notes-modal').classList.contains('open')) {
-        if (e.key === 'Escape' || e.key === 'n' || e.key === 'N') toggleNotes();
-        return;
-      }
-
       switch (e.key) {
         case 'ArrowRight':
         case 'PageDown':
@@ -1419,23 +653,17 @@ listen_sd = INVALID_SOCKET;
           break;
         case 'Home':
           e.preventDefault();
-          goToSlide(1);
+          currentSlide = 1;
+          updatePresentation();
           break;
         case 'End':
           e.preventDefault();
-          goToSlide(totalSlides);
+          currentSlide = totalSlides;
+          updatePresentation();
           break;
         case 'f':
         case 'F':
           toggleFullScreen();
-          break;
-        case 'm':
-        case 'M':
-          toggleMenu();
-          break;
-        case 'n':
-        case 'N':
-          toggleNotes();
           break;
       }
     });
