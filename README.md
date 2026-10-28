@@ -94,18 +94,17 @@ sequenceDiagram
 ```
 jogo-da-velha-sockets-tcp/
 ├── index.html                   # Interactive HTML slide deck for project defense/presentation
-├── apresentacao.html            # Direct mirror of index.html
 ├── servidor_velha.c             # Server source: listener, IP autodiscovery, coin toss & turn loop
 ├── cliente_velha.c              # Client source: connection, interactive terminal UI & move receiver
-├── compilar.bat                 # Automated Windows batch compiler via MinGW GCC
-├── jogar_local.bat              # Helper script to launch local loopback game instances
-├── Makefile                     # Cross-platform Makefile for Windows and Linux builds
+├── Makefile                     # Cross-platform Makefile (Windows MinGW & POSIX Linux)
 ├── docs/
 │   ├── RELATORIO_JOGO_DA_VELHA.pdf # Full LaTeX technical report (IME official submission)
 │   ├── RELATORIO_JOGO_DA_VELHA.tex # LaTeX report source code
 │   ├── RELATORIO.md            # Detailed engineering notes in Markdown
 │   └── LEIAME.txt              # Original lab instructions and project manifesto
 ├── assets/
+│   ├── ficha_trabalho_p1.jpeg  # Official assignment sheet photo (Page 1)
+│   ├── ficha_trabalho_p2.jpeg  # Official assignment sheet photo (Page 2)
 │   ├── screenshot_server.jpeg  # Terminal capture showing server host and IP display
 │   └── screenshot_client.jpeg  # Terminal capture showing client match completion
 ├── .gitignore
@@ -117,7 +116,7 @@ jogo-da-velha-sockets-tcp/
 
 ## 🖥️ Interactive HTML Presentation (Slide Deck)
 
-An interactive HTML slide presentation is available in [`index.html`](index.html) (also accessible as [`apresentacao.html`](apresentacao.html)).
+An interactive HTML slide presentation is available in [`index.html`](index.html), also hosted live via [GitHub Pages](https://vpariz.github.io/jogo-da-velha-sockets-tcp/).
 It was created specifically for classroom presentations and project defense, containing:
 * **TCP Socket Lifecycle:** Interactive timeline of `WSAStartup`, `socket`, `bind`, `listen`, `accept`, `connect`, `send`, `recv`, `closesocket`, `WSACleanup`.
 * **Network Byte Order & Endianness:** Detailed breakdown of `sockaddr_in`, `htons`, `htonl`, `inet_ntoa` and `inet_addr`.
@@ -135,20 +134,23 @@ To present: simply open `index.html` in any browser!
 
 ### 1. Compilation
 
-#### Using the automated batch script:
-```cmd
-compilar.bat
-```
-
-#### Or using GCC / MinGW directly:
-```bash
-gcc -Wall -Wextra servidor_velha.c -o servidor_velha.exe -lws2_32
-gcc -Wall -Wextra cliente_velha.c -o cliente_velha.exe -lws2_32
-```
-
-#### Or using Make:
+#### Using GNU Make (Recommended):
 ```bash
 make
+```
+
+#### Or using GCC directly:
+
+**On Windows (MinGW):**
+```cmd
+gcc -Wall -Wextra -O2 servidor_velha.c -o servidor_velha.exe -lws2_32
+gcc -Wall -Wextra -O2 cliente_velha.c -o cliente_velha.exe -lws2_32
+```
+
+**On Linux / POSIX:**
+```bash
+gcc -Wall -Wextra -O2 servidor_velha.c -o servidor_velha
+gcc -Wall -Wextra -O2 cliente_velha.c -o cliente_velha
 ```
 
 ### 2. Execution
