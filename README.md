@@ -103,8 +103,6 @@ jogo-da-velha-sockets-tcp/
 │   ├── RELATORIO.md            # Detailed engineering notes in Markdown
 │   └── LEIAME.txt              # Original lab instructions and project manifesto
 ├── assets/
-│   ├── ficha_trabalho_p1.jpeg  # Official assignment sheet photo (Page 1)
-│   ├── ficha_trabalho_p2.jpeg  # Official assignment sheet photo (Page 2)
 │   ├── screenshot_server.jpeg  # Terminal capture showing server host and IP display
 │   └── screenshot_client.jpeg  # Terminal capture showing client match completion
 ├── .gitignore
