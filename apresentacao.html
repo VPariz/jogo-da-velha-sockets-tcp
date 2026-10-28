@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apresentação de Código: Jogo da Velha TCP | IME Redes I</title>
+  <title>Apresentação: Jogo da Velha TCP | Bateção de Gaivotas da Ficha Oficial</title>
   <style>
     :root {
       --bg-dark: #070a13;
@@ -18,7 +18,7 @@
       --accent-red: #f87171;
       --accent-purple: #c084fc;
       --border-color: #1e293b;
-      --border-glow: rgba(56, 189, 248, 0.2);
+      --border-glow: rgba(56, 189, 248, 0.25);
       --code-bg: #030712;
       --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
     }
@@ -93,6 +93,11 @@
       font-size: 0.74rem;
       font-weight: 700;
     }
+    .header-badge-gaivota {
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      color: var(--accent-green);
+    }
     .header-actions {
       display: flex;
       gap: 8px;
@@ -150,7 +155,7 @@
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 14px;
-      padding: 32px 40px;
+      padding: 30px 38px;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 1px 1px var(--border-glow);
       animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -173,6 +178,20 @@
       color: var(--accent-cyan);
       margin-bottom: 6px;
     }
+    .gaivota-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      color: var(--accent-green);
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      margin-bottom: 8px;
+    }
     h1 {
       font-size: 2.1rem;
       font-weight: 800;
@@ -192,7 +211,7 @@
       gap: 10px;
     }
     h3 {
-      font-size: 1.08rem;
+      font-size: 1.05rem;
       font-weight: 600;
       color: var(--accent-blue);
       margin-bottom: 8px;
@@ -235,9 +254,44 @@
       background: rgba(3, 7, 18, 0.75);
     }
     .card-icon {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       margin-bottom: 8px;
       display: inline-block;
+    }
+
+    /* Gaivotas Checklist Table */
+    .gaivotas-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+      margin: 10px 0;
+    }
+    .gaivotas-table th, .gaivotas-table td {
+      padding: 9px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .gaivotas-table th {
+      background: rgba(3, 7, 18, 0.75);
+      color: var(--accent-cyan);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .gaivotas-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .badge-check {
+      background: rgba(52, 211, 153, 0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
 
     /* Code Blocks */
@@ -248,7 +302,7 @@
       padding: 14px 16px;
       overflow-x: auto;
       font-family: var(--font-mono);
-      font-size: 0.82rem;
+      font-size: 0.81rem;
       line-height: 1.5;
       color: #e2e8f0;
       margin-bottom: 10px;
@@ -288,30 +342,6 @@
     .c-typ { color: #38bdf8; }                      /* types */
     .c-hl { background: rgba(56, 189, 248, 0.15); border-left: 3px solid var(--accent-blue); padding-left: 6px; display: block; margin: 2px 0; }
 
-    /* Tables */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 12px 0;
-      font-size: 0.88rem;
-    }
-    th, td {
-      padding: 9px 12px;
-      text-align: left;
-      border-bottom: 1px solid var(--border-color);
-    }
-    th {
-      background: rgba(3, 7, 18, 0.7);
-      color: var(--accent-blue);
-      font-weight: 600;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-    tr:hover td {
-      background: rgba(255, 255, 255, 0.02);
-    }
-
     /* Callouts */
     .callout {
       border-left: 4px solid var(--accent-blue);
@@ -331,28 +361,36 @@
       background: rgba(251, 191, 36, 0.08);
     }
 
-    /* Line-by-line highlight breakdown */
-    .line-explain {
+    /* Ficha Gallery */
+    .ficha-gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .ficha-card {
+      background: #030712;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: 8px;
     }
-    .line-item {
-      background: rgba(3, 7, 18, 0.5);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 9px 12px;
+    .ficha-card img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      cursor: zoom-in;
+      transition: opacity 0.2s;
     }
-    .line-code {
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
-      color: var(--accent-cyan);
-      margin-bottom: 3px;
+    .ficha-card img:hover {
+      opacity: 0.9;
     }
-    .line-desc {
-      font-size: 0.82rem;
+    .ficha-meta {
+      padding: 8px 12px;
+      background: rgba(15, 23, 42, 0.85);
+      border-top: 1px solid var(--border-color);
+      font-size: 0.8rem;
       color: var(--text-muted);
-      line-height: 1.5;
     }
 
     /* Interactive Simulator */
@@ -451,7 +489,7 @@
       gap: 8px;
     }
 
-    /* Modal Drawers (Index, Notes) */
+    /* Modal Drawers */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -527,7 +565,7 @@
     }
 
     @media (max-width: 900px) {
-      .grid-2, .grid-3, .grid-4, .sim-container { grid-template-columns: 1fr; }
+      .grid-2, .grid-3, .grid-4, .ficha-gallery, .sim-container { grid-template-columns: 1fr; }
       .slide { padding: 20px; }
       h1 { font-size: 1.6rem; }
       .footer-hints { display: none; }
@@ -546,13 +584,14 @@
   <header>
     <div class="header-title">
       <span class="header-badge">IME • REDES I</span>
-      <span>Apresentação de Código C: Jogo da Velha TCP</span>
+      <span class="header-badge header-badge-gaivota">GAIVOTAS BATIDAS ✔</span>
+      <span>Jogo da Velha TCP: Código & Requisitos da Ficha</span>
     </div>
     <div class="header-actions">
-      <button class="btn" onclick="toggleNotes()" id="btn-notes" title="Guia do que falar em cada slide (Tecla N)">Roteiro de Fala 🎙️</button>
+      <button class="btn" onclick="toggleNotes()" id="btn-notes" title="Roteiro de Fala para a Banca (Tecla N)">Roteiro de Fala 🎙️</button>
       <button class="btn" onclick="toggleMenu()" title="Índice dos Slides (Tecla M)">Índice 📑</button>
       <button class="btn" onclick="toggleFullScreen()" title="Tela Cheia (Tecla F)">Tela Cheia ⛶</button>
-      <span class="slide-counter" id="counter">1 / 14</span>
+      <span class="slide-counter" id="counter">1 / 15</span>
     </div>
   </header>
 
@@ -560,20 +599,20 @@
   <main id="deck">
 
     <!-- ==========================================
-         SLIDE 1: CAPA
+         SLIDE 1: CAPA OFICIAL
          ========================================== -->
     <section class="slide active" data-index="1">
-      <span class="slide-tag">Defesa de Implementação • Engenharia Eletrônica (2026.2)</span>
-      <h1>Explicação Detalhada do Código: Jogo da Velha TCP</h1>
+      <span class="slide-tag">Defesa Prática de Código • Engenharia Eletrônica (2026.2)</span>
+      <h1>Jogo da Velha Cliente-Servidor via Sockets TCP</h1>
       <p style="font-size: 1.05rem; max-width: 860px; margin-bottom: 20px;">
-        Análise técnica e linha a linha das estruturas de dados, funções de sanitização, controle de fluxo,
-        representação de memória e tratamento de rede em <code>servidor_velha.c</code> e <code>cliente_velha.c</code>.
+        Apresentação de código focada no cumprimento integral da <strong>Ficha de Requisitos Oficiais</strong> do 
+        <strong>Prof. Cel. Vidal</strong> (Valor: 3,0 VE). Análise linha a linha das funções em C e bateção de cada gaivota.
       </p>
 
       <div class="grid-3" style="margin-top: 16px;">
         <div class="card">
           <div class="card-icon">👨‍💻</div>
-          <h3>Equipe de Autores</h3>
+          <h3>Equipe de Desenvolvimento</h3>
           <p style="font-size: 0.86rem; margin-bottom: 0; line-height: 1.7;">
             • <strong>Pedro Augusto (Peu)</strong><br>
             • <strong>João Victor Pariz</strong><br>
@@ -582,70 +621,222 @@
         </div>
         <div class="card">
           <div class="card-icon">🏛️</div>
-          <h3>Disciplina & Professor</h3>
+          <h3>Contexto & Docente</h3>
           <p style="font-size: 0.86rem; margin-bottom: 0; line-height: 1.7;">
             • Instituto Militar de Engenharia (IME)<br>
-            • <strong>Prof. Cel. Paulo Cesar Salgado Vidal</strong><br>
+            • <strong>Cel. Paulo César Salgado Vidal</strong><br>
             • Redes de Computadores I
           </p>
         </div>
         <div class="card">
-          <div class="card-icon">📁</div>
-          <h3>Arquitetura dos Fontes</h3>
+          <div class="card-icon">📋</div>
+          <h3>Status dos Requisitos</h3>
           <p style="font-size: 0.86rem; margin-bottom: 0; line-height: 1.7;">
-            • <code>servidor_velha.c</code> (408 linhas)<br>
-            • <code>cliente_velha.c</code> (383 linhas)<br>
-            • Zero warnings com <code>-Wall -Wextra</code>
+            • Requisitos a, b, c, d: <strong>100% Batidos</strong><br>
+            • Figura do jogo (1-9): <strong>Idêntica</strong><br>
+            • Orientações finais de erro: <strong>Tratadas</strong>
           </p>
         </div>
       </div>
 
       <div class="callout callout-success" style="margin-top: 22px;">
-        🎯 <strong>Foco da Apresentação:</strong> Ir direto ao código! Como cada função foi implementada, decisões de design em C, prevenção de bugs e o funcionamento exato da máquina de estados.
+        🎯 <strong>Roteiro da Apresentação:</strong> Mostraremos a ficha original fotografada, a tabela de correspondência das gaivotas e o código C exato de cada função atendendo às exigências da folha.
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 2: ESTRUTURAS DE DADOS & MEMÓRIA
+         SLIDE 2: FOTOS DA FICHA OFICIAL DE REQUISITOS
          ========================================== -->
     <section class="slide" data-index="2">
-      <span class="slide-tag">Módulo 1 • Estrutura de Dados</span>
+      <span class="slide-tag">Documento de Origem</span>
+      <h2>A Ficha Oficial do Trabalho (Páginas 1 e 2)</h2>
+      <p>Fotografias originais da especificação fornecida em sala de aula (clique nas imagens para ampliar em tela cheia):</p>
+
+      <div class="ficha-gallery">
+        <div class="ficha-card">
+          <img src="assets/ficha_trabalho_p1.jpeg" alt="Ficha Oficial - Pagina 1" onclick="zoomImage(this.src)">
+          <div class="ficha-meta">
+            <strong>Página 1:</strong> Requisitos Funcionais a) Conexão, b) Sorteio da Moeda, c) Turnos, d) Vitória, Empate e Encerramento.
+          </div>
+        </div>
+        <div class="ficha-card">
+          <img src="assets/ficha_trabalho_p2.jpeg" alt="Ficha Oficial - Pagina 2" onclick="zoomImage(this.src)">
+          <div class="ficha-meta">
+            <strong>Página 2:</strong> Exemplo da figura do jogo (1 a 9, prompt exato) e Orientações Finais de tratamento de erros e validação.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 3: CHECKLIST DE GAIVOTAS (PARTE 1)
+         ========================================== -->
+    <section class="slide" data-index="3">
+      <span class="slide-tag">Auditoria de Requisitos</span>
+      <h2>Bater as Gaivotas: Requisitos Funcionais (a, b, c)</h2>
+      <p>Mapeamento de conformidade direta entre o texto da ficha e as rotinas em C:</p>
+
+      <table class="gaivotas-table">
+        <thead>
+          <tr>
+            <th>Item da Ficha</th>
+            <th>Exigência Oficial do Enunciado</th>
+            <th>Rotina / Linha no Código C</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>a) Conexão</strong></td>
+            <td>Servidor iniciado primeiro, aguarda ativamente em porta específica.</td>
+            <td><code>servidor_velha.c</code>: <code>bind()</code> na porta 6000 e <code>listen(sd, 1)</code>.</td>
+            <td><span class="badge-check">✔ Gaivota Batida</span></td>
+          </tr>
+          <tr>
+            <td><strong>a) Conexão</strong></td>
+            <td>Cliente solicita conexão; ambos inicializam estrutura do tabuleiro.</td>
+            <td><code>cliente_velha.c</code>: <code>connect()</code> e inicialização com <code>for(...) tab[i]=' '</code>.</td>
+            <td><span class="badge-check">✔ Gaivota Batida</span></td>
+          </tr>
+          <tr>
+            <td><strong>b) Sorteio</strong></td>
+            <td>Sorteio aleatório (moeda/booleano) para decidir quem faz primeira jogada.</td>
+            <td><code>servidor_velha.c</code>: <code>srand(time(NULL))</code> e sorteio <code>rand() % 2</code>.</td>
+            <td><span class="badge-check">✔ Gaivota Batida</span></td>
+          </tr>
+          <tr>
+            <td><strong>b) Sorteio</strong></td>
+            <td>Mensagem de controle notificando quem inicia (Servidor ou Cliente).</td>
+            <td>Envio de <code>START:SERVER\n</code> ou <code>START:CLIENT\n</code> via <code>send()</code>.</td>
+            <td><span class="badge-check">✔ Gaivota Batida</span></td>
+          </tr>
+          <tr>
+            <td><strong>c) Turnos</strong></td>
+            <td>Servidor joga primeiro &rarr; atualiza tabuleiro local e envia coordenadas.</td>
+            <td><code>obter_jogada_usuario()</code>, <code>tabuleiro[jogada-1]='O'</code> e <code>send("MOVE:N\n")</code>.</td>
+            <td><span class="badge-check">✔ Gaivota Batida</span></td>
+          </tr>
+          <tr>
+            <td><strong>c) Turnos</strong></td>
+            <td>Cliente joga primeiro &rarr; servidor aguarda recebimento da jogada.</td>
+            <td>Servidor entra em bloqueio no <code>recv()</code> aguardando <code>MOVE:<N>\n</code>.</td>
+            <td><span class="badge-check">✔ Gaivota Batida</span></td>
+          </tr>
+          <tr>
+            <td><strong>c) Turnos</strong></td>
+            <td>Recepção dos dados do oponente, atualização local e alternância de vez.</td>
+            <td>Parsing com <code>sscanf</code>, atualização da matriz e inversão da variável de turno.</td>
+            <td><span class="badge-check">✔ Gaivota Batida</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 4: CHECKLIST DE GAIVOTAS (PARTE 2)
+         ========================================== -->
+    <section class="slide" data-index="4">
+      <span class="slide-tag">Auditoria de Requisitos</span>
+      <h2>Bater as Gaivotas: Requisitos (d) e Orientações Finais</h2>
+      <p>Conformidade estrita das regras de encerramento, layout visual e robustez:</p>
+
+      <table class="gaivotas-table">
+        <thead>
+          <tr>
+            <th>Item da Ficha</th>
+            <th>Exigência Oficial do Enunciado</th>
+            <th>Rotina / Linha no Código C</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>d) Término</strong></td>
+            <td>Ambas as aplicações verificam vitória de X, de O ou empate a cada jogada.</td>
+            <td>Função <code>verificar_termino(tabuleiro)</code> executada localmente por ambos.</td>
+            <td><span class="badge-check">✔ Gaivota Batida</span></td>
+          </tr>
+          <tr>
+            <td><strong>d) Término</strong></td>
+            <td>Mensagem clara: <em>"Você venceu!"</em>, <em>"Você perdeu!"</em> ou <em>"Empate!"</em>.</td>
+            <td>Exatamente as strings do enunciado formatadas em destaque no terminal.</td>
+            <td><span class="badge-check">✔ Gaivota Batida</span></td>
+          </tr>
+          <tr>
+            <td><strong>d) Término</strong></td>
+            <td>Encerrar as conexões de socket e recursos de rede.</td>
+            <td>Execução de <code>closesocket()</code> e <code>WSACleanup()</code> ao final da partida.</td>
+            <td><span class="badge-check">✔ Gaivota Batida</span></td>
+          </tr>
+          <tr>
+            <td><strong>Figura do Jogo</strong></td>
+            <td>Grade 1 a 9 no padrão: <code> 1 | 2 | 3 </code> / <code>---+---+---</code>.</td>
+            <td>Função <code>exibir_tabuleiro_guia()</code> reproduzindo o desenho fiel da página 2.</td>
+            <td><span class="badge-check">✔ Gaivota Batida</span></td>
+          </tr>
+          <tr>
+            <td><strong>Prompt Exato</strong></td>
+            <td>Prompt exigido na ficha: <code>Vez de O célula > </code> e <code>Vez de X célula > </code>.</td>
+            <td><code>printf("Vez de %c célula > ", simbolo)</code> com <code>fflush(stdout)</code>.</td>
+            <td><span class="badge-check">✔ Gaivota Batida</span></td>
+          </tr>
+          <tr>
+            <td><strong>Orientações Finais</strong></td>
+            <td>Tratamento de erros de conexão (socket, bind, connect, desconexão).</td>
+            <td>Checagem de <code>INVALID_SOCKET</code>, <code>SOCKET_ERROR</code> e <code>recv <= 0</code> com códigos.</td>
+            <td><span class="badge-check">✔ Gaivota Batida</span></td>
+          </tr>
+          <tr>
+            <td><strong>Orientações Finais</strong></td>
+            <td>Validação: tratar entradas inválidas (números fora de 1-9, múltiplos caracteres, letras).</td>
+            <td><code>fgets</code>, dreno com <code>getchar()</code>, trim e checagem de <code>strlen==1</code>.</td>
+            <td><span class="badge-check">✔ Gaivota Batida</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 5: CÓDIGO - ESTRUTURAS & TABULEIRO
+         ========================================== -->
+    <section class="slide" data-index="5">
+      <span class="gaivota-pill">🐦 GAIVOTA BATIDA: Requisito a) Estrutura do Tabuleiro</span>
       <h2>Representação do Tabuleiro em Memória</h2>
-      <p>Decisão de projeto: Por que usamos um vetor unidimensional de 9 bytes em vez de uma matriz <code>char tab[3][3]</code>?</p>
+      <p>Decisão de projeto em C: Por que alocamos um vetor linear na <em>stack</em> e não uma matriz 2D?</p>
 
       <div class="grid-2">
-        <pre><span class="code-badge">Definições Globais e Memória</span>
-<span class="c-com">// Simbolos imutaveis definidos por diretiva</span>
+        <pre><span class="code-badge">Definição dos Dados</span>
+<span class="c-com">// Simbolos oficiais da folha (Servidor 'O' e Cliente 'X')</span>
 <span class="c-kw">#define</span> SIMBOLO_SERVIDOR <span class="c-str">'O'</span>
 <span class="c-kw">#define</span> SIMBOLO_CLIENTE  <span class="c-str">'X'</span>
 
-<span class="c-com">// Vetor de 9 caracteres alocado na pilha (stack)</span>
+<span class="c-com">// Vetor linear alocado na pilha (stack)</span>
 <span class="c-typ">char</span> tabuleiro[<span class="c-num">9</span>];
 
-<span class="c-com">// Inicializacao com espacos em branco ' '</span>
+<span class="c-com">// Inicializacao exigida no Requisito a:</span>
 <span class="c-kw">for</span> (<span class="c-typ">int</span> i = <span class="c-num">0</span>; i < <span class="c-num">9</span>; i++) {
     tabuleiro[i] = <span class="c-str">' '</span>;
 }
 </pre>
 
         <div class="card">
-          <h3>Vantagens Técnicas do Vetor Linear <code>tabuleiro[9]</code></h3>
+          <h3>Vantagens Técnicas de <code>tabuleiro[9]</code></h3>
           <ul style="color: var(--text-muted); font-size: 0.86rem; line-height: 1.75; margin-left: 18px;">
-            <li><strong>Mapeamento 1:1 Direto:</strong> A entrada do usuário é um número de 1 a 9. O acesso à memória é imediato: <code>tabuleiro[jogada - 1]</code> sem necessidade de calcular divisão e resto (<code>linha = (n-1)/3</code>, <code>col = (n-1)%3</code>).</li>
-            <li><strong>Passagem Eficiente:</strong> Passado para funções por ponteiro simples (<code>const char tab[9]</code>), ocupando apenas 8 bytes de ponteiro no registrador da arquitetura x64.</li>
-            <li><strong>Contiguidade de Memória:</strong> Otimização de cache L1 do processador na checagem das 8 linhas de vitória.</li>
+            <li><strong>Mapeamento Direto em $O(1)$:</strong> A entrada da folha é de 1 a 9. O acesso ao vetor é imediato: <code>tabuleiro[jogada - 1]</code> sem necessidade de divisões ou módulo (<code>(n-1)/3</code> e <code>(n-1)%3</code>).</li>
+            <li><strong>Eficiência de Passagem:</strong> Passado para funções por ponteiro (<code>const char tab[9]</code>), ocupando apenas 8 bytes de ponteiro no registrador de arquitetura x64.</li>
+            <li><strong>Cache Locality:</strong> 9 bytes contíguos aproveitam perfeitamente as linhas de cache L1 da CPU.</li>
           </ul>
         </div>
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 3: AUTODESCOBERTA DE IPS
+         SLIDE 6: CÓDIGO - AUTODESCOBERTA DE IPS
          ========================================== -->
-    <section class="slide" data-index="3">
-      <span class="slide-tag">Módulo 2 • Função Utilitária</span>
-      <h2>Código: <code>exibir_ips_locais()</code></h2>
-      <p>Como o código inspeciona a tabela de adaptadores de rede do Windows sem chamar o <code>ipconfig</code>:</p>
+    <section class="slide" data-index="6">
+      <span class="slide-tag">Diferencial de Usabilidade</span>
+      <h2>Função <code>exibir_ips_locais()</code></h2>
+      <p>Como o código inspeciona as interfaces da máquina para o Cliente conectar sem usar <code>ipconfig</code>:</p>
 
       <pre><span class="code-badge">servidor_velha.c (Linhas 39 a 56)</span>
 <span class="c-typ">void</span> <span class="c-fn">exibir_ips_locais</span>(<span class="c-typ">int</span> porta) {
@@ -663,25 +854,21 @@
 }
 </pre>
 
-      <div class="line-explain">
-        <div class="line-item">
-          <div class="line-code">host_info->h_addr_list[i]</div>
-          <div class="line-desc">Ponteiro duplo (<code>char **</code>) que aponta para um vetor de ponteiros terminado em <code>NULL</code>, onde cada elemento armazena os 4 bytes binários de uma interface IPv4 da máquina (Wi-Fi, Ethernet, adaptadores virtuais).</div>
-        </div>
-        <div class="line-item">
-          <div class="line-code">inet_ntoa(addr)</div>
-          <div class="line-desc">Converte a estrutura binária <code>in_addr</code> diretamente para a representação textual pontuada (ex: <code>"172.16.1.160"</code>) retornada num buffer estático do Winsock.</div>
-        </div>
+      <div class="card" style="margin-top: 10px;">
+        <h3>Como funciona o ponteiro duplo <code>h_addr_list</code>?</h3>
+        <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 0;">
+          A estrutura <code>hostent</code> retorna uma lista de ponteiros terminada em <code>NULL</code> contendo os 4 bytes binários de cada placa de rede ativa. O loop copia cada endereço com <code>memcpy</code> e formata a string decimal com pontos através de <code>inet_ntoa(addr)</code>.
+        </p>
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 4: SANITIZAÇÃO DE ENTRADA (PARTE 1)
+         SLIDE 7: CÓDIGO - LEITURA SEGURA DE ENTRADA
          ========================================== -->
-    <section class="slide" data-index="4">
-      <span class="slide-tag">Módulo 3 • Engenharia de Software Robusta</span>
-      <h2>Função <code>obter_jogada_usuario()</code>: Leitura e Dreno</h2>
-      <p>Por que NÃO usamos <code>scanf("%d")</code> e como o código protege o buffer:</p>
+    <section class="slide" data-index="7">
+      <span class="gaivota-pill">🐦 GAIVOTA BATIDA: Orientações Finais • Validação de Entradas</span>
+      <h2>Função <code>obter_jogada_usuario()</code> (Parte 1: Leitura)</h2>
+      <p>Por que NÃO usamos <code>scanf("%d")</code> e como blindamos o buffer contra estouro:</p>
 
       <div class="grid-2">
         <pre><span class="code-badge">servidor_velha.c / cliente_velha.c</span>
@@ -691,15 +878,15 @@
 
     <span class="c-kw">while</span> (<span class="c-num">1</span>) {
         <span class="c-fn">printf</span>(<span class="c-str">"Vez de %c célula > "</span>, simbolo);
-        <span class="c-hl"><span class="c-fn">fflush</span>(stdout); <span class="c-com">// Forca envio imediato ao console sem buffer</span></span>
+        <span class="c-hl"><span class="c-fn">fflush</span>(stdout); <span class="c-com">// Formato EXATO da folha do Cel. Vidal</span></span>
 
         <span class="c-hl"><span class="c-kw">if</span> (<span class="c-fn">fgets</span>(linha, <span class="c-kw">sizeof</span>(linha), stdin) == NULL) {</span>
             <span class="c-fn">clearerr</span>(stdin);
             <span class="c-kw">continue</span>;
         }
 
-        <span class="c-com">// Se o usuario digitou mais de 127 caracteres:</span>
-        <span class="c-hl"><span class="c-kw">if</span> (<span class="c-fn">strchr</span>(linha, <span class="c-str">'\n'</span>) == NULL) {</span>
+        <span class="c-hl"><span class="c-com">// Se o usuario digitou mais de 127 caracteres, drena o buffer:</span></span>
+        <span class="c-kw">if</span> (<span class="c-fn">strchr</span>(linha, <span class="c-str">'\n'</span>) == NULL) {
             <span class="c-typ">int</span> c;
             <span class="c-kw">while</span> ((c = <span class="c-fn">getchar</span>()) != <span class="c-str">'\n'</span> && c != EOF);
         }
@@ -707,27 +894,27 @@
 </pre>
 
         <div class="card">
-          <h3>Defesa Contra Falhas Clássicas de C</h3>
+          <h3>Tratamento de Vulnerabilidades em C</h3>
           <ul style="color: var(--text-muted); font-size: 0.84rem; line-height: 1.75; margin-left: 18px;">
-            <li><strong>Por que nunca <code>scanf</code>?</strong> Se o jogador digitar acidentalmente a letra <code>"a"</code> ou <code>"teste"</code>, <code>scanf("%d")</code> falha na conversão, deixa os caracteres presos no buffer <code>stdin</code> e entra em loop infinito travando o terminal.</li>
-            <li><strong>Controle de Limite com <code>fgets</code>:</strong> Lê no máximo 127 caracteres + <code>'\0'</code>, garantindo impossibilidade física de Buffer Overflow.</li>
-            <li><strong>Dreno de Linhas Longas:</strong> Se alguém colar um texto gigante, o <code>while (getchar() != '\n')</code> consome e descarta todo o restante, impedindo que suje a próxima rodada.</li>
+            <li><strong>Falha do <code>scanf</code>:</strong> Se o jogador digitar letras acidentalmente, o <code>scanf("%d")</code> falha na conversão, deixa os caracteres presos no buffer e entra em loop infinito travando o console.</li>
+            <li><strong>Limite Físico com <code>fgets</code>:</strong> Lê no máximo 127 caracteres + <code>'\0'</code>, impossibilitando qualquer Buffer Overflow.</li>
+            <li><strong>Dreno com <code>getchar()</code>:</strong> Esvazia a linha caso alguém cole textos gigantes, impedindo que suje as próximas rodadas.</li>
           </ul>
         </div>
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 5: SANITIZAÇÃO DE ENTRADA (PARTE 2)
+         SLIDE 8: CÓDIGO - TRIM E REGRAS DE VALIDAÇÃO
          ========================================== -->
-    <section class="slide" data-index="5">
-      <span class="slide-tag">Módulo 4 • Tratamento de Strings</span>
-      <h2>Função <code>obter_jogada_usuario()</code>: Trim e Validação</h2>
-      <p>Tratamento de terminadores de linha Windows e validação estrita de caracteres:</p>
+    <section class="slide" data-index="8">
+      <span class="gaivota-pill">🐦 GAIVOTA BATIDA: Orientações Finais • Múltiplos Caracteres e Posição</span>
+      <h2>Função <code>obter_jogada_usuario()</code> (Parte 2: Trim e Validação)</h2>
+      <p>Tratamento de <code>\r\n</code>, espaços nas bordas e verificação estrita de ocupação:</p>
 
       <div class="grid-2">
         <pre><span class="code-badge">Continuação da Função</span>
-        <span class="c-com">// 1. Elimina quebras de linha Windows (\r\n) ou Unix (\n)</span>
+        <span class="c-com">// 1. Remove terminadores de linha \r e \n</span>
         linha[<span class="c-fn">strcspn</span>(linha, <span class="c-str">"\r\n"</span>)] = <span class="c-str">'\0'</span>;
 
         <span class="c-com">// 2. Trim de espacos e tabs no inicio</span>
@@ -747,40 +934,40 @@
             <span class="c-kw">continue</span>;
         }
 
-        celula = (inicio[<span class="c-num">0</span>] - <span class="c-str">'1'</span>); <span class="c-com">// Converte char para indice 0 a 8</span>
+        celula = (inicio[<span class="c-num">0</span>] - <span class="c-str">'1'</span>); <span class="c-com">// Indice 0 a 8</span>
 
-        <span class="c-hl"><span class="c-com">// 5. Validacao se a celula ja esta ocupada</span></span>
+        <span class="c-hl"><span class="c-com">// 5. Bloqueia celula ja preenchida</span></span>
         <span class="c-kw">if</span> (tabuleiro[celula] != <span class="c-str">' '</span>) {
             <span class="c-fn">printf</span>(<span class="c-str">"Posicao invalida! A celula %d ja esta ocupada (%c).\n"</span>,
                    celula + <span class="c-num">1</span>, tabuleiro[celula]);
             <span class="c-kw">continue</span>;
         }
 
-        <span class="c-kw">return</span> celula + <span class="c-num">1</span>; <span class="c-com">// Retorna 1 a 9</span>
+        <span class="c-kw">return</span> celula + <span class="c-num">1</span>;
 </pre>
 
         <div class="card">
-          <h3>O que esta lógica blinda na prática?</h3>
+          <h3>Requisitos Atendidos da Ficha</h3>
           <ul style="color: var(--text-muted); font-size: 0.84rem; line-height: 1.8; margin-left: 18px;">
-            <li><strong>Espaços acidentais:</strong> Se o usuário digitar <code>"  5  "</code>, o algoritmo normaliza para <code>"5"</code> com sucesso.</li>
-            <li><strong>Rejeição de números de dois dígitos:</strong> Entradas como <code>"12"</code>, <code>"0"</code> ou <code>"-1"</code> são rejeitadas pela checagem <code>strlen(inicio) != 1</code>.</li>
-            <li><strong>Conversão ASCII para Inteiro:</strong> A subtração <code>(inicio[0] - '1')</code> aproveita a contiguidade da tabela ASCII (código 49 a 57), transformando o caractere no índice do vetor (0 a 8) sem precisar de <code>atoi()</code>.</li>
+            <li><strong>Tolerância a espaços:</strong> Se o usuário digitar <code>"  5  "</code>, o trim limpa e aceita a jogada normalmente.</li>
+            <li><strong>Rejeição de múltiplos caracteres:</strong> Entradas como <code>"12"</code>, <code>"abc"</code> ou <code>"1 2"</code> são barradas pela checagem <code>strlen(inicio) != 1</code>.</li>
+            <li><strong>Conversão ASCII sem biblioteca:</strong> A operação <code>inicio[0] - '1'</code> converte o caractere ASCII diretamente para índice 0-8 com custo de 1 ciclo de instrução.</li>
           </ul>
         </div>
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 6: VERIFICAÇÃO DE VITÓRIA E EMPATE
+         SLIDE 9: CÓDIGO - MATRIZ DAS 8 RETAS
          ========================================== -->
-    <section class="slide" data-index="6">
-      <span class="slide-tag">Módulo 5 • Algoritmo de Regras</span>
+    <section class="slide" data-index="9">
+      <span class="gaivota-pill">🐦 GAIVOTA BATIDA: Requisito d) Validação de Vitória e Empate</span>
       <h2>Função <code>verificar_termino()</code>: Matriz das 8 Retas</h2>
-      <p>Implementação concisa e determinística da avaliação das 8 linhas vitoriosas:</p>
+      <p>Algoritmo em $O(1)$ constante que valida as 8 linhas vitoriosas e o empate a cada rodada:</p>
 
       <pre><span class="code-badge">servidor_velha.c / cliente_velha.c (Linhas 90 a 117)</span>
 <span class="c-typ">int</span> <span class="c-fn">verificar_termino</span>(<span class="c-kw">const</span> <span class="c-typ">char</span> tab[<span class="c-num">9</span>]) {
-    <span class="c-com">// Matriz estatica com as 8 combinacoes de indices de vitoria</span>
+    <span class="c-com">// As 8 combinacoes vitoriosas possiveis</span>
     <span class="c-kw">const</span> <span class="c-typ">int</span> linhas[<span class="c-num">8</span>][<span class="c-num">3</span>] = {
         {<span class="c-num">0</span>, <span class="c-num">1</span>, <span class="c-num">2</span>}, {<span class="c-num">3</span>, <span class="c-num">4</span>, <span class="c-num">5</span>}, {<span class="c-num">6</span>, <span class="c-num">7</span>, <span class="c-num">8</span>}, <span class="c-com">// 3 Horizontais</span>
         {<span class="c-num">0</span>, <span class="c-num">3</span>, <span class="c-num">6</span>}, {<span class="c-num">1</span>, <span class="c-num">4</span>, <span class="c-num">7</span>}, {<span class="c-num">2</span>, <span class="c-num">5</span>, <span class="c-num">8</span>}, <span class="c-com">// 3 Verticais</span>
@@ -800,68 +987,66 @@
         <span class="c-kw">if</span> (tab[i] == <span class="c-str">' '</span>) <span class="c-kw">return</span> -<span class="c-num">1</span>;
     }
 
-    <span class="c-kw">return</span> <span class="c-num">0</span>; <span class="c-com">// Todas as 9 celulas cheias sem vencedor: Empate ("Velha")</span>
+    <span class="c-kw">return</span> <span class="c-num">0</span>; <span class="c-com">// Todas as celulas preenchidas sem vencedor: Empate ("Deu velha")</span>
 }
 </pre>
 
       <div class="callout callout-success">
-        🧠 <strong>Complexidade $O(1)$ Constante:</strong> Apenas 8 iterações de teste de igualdade direta. Sem alocação dinâmica, sem recursão e sem risco de vazamento de memória.
+        🛡️ <strong>Validação Dupla e Independente:</strong> Conforme exigido no Requisito d, <em>ambas</em> as aplicações executam esta função localmente. Nenhum nó confia no outro para anunciar o término do jogo.
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 7: INICIALIZAÇÃO DO SERVIDOR
+         SLIDE 10: CÓDIGO - SETUP DO SERVIDOR
          ========================================== -->
-    <section class="slide" data-index="7">
-      <span class="slide-tag">Módulo 6 • Setup do Servidor</span>
-      <h2>Código: Inicialização e Fechamento do Listener</h2>
-      <p>Trecho crítico de <code>servidor_velha.c</code> no gerenciamento dos descritores:</p>
+    <section class="slide" data-index="10">
+      <span class="gaivota-pill">🐦 GAIVOTA BATIDA: Requisito a) Servidor Iniciado Primeiro</span>
+      <h2>Configuração do Servidor e Fechamento do Listener</h2>
+      <p>Gerenciamento de sockets no nó servidor:</p>
 
       <div class="grid-2">
-        <pre><span class="code-badge">Configuração do Socket</span>
-<span class="c-com">// 1. Aloca socket TCP passivo</span>
+        <pre><span class="code-badge">servidor_velha.c (Linhas 220 a 273)</span>
+<span class="c-com">// 1. Criacao do socket passivo TCP</span>
 listen_sd = <span class="c-fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
-<span class="c-com">// 2. Evita erro de porta presa no TIME_WAIT ao reiniciar</span>
+<span class="c-com">// 2. Permite reuso imediato da porta no reinicio</span>
 <span class="c-typ">int</span> opt = <span class="c-num">1</span>;
 <span class="c-fn">setsockopt</span>(listen_sd, SOL_SOCKET, SO_REUSEADDR, (<span class="c-kw">const</span> <span class="c-typ">char</span> *)&opt, <span class="c-kw">sizeof</span>(opt));
 
-<span class="c-com">// 3. Bind e Listen com backlog = 1 (apenas 1 cliente)</span>
+<span class="c-com">// 3. Bind e Listen na porta com backlog = 1</span>
 <span class="c-fn">bind</span>(listen_sd, (<span class="c-typ">struct</span> sockaddr *)&servAddr, <span class="c-kw">sizeof</span>(servAddr));
 <span class="c-fn">listen</span>(listen_sd, <span class="c-num">1</span>);
 
-<span class="c-hl"><span class="c-com">// 4. Accept bloqueia e gera socket dedicado de dados</span></span>
+<span class="c-hl"><span class="c-com">// 4. Accept bloqueia ate o cliente conectar</span></span>
 client_sd = <span class="c-fn">accept</span>(listen_sd, (<span class="c-typ">struct</span> sockaddr *)&cliAddr, &cliLen);
 
-<span class="c-hl"><span class="c-com">// 5. FECHAMENTO IMEDIATO DO SOCKET DE ESCUTA!</span></span>
+<span class="c-hl"><span class="c-com">// 5. Fecha socket passivo imediatamente apos accept!</span></span>
 <span class="c-fn">closesocket</span>(listen_sd);
 listen_sd = INVALID_SOCKET;
 </pre>
 
         <div class="card">
-          <h3>Por que fechar <code>listen_sd</code> logo após o <code>accept</code>?</h3>
+          <h3>Decisão Técnica Fundamental</h3>
           <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.7;">
-            Esta é uma das perguntas favoritas do <strong>Cel. Vidal</strong>!
+            O socket <code>listen_sd</code> serve estritamente para escutar o handshake de entrada. Uma vez aceita a conexão, a transmissão ocorre pelo socket dedicado <code>client_sd</code>.
           </p>
-          <ul style="color: var(--text-muted); font-size: 0.83rem; line-height: 1.7; margin-left: 16px;">
-            <li>O <code>listen_sd</code> tem como única função escutar o handshake inicial.</li>
-            <li>A comunicação com o adversário ocorre exclusivamente através do <code>client_sd</code> retornado pelo <code>accept</code>.</li>
-            <li>Como o jogo é estritamente de 2 jogadores, fechar o <code>listen_sd</code> <strong>protege o servidor contra conexões invasoras</strong> durante a partida e libera a porta no kernel do SO.</li>
-          </ul>
+          <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 0;">
+            Fechar o <code>listen_sd</code> logo após o <code>accept</code> impede conexões espúrias de outros computadores da rede durante a partida e libera os recursos no SO.
+          </p>
         </div>
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 8: SORTEIO E MENSAGEM DE CONTROLE
+         SLIDE 11: CÓDIGO - SORTEIO DA MOEDA
          ========================================== -->
-    <section class="slide" data-index="8">
-      <span class="slide-tag">Módulo 7 • Sincronismo Inicial</span>
-      <h2>Sorteio da Moeda e Handshake de Controle</h2>
+    <section class="slide" data-index="11">
+      <span class="gaivota-pill">🐦 GAIVOTA BATIDA: Requisito b) Sorteio Aleatório da Moeda</span>
+      <h2>Sorteio Aleatório e Handshake de Controle</h2>
       <p>Como o Servidor sorteia quem começa e notifica o Cliente:</p>
 
       <pre><span class="code-badge">servidor_velha.c (Linhas 280 a 305)</span>
-<span class="c-com">// Semente baseada no relogio atual (garante sorteio imprevisivel a cada rodada)</span>
+<span class="c-com">// Semente temporal: garante sorteio aleatorio genuino a cada partida</span>
 <span class="c-hl"><span class="c-fn">srand</span>((<span class="c-typ">unsigned</span> <span class="c-typ">int</span>)<span class="c-fn">time</span>(NULL));</span>
 <span class="c-typ">int</span> vez_do_servidor = <span class="c-fn">rand</span>() % <span class="c-num">2</span>; <span class="c-com">// 1 = Servidor comeca, 0 = Cliente comeca</span>
 
@@ -874,173 +1059,105 @@ listen_sd = INVALID_SOCKET;
     <span class="c-fn">printf</span>(<span class="c-str">"Sorteio realizado: CLIENTE comeca a partida!\n"</span>);
 }
 
-<span class="c-com">// Transmite a decisao pela rede via TCP</span>
 <span class="c-hl">rc = <span class="c-fn">send</span>(client_sd, buffer, (<span class="c-typ">int</span>)<span class="c-fn">strlen</span>(buffer), <span class="c-num">0</span>);</span>
 </pre>
 
-      <div class="card" style="margin-top: 14px;">
-        <h3>Como o Cliente consome esta mensagem em <code>cliente_velha.c</code>:</h3>
+      <div class="card" style="margin-top: 10px;">
+        <h3>Recepção no Cliente (<code>cliente_velha.c</code>):</h3>
         <p style="font-size: 0.86rem; color: #cbd5e1; margin-bottom: 0;">
-          O nó Cliente inicia bloqueado na chamada <code>recv(sd, buffer, sizeof(buffer)-1, 0)</code>. Ao receber os bytes, ele verifica com <code>strstr(buffer, "START:CLIENT")</code>. Se encontrar a substring, atribui <code>vez_do_cliente = 1</code>; caso contrário, atribui <code>0</code>.
+          O Cliente fica bloqueado em <code>recv(sd, buffer, sizeof(buffer)-1, 0)</code>. Ao receber, testa com <code>strstr(buffer, "START:CLIENT")</code>. Se verdadeiro, define <code>vez_do_cliente = 1</code>; se falso, define <code>0</code>.
         </p>
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 9: O LOOP PRINCIPAL - TURNO ATIVO
+         SLIDE 12: CÓDIGO - CICLO DE TURNOS
          ========================================== -->
-    <section class="slide" data-index="9">
-      <span class="slide-tag">Módulo 8 • Máquina de Estados</span>
-      <h2>Loop Principal: O Turno Ativo (Envio de Jogada)</h2>
-      <p>Código executado pelo jogador da vez em <code>servidor_velha.c</code> (espelhado no cliente):</p>
+    <section class="slide" data-index="12">
+      <span class="gaivota-pill">🐦 GAIVOTA BATIDA: Requisito c) Ciclo de Jogo e Turnos</span>
+      <h2>Loop Principal: Alternância e Transmissão de Jogadas</h2>
+      <p>Envio (Turno Ativo) e Recepção Bloqueante (Turno Passivo):</p>
 
-      <pre><span class="code-badge">Turno Ativo no Servidor</span>
+      <pre><span class="code-badge">Loop Principal Sincronizado</span>
 <span class="c-kw">if</span> (vez_do_servidor) {
-    <span class="c-com">// 1. Obtem e valida a jogada do usuario (garante 1 a 9 em casa vaga)</span>
+    <span class="c-com">// --- TURNO ATIVO: Joga, atualiza tabuleiro local e transmite MOVE:&lt;N&gt;\n ---</span>
     <span class="c-typ">int</span> jogada = <span class="c-fn">obter_jogada_usuario</span>(tabuleiro, SIMBOLO_SERVIDOR);
-    <span class="c-hl">tabuleiro[jogada - <span class="c-num">1</span>] = SIMBOLO_SERVIDOR;</span>
-
-    <span class="c-com">// 2. Redesenha a grade atualizada</span>
+    tabuleiro[jogada - <span class="c-num">1</span>] = SIMBOLO_SERVIDOR;
     <span class="c-fn">exibir_tabuleiro</span>(tabuleiro);
 
-    <span class="c-com">// 3. Formata e envia pacote MOVE:&lt;N&gt;\n</span>
-    <span class="c-fn">memset</span>(buffer, <span class="c-num">0</span>, <span class="c-kw">sizeof</span>(buffer));
     <span class="c-fn">snprintf</span>(buffer, <span class="c-kw">sizeof</span>(buffer), <span class="c-str">"MOVE:%d\n"</span>, jogada);
-    <span class="c-hl">rc = <span class="c-fn">send</span>(client_sd, buffer, (<span class="c-typ">int</span>)<span class="c-fn">strlen</span>(buffer), <span class="c-num">0</span>);</span>
+    <span class="c-hl"><span class="c-fn">send</span>(client_sd, buffer, (<span class="c-typ">int</span>)<span class="c-fn">strlen</span>(buffer), <span class="c-num">0</span>);</span>
 
-    <span class="c-com">// 4. Testa se esta jogada encerrou o jogo</span>
     <span class="c-typ">int</span> status = <span class="c-fn">verificar_termino</span>(tabuleiro);
     <span class="c-kw">if</span> (status == <span class="c-num">2</span>) { <span class="c-fn">printf</span>(<span class="c-str">"Você venceu!\n"</span>); jogo_ativo = <span class="c-num">0</span>; }
     <span class="c-kw">else</span> <span class="c-kw">if</span> (status == <span class="c-num">0</span>) { <span class="c-fn">printf</span>(<span class="c-str">"Empate!\n"</span>); jogo_ativo = <span class="c-num">0</span>; }
-    <span class="c-kw">else</span> {
-        <span class="c-hl">vez_do_servidor = <span class="c-num">0</span>; <span class="c-com">// Passa a vez para o adversario</span></span>
+    <span class="c-kw">else</span> { vez_do_servidor = <span class="c-num">0</span>; } <span class="c-com">// Alterna a vez</span>
+
+} <span class="c-kw">else</span> {
+    <span class="c-com">// --- TURNO PASSIVO: Bloqueia no recv() aguardando dados da rede ---</span>
+    <span class="c-hl">rc = <span class="c-fn">recv</span>(client_sd, buffer, <span class="c-kw">sizeof</span>(buffer) - <span class="c-num">1</span>, <span class="c-num">0</span>);</span>
+    <span class="c-kw">if</span> (rc > <span class="c-num">0</span>) {
+        buffer[rc] = <span class="c-str">'\0'</span>;
+        <span class="c-typ">int</span> jogada_cli;
+        <span class="c-kw">if</span> (<span class="c-fn">sscanf</span>(buffer, <span class="c-str">"MOVE:%d"</span>, &jogada_cli) == <span class="c-num">1</span> && tabuleiro[jogada_cli - <span class="c-num">1</span>] == <span class="c-str">' '</span>) {
+            tabuleiro[jogada_cli - <span class="c-num">1</span>] = SIMBOLO_CLIENTE;
+            <span class="c-fn">exibir_tabuleiro</span>(tabuleiro);
+            <span class="c-com">// Checa vitoria adversaria ou empate e passa a vez</span>
+        }
     }
 }
 </pre>
     </section>
 
     <!-- ==========================================
-         SLIDE 10: O LOOP PRINCIPAL - TURNO PASSIVO
+         SLIDE 13: CÓDIGO - RETORNOS DO RECV & ENCERRAMENTO
          ========================================== -->
-    <section class="slide" data-index="10">
-      <span class="slide-tag">Módulo 9 • Máquina de Estados</span>
-      <h2>Loop Principal: O Turno Passivo (Recepção)</h2>
-      <p>Código que aguarda e processa o movimento do adversário remoto:</p>
-
-      <pre><span class="code-badge">Turno Passivo no Servidor</span>
-} <span class="c-kw">else</span> {
-    <span class="c-fn">printf</span>(<span class="c-str">"Aguardando jogada do adversario (Cliente)...\n"</span>);
-    <span class="c-fn">memset</span>(buffer, <span class="c-num">0</span>, <span class="c-kw">sizeof</span>(buffer));
-
-    <span class="c-hl"><span class="c-com">// Chamada bloqueante ao recv: aguarda dados no canal TCP</span></span>
-    <span class="c-hl">rc = <span class="c-fn">recv</span>(client_sd, buffer, <span class="c-kw">sizeof</span>(buffer) - <span class="c-num">1</span>, <span class="c-num">0</span>);</span>
-
-    <span class="c-kw">if</span> (rc > <span class="c-num">0</span>) {
-        <span class="c-hl">buffer[rc] = <span class="c-str">'\0'</span>; <span class="c-com">// Assegura string C bem-formada</span></span>
-        <span class="c-typ">int</span> jogada_cli = <span class="c-num">0</span>;
-
-        <span class="c-hl"><span class="c-com">// Parsing e validacao estrita do pacote recebido</span></span>
-        <span class="c-kw">if</span> (<span class="c-fn">sscanf</span>(buffer, <span class="c-str">"MOVE:%d"</span>, &jogada_cli) == <span class="c-num">1</span> &&
-            jogada_cli >= <span class="c-num">1</span> && jogada_cli <= <span class="c-num">9</span> &&
-            tabuleiro[jogada_cli - <span class="c-num">1</span>] == <span class="c-str">' '</span>) {
-
-            tabuleiro[jogada_cli - <span class="c-num">1</span>] = SIMBOLO_CLIENTE;
-            <span class="c-fn">exibir_tabuleiro</span>(tabuleiro);
-
-            <span class="c-com">// Verifica condicoes de derrota ou empate</span>
-            <span class="c-typ">int</span> status = <span class="c-fn">verificar_termino</span>(tabuleiro);
-            <span class="c-kw">if</span> (status == <span class="c-num">1</span>) { <span class="c-fn">printf</span>(<span class="c-str">"Você perdeu!\n"</span>); jogo_ativo = <span class="c-num">0</span>; }
-            <span class="c-kw">else</span> <span class="c-kw">if</span> (status == <span class="c-num">0</span>) { <span class="c-fn">printf</span>(<span class="c-str">"Empate!\n"</span>); jogo_ativo = <span class="c-num">0</span>; }
-            <span class="c-kw">else</span> { vez_do_servidor = <span class="c-num">1</span>; } <span class="c-com">// Recupera a vez de jogar!</span>
-        }
-    }
-    ...
-</pre>
-    </section>
-
-    <!-- ==========================================
-         SLIDE 11: TRATAMENTO DE RETORNO DO RECV
-         ========================================== -->
-    <section class="slide" data-index="11">
-      <span class="slide-tag">Módulo 10 • Resiliência de Sockets</span>
-      <h2>Tratamento dos Três Retornos de <code>recv()</code></h2>
-      <p>Como o código diferencia recepção válida, desconexão limpa e erro fatal:</p>
+    <section class="slide" data-index="13">
+      <span class="gaivota-pill">🐦 GAIVOTA BATIDA: Requisito d) Encerramento e Orientações de Erro</span>
+      <h2>Tratamento de Desconexão e Liberação de Recursos</h2>
+      <p>Tratamento dos 3 casos de retorno de <code>recv()</code> e descarregamento da DLL:</p>
 
       <div class="grid-3">
         <div class="card">
           <div class="card-icon">🟢</div>
           <h3><code>rc &gt; 0</code> (Sucesso)</h3>
-          <p style="font-size: 0.84rem; line-height: 1.6;">
-            O socket leu <code>rc</code> bytes. O código imediatamente insere o terminador nulo <code>buffer[rc] = '\0'</code> para garantir que funções de string como <code>sscanf</code> e <code>strstr</code> não leiam lixo além dos bytes recebidos.
+          <p style="font-size: 0.83rem;">
+            Leitura bem-sucedida. O código faz <code>buffer[rc] = '\0'</code> para isolar a string e processar com <code>sscanf</code>.
           </p>
         </div>
-
         <div class="card">
           <div class="card-icon">🟡</div>
-          <h3><code>rc == 0</code> (FIN Gracioso)</h3>
-          <p style="font-size: 0.84rem; line-height: 1.6;">
-            Significa que o adversário fechou seu programa normalmente (o SO transmitiu o pacote <strong>TCP FIN</strong>). O código imprime mensagem avisando encerramento sem disparar alarme falso de erro.
+          <h3><code>rc == 0</code> (Término Limpo)</h3>
+          <p style="font-size: 0.83rem;">
+            O adversário fechou o jogo normalmente (SO enviou TCP FIN). Imprime aviso e encerra sem erro falso.
           </p>
         </div>
-
         <div class="card">
           <div class="card-icon">🔴</div>
-          <h3><code>rc &lt; 0</code> (Erro / Queda)</h3>
-          <p style="font-size: 0.84rem; line-height: 1.6;">
-            Indica desconexão abrupta (RST), falha no enlace ou interrupção. O código captura o erro com <code>WSAGetLastError()</code>, rompe o loop e parte para a desalocação segura dos recursos.
+          <h3><code>rc &lt; 0</code> (Queda Abrupta)</h3>
+          <p style="font-size: 0.83rem;">
+            Desconexão repentina (RST). Captura código com <code>WSAGetLastError()</code> e desaloca os recursos.
           </p>
         </div>
       </div>
 
-      <pre style="margin-top: 14px;"><span class="code-badge">servidor_velha.c / cliente_velha.c</span>
-<span class="c-kw">else</span> <span class="c-kw">if</span> (rc == <span class="c-num">0</span>) {
-    <span class="c-fn">printf</span>(<span class="c-str">"\n[AVISO] Conexao encerrada pelo adversario.\n"</span>);
-    <span class="c-kw">break</span>;
-} <span class="c-kw">else</span> {
-    <span class="c-fn">printf</span>(<span class="c-str">"\n[ERRO] Conexao perdida inesperadamente. Codigo: %d\n"</span>, <span class="c-fn">WSAGetLastError</span>());
-    <span class="c-kw">break</span>;
-}
-</pre>
-    </section>
-
-    <!-- ==========================================
-         SLIDE 12: TEARDOWN E FINALIZAÇÃO
-         ========================================== -->
-    <section class="slide" data-index="12">
-      <span class="slide-tag">Módulo 11 • Liberação de Recursos</span>
-      <h2>Finalização Graciosa e Descarregamento da DLL</h2>
-      <p>O que acontece após o término da partida em ambas as aplicações:</p>
-
-      <pre><span class="code-badge">Trecho de Finalização</span>
-<span class="c-com">// 1. Fecha o socket de dados ativo disparando o handshake TCP FIN-ACK</span>
+      <pre style="margin-top: 14px;"><span class="code-badge">Fechamento Conforme Requisito d</span>
+<span class="c-com">// Fecha os descritores e descarrega a dll</span>
 <span class="c-kw">if</span> (client_sd != INVALID_SOCKET) {
-    <span class="c-fn">closesocket</span>(client_sd);
+    <span class="c-fn">closesocket</span>(client_sd); <span class="c-com">// Envia pacote TCP FIN</span>
 }
-
-<span class="c-com">// 2. Desregistra a aplicacao da pilha Winsock e descarrega ws2_32.dll</span>
-<span class="c-fn">WSACleanup</span>();
-
-<span class="c-fn">printf</span>(<span class="c-str">"Recursos liberados com sucesso.\n"</span>);
-<span class="c-fn">printf</span>(<span class="c-str">"Pressione Enter para encerrar o programa.\n"</span>);
-<span class="c-fn">getchar</span>(); <span class="c-com">// Segura a janela aberta para visualizacao</span>
-<span class="c-kw">return</span> <span class="c-num">0</span>;
+<span class="c-fn">WSACleanup</span>();                <span class="c-com">// Libera a memoria alocada pela ws2_32.dll</span>
+<span class="c-fn">getchar</span>();                   <span class="c-com">// Segura o terminal para leitura do placar final</span>
 </pre>
-
-      <div class="card" style="margin-top: 14px;">
-        <h3>Por que <code>WSACleanup()</code> é obrigatório no Windows?</h3>
-        <p style="font-size: 0.86rem; color: #cbd5e1; line-height: 1.7; margin-bottom: 0;">
-          Ao contrário do Linux/BSD onde os sockets são arquivos no kernel, no Windows o Winsock aloca tabelas internas e referências à biblioteca dinâmica <code>ws2_32.dll</code> via contador de referências. O <code>WSACleanup()</code> decrementa esse contador e libera a memória alocada pelo <code>WSAStartup()</code>.
-        </p>
-      </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 13: SIMULADOR INTERATIVO DO CÓDIGO
+         SLIDE 14: SIMULADOR INTERATIVO DO CÓDIGO
          ========================================== -->
-    <section class="slide" data-index="13">
-      <span class="slide-tag">Módulo 12 • Demonstração Prática</span>
-      <h2>Simulação Interativa do Fluxo de Código em Execução</h2>
-      <p>Clique nas células para testar a máquina de estados e ver os pacotes gerados em tempo real:</p>
+    <section class="slide" data-index="14">
+      <span class="slide-tag">Demonstração Interativa</span>
+      <h2>Simulação Interativa do Protocolo em Execução</h2>
+      <p>Clique nas células para disparar o protocolo e ver a transmissão de pacotes TCP simulada:</p>
 
       <div class="sim-container">
         <div>
@@ -1056,58 +1173,58 @@ listen_sd = INVALID_SOCKET;
             <div class="board-cell" onclick="simPlay(8)">9</div>
           </div>
           <div style="margin-top: 12px; display: flex; gap: 8px;">
-            <button class="btn" style="flex: 1;" onclick="simReset()">Reiniciar Tabuleiro 🔄</button>
+            <button class="btn" style="flex: 1;" onclick="simReset()">Reiniciar Partida 🔄</button>
           </div>
         </div>
 
         <div class="sim-terminal">
           <div style="display: flex; justify-content: space-between; margin-bottom: 6px; border-bottom: 1px solid #1e293b; padding-bottom: 4px;">
-            <span style="color: var(--accent-cyan);">Console de Rede (Simulador do Protocolo)</span>
+            <span style="color: var(--accent-cyan);">Captura de Pacotes TCP (Console de Rede)</span>
             <span id="sim-status" style="color: var(--accent-amber);">Vez do Cliente ('X')</span>
           </div>
           <div class="sim-terminal-log" id="sim-log">
-            <div class="log-sys">[SISTEMA] Socket conectado em 127.0.0.1:6000</div>
-            <div class="log-rx">[REDE &lt;--] RX: START:CLIENT\n (Sorteio: Cliente joga primeiro)</div>
+            <div class="log-sys">[SISTEMA] Conexao TCP estabelecida em 127.0.0.1:6000</div>
+            <div class="log-rx">[REDE &lt;--] RX: START:CLIENT\n (Sorteio: Cliente comeca!)</div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 14: CONCLUSÃO & PERGUNTAS
+         SLIDE 15: CONCLUSÃO
          ========================================== -->
-    <section class="slide" data-index="14">
-      <span class="slide-tag">Encerramento da Defesa</span>
-      <h1>Conclusão da Apresentação de Código</h1>
+    <section class="slide" data-index="15">
+      <span class="slide-tag">Conclusão da Apresentação</span>
+      <h1>Todas as Gaivotas Batidas com Rigor</h1>
       <p style="font-size: 1.08rem; max-width: 860px; margin-bottom: 20px;">
-        Síntese dos diferenciais e das técnicas consolidadas na implementação:
+        O projeto cumpre 100% dos requisitos da folha oficial do Cel. Vidal, com código limpo, comentado e robusto:
       </p>
 
       <div class="grid-4" style="margin-bottom: 20px;">
         <div class="card">
-          <div class="card-icon">🛡️</div>
+          <div class="card-icon">✔</div>
+          <h3>Requisitos a, b, c, d</h3>
+          <p style="font-size: 0.82rem;">Conexão, sorteio da moeda, ciclo de turnos e vitória/empate.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">✔</div>
+          <h3>Figura Idêntica</h3>
+          <p style="font-size: 0.82rem;">Layout exato de 1 a 9 e mensagens <em>"Vez de O/X célula >"</em>.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">✔</div>
           <h3>Blindagem de I/O</h3>
-          <p style="font-size: 0.82rem;"><code>fgets</code> com dreno de buffer residual e validação de 1 a 9.</p>
+          <p style="font-size: 0.82rem;"><code>fgets</code>, dreno de buffer e validação rigorosa de 1 a 9.</p>
         </div>
         <div class="card">
-          <div class="card-icon">⚡</div>
-          <h3>Validação $O(1)$</h3>
-          <p style="font-size: 0.82rem;">Matriz estática das 8 retas sem sobrecarga de processamento.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🔒</div>
-          <h3>Resiliência</h3>
-          <p style="font-size: 0.82rem;">Fechamento limpo do listener, detecção de queda e teardown de sockets.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🎯</div>
-          <h3>Portabilidade</h3>
-          <p style="font-size: 0.82rem;">IPs autodescobertos e zero recompilação para trocar de PC.</p>
+          <div class="card-icon">✔</div>
+          <h3>Resiliência Total</h3>
+          <p style="font-size: 0.82rem;">Tratamento de queda, fechamento do listener e teardown Winsock.</p>
         </div>
       </div>
 
       <div class="card" style="text-align: center; padding: 22px; background: rgba(56, 189, 248, 0.04); border-color: rgba(56, 189, 248, 0.3);">
-        <h2 style="margin-bottom: 6px; justify-content: center;">Estamos à disposição para dúvidas do Cel. Vidal! 🤝</h2>
+        <h2 style="margin-bottom: 6px; justify-content: center;">Obrigado, Cel. Vidal e turma! 🤝</h2>
         <p style="margin-bottom: 10px; color: var(--accent-blue);">
           Pedro Augusto • João Victor Pariz • Mateus Roma
         </p>
@@ -1137,7 +1254,7 @@ listen_sd = INVALID_SOCKET;
   <div class="modal-overlay" id="menu-modal" onclick="if(event.target === this) toggleMenu()">
     <div class="modal-box">
       <div class="modal-header">
-        <h3 style="margin: 0; color: #fff;">Índice de Slides de Código</h3>
+        <h3 style="margin: 0; color: #fff;">Índice dos Slides</h3>
         <button class="btn" onclick="toggleMenu()" style="padding: 4px 8px;">✕</button>
       </div>
       <div class="modal-body" id="menu-list" style="display: flex; flex-direction: column; gap: 4px;">
@@ -1150,12 +1267,19 @@ listen_sd = INVALID_SOCKET;
   <div class="modal-overlay" id="notes-modal" onclick="if(event.target === this) toggleNotes()">
     <div class="modal-box">
       <div class="modal-header">
-        <h3 style="margin: 0; color: #fff;">🎙️ O Que Falar Neste Slide (Guia do Apresentador)</h3>
+        <h3 style="margin: 0; color: #fff;">🎙️ Roteiro de Fala (Bater as Gaivotas com o Cel. Vidal)</h3>
         <button class="btn" onclick="toggleNotes()" style="padding: 4px 8px;">✕</button>
       </div>
       <div class="modal-body" id="notes-content">
         <!-- Filled dynamically per slide -->
       </div>
+    </div>
+  </div>
+
+  <!-- Image Lightbox Modal -->
+  <div class="modal-overlay" id="img-modal" onclick="closeImage()">
+    <div style="max-width: 90%; max-height: 90%;">
+      <img id="img-zoom" src="" alt="Zoom" style="width: 100%; height: 100%; object-fit: contain; border-radius: 8px;">
     </div>
   </div>
 
@@ -1170,22 +1294,23 @@ listen_sd = INVALID_SOCKET;
     const nextBtn = document.getElementById('next-btn');
     const menuList = document.getElementById('menu-list');
 
-    // Laser-focused code explanation speaker notes for the team
+    // Laser-focused speaker notes for beating every requirement
     const speakerNotes = {
-      1: "Cumprimentar o Cel. Vidal e a turma. Dizer diretamente: 'Professor, nosso foco nesta apresentação é mostrar como o código foi arquitetado e implementado em C, explicando cada função, o gerenciamento de memória e as decisões técnicas que tomamos.'",
-      2: "Explicar a representação de dados: usamos um vetor linear char tabuleiro[9] na stack. Destacar a vantagem: a entrada do usuário de 1 a 9 é mapeada direto para tabuleiro[jogada - 1], sem precisar de divisões inteiras para achar linha e coluna de matriz 2D. Além disso, passar um vetor de 9 chars para funções consome apenas 8 bytes de ponteiro no registrador.",
-      3: "Explicar a função exibir_ips_locais(). Mostrar que usamos gethostname e gethostbyname para obter a struct hostent. O loop percorre a lista de ponteiros h_addr_list[i] até achar NULL, copiando com memcpy e formatando com inet_ntoa. Isso foi feito para não precisarmos parar a apresentação em aula para dar ipconfig.",
-      4: "Explicar a sanitização de entrada com obter_jogada_usuario(). Destacar que NÃO usamos scanf('%d') porque se alguém digitar uma letra, o scanf trava num loop infinito. Usamos fgets com limite de 128 bytes e, caso alguém digite mais de 127 caracteres, o while(getchar() != '\\n') consome e drena o lixo do buffer.",
-      5: "Mostrar a segunda metade da sanitização: o strcspn remove tanto \\r quanto \\n (compatibilidade total Windows e Linux). Em seguida fazemos o trim com ponteiros início e fim. O teste strlen(inicio) == 1 garante exatamente 1 dígito entre '1' e '9'. Por fim, verificamos se tabuleiro[celula] != ' ' para barrar jogada em casa ocupada.",
-      6: "Explicar a função verificar_termino(). Mostrar a matriz estática linhas[8][3] contendo as 3 linhas horizontais, 3 verticais e 2 diagonais. O loop roda apenas 8 vezes em O(1), checando se os três índices são iguais e diferentes de espaço. Se não houver vencedor, um segundo loop varre o vetor procurando ' '. Se não houver mais espaços, retorna 0 (empate).",
-      7: "Explicar o setup do servidor: criamos o socket e aplicamos setsockopt com SO_REUSEADDR para permitir reiniciar o servidor na mesma porta sem erro de TIME_WAIT. E o ponto mais importante: logo após o accept(), fechamos o listen_sd com closesocket! Como o jogo é para 2 pessoas, fechar o listener economiza recursos e bloqueia conexões espúrias.",
-      8: "Explicar o sorteio da moeda: chamamos srand(time(NULL)) e fazemos rand() % 2. O servidor formata a string 'START:SERVER\\n' ou 'START:CLIENT\\n' com snprintf e envia com send(). Do outro lado, o cliente aguarda no recv() e testa a mensagem com strstr().",
-      9: "Explicar o turno ativo: o jogador digita a célula, o tabuleiro local é preenchido e redesenhado. Formatamos o comando 'MOVE:<N>\\n' e enviamos via send(). Logo após o envio, chamamos verificar_termino(): se status for 2 ou 1 avisamos vitória; se for 0 avisamos empate; se for -1 passamos a vez.",
-      10: "Explicar o turno passivo: ficamos bloqueados no recv(). Ao receber, colocamos buffer[rc] = '\\0' para garantir que é uma string válida. Usamos sscanf(buffer, 'MOVE:%d', &jogada_cli) e validamos se a célula recebida do adversário é válida e livre antes de aplicar no tabuleiro.",
-      11: "Explicar os 3 retornos do recv(): rc > 0 indica leitura bem-sucedida de bytes; rc == 0 indica término gracioso (o adversário fechou o programa e o SO mandou TCP FIN); rc < 0 indica desconexão abrupta ou queda de cabo, capturando o erro com WSAGetLastError().",
-      12: "Explicar o encerramento do processo: closesocket() fecha o socket de dados ativo transmitindo o handshake FIN-ACK, e WSACleanup() descarrega a dll ws2_32 da memória. O getchar() final mantém o terminal visível para os jogadores verem o placar.",
-      13: "Fazer uma demonstração interativa rápida clicando no tabuleiro em tela para mostrar a alternância de turnos e os pacotes sendo gerados dinamicamente no terminal simulado.",
-      14: "Concluir a apresentação sintetizando a robustez do código e abrir imediatamente para a demonstração prática executando os executáveis .exe e para as perguntas do Cel. Vidal."
+      1: "Cumprimentar o Cel. Vidal e a turma: 'Bom dia Cel. Vidal, bom dia turma. Nossa apresentação tem como objetivo principal demonstrar o código que desenvolvemos e bater rigorosamente cada gaivota dos requisitos que o senhor passou na ficha do trabalho de 3,0 pontos.'",
+      2: "Mostrar as fotos da ficha oficial: 'Aqui estão as fotos da ficha que recebemos em sala. Vamos passar item por item comprovando onde cada linha do enunciado foi atendida no código C.'",
+      3: "Apresentar a tabela de gaivotas da Parte 1: Destacar que o Servidor é o primeiro a subir com bind e listen na porta 6000; o Cliente conecta; ambos inicializam o tabuleiro com espaços; o Servidor faz o sorteio da moeda com srand e rand; e a mensagem de controle START:SERVER ou START:CLIENT é transmitida antes de qualquer jogada.",
+      4: "Apresentar a tabela de gaivotas da Parte 2: Mostrar que a função verificar_termino roda localmente em ambos os nós a cada jogada; as mensagens 'Você venceu!', 'Você perdeu!' e 'Empate!' são exibidas exatamente com esse texto; e os sockets são fechados com closesocket e WSACleanup. Citar que o layout 1 a 9 e o prompt 'Vez de O célula >' são idênticos aos da página 2.",
+      5: "Explicar o código do tabuleiro: 'Professor, usamos char tabuleiro[9] na stack. A vantagem de usar vetor linear e não matriz 3x3 é que o acesso à jogada digitada (1 a 9) é imediato em O(1): tabuleiro[jogada - 1], além de passar para funções como ponteiro de apenas 8 bytes.'",
+      6: "Explicar a autodescoberta de IPs: 'Criamos a função exibir_ips_locais() usando gethostname e gethostbyname para varrer a lista h_addr_list. Isso permite que na hora da aula não precisemos parar a apresentação para dar ipconfig no cmd.'",
+      7: "Bater a gaivota de validação de entrada: 'Na folha o senhor pediu para tratar entradas inválidas, letras e múltiplos caracteres. Por isso NÃO usamos scanf('%d'), que entraria em loop infinito se alguém digitasse uma letra. Usamos fgets com limite de 128 bytes e limpamos o buffer residual com o while(getchar() != '\\n').'",
+      8: "Mostrar o restante da sanitização: 'Removemos \\r\\n com strcspn para funcionar tanto no Windows quanto no Linux, fazemos trim dos espaços e validamos se o tamanho é exatamente 1 caractere entre '1' e '9'. Por fim, o código checa se tabuleiro[celula] != ' ' para impedir marcar posição ocupada.'",
+      9: "Explicar a função verificar_termino(): 'A matriz linhas[8][3] guarda as 3 horizontais, 3 verticais e 2 diagonais. O loop roda apenas 8 vezes checando igualdade. Se ninguém venceu e ainda há ' ', retorna -1. Se não há mais espaços, retorna 0 (empate). Ambos os nós rodam isso localmente.'",
+      10: "Explicar o fechamento do listener: 'Configuramos SO_REUSEADDR para não travar a porta no TIME_WAIT caso precisemos reiniciar o servidor. E um detalhe essencial: logo após o accept(), fechamos o listen_sd com closesocket, porque o jogo é apenas para 2 pessoas e isso protege a partida contra conexões invasoras.'",
+      11: "Bater a gaivota do sorteio da moeda: 'O servidor inicializa srand(time(NULL)) e faz rand() % 2. Se for 1, o Servidor ('O') começa; se for 0, o Cliente ('X') começa. A mensagem START:SERVER ou START:CLIENT é enviada via send(), e o cliente consome no recv() usando strstr().'",
+      12: "Explicar o ciclo de turnos: 'Quem está na sua vez lê a entrada, preenche o tabuleiro e envia MOVE:<N>\\n. Quem está aguardando fica bloqueado na chamada recv(). Ao receber os dados, atualiza seu tabuleiro local e inverte a variável de turno.'",
+      13: "Bater a gaivota de tratamento de erros e encerramento: 'O recv() trata os três casos possíveis: rc > 0 (sucesso), rc == 0 (adversário fechou o jogo e mandou TCP FIN, término gracioso) e rc < 0 (queda de rede capturada por WSAGetLastError). Ao final, closesocket fecha a conexão e WSACleanup descarrega a biblioteca.'",
+      14: "Demonstração prática interativa: 'Para ilustrar o protocolo antes de rodar os executáveis, criamos este simulador na própria apresentação. Clicando nas células, vemos os pacotes MOVE sendo gerados em tempo real no console simulado.'",
+      15: "Concluir: 'Com isso, batemos 100% das gaivotas da ficha de requisitos. Estamos prontos para demonstrar o programa rodando no terminal e responder a qualquer pergunta do Cel. Vidal.'"
     };
 
     // Build Menu List
@@ -1278,6 +1403,15 @@ listen_sd = INVALID_SOCKET;
           document.exitFullscreen();
         }
       }
+    }
+
+    function zoomImage(src) {
+      document.getElementById('img-zoom').src = src;
+      document.getElementById('img-modal').classList.add('open');
+    }
+
+    function closeImage() {
+      document.getElementById('img-modal').classList.remove('open');
     }
 
     // ==========================================
@@ -1390,6 +1524,10 @@ listen_sd = INVALID_SOCKET;
       }
       if (document.getElementById('notes-modal').classList.contains('open')) {
         if (e.key === 'Escape' || e.key === 'n' || e.key === 'N') toggleNotes();
+        return;
+      }
+      if (document.getElementById('img-modal').classList.contains('open')) {
+        if (e.key === 'Escape') closeImage();
         return;
       }
 
