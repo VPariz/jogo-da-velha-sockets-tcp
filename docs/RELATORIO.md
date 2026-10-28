@@ -1,7 +1,7 @@
 # Relatório de Implementação: Jogo da Velha Cliente-Servidor (TCP)
 
 **Disciplina:** Redes de Computadores para Engenharia Eletrônica I (2026.2)  
-**Avaliação:** Trabalho para VE (Valor: 3,0 pontos)  
+**Trabalho:** Implementação Prática de Sockets TCP (Jogo da Velha Cliente-Servidor)  
 **Data:** 21 de outubro de 2026  
 
 ---

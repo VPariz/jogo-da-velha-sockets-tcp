@@ -139,7 +139,7 @@
       color: #ffffff;
     }
     h3 {
-      font-size: 1.08rem;
+      font-size: 1.05rem;
       font-weight: 600;
       color: var(--accent);
       margin-bottom: 10px;
@@ -178,7 +178,7 @@
       padding: 14px 16px;
       overflow-x: auto;
       font-family: var(--font-mono);
-      font-size: 0.84rem;
+      font-size: 0.83rem;
       line-height: 1.5;
       color: #e2e8f0;
       margin-bottom: 10px;
@@ -198,8 +198,8 @@
 
     ul, ol {
       color: var(--text-muted);
-      font-size: 0.94rem;
-      line-height: 1.75;
+      font-size: 0.92rem;
+      line-height: 1.7;
       margin-left: 20px;
     }
     li strong {
@@ -273,10 +273,10 @@
          SLIDE 1: CAPA
          ========================================== -->
     <section class="slide active">
-      <div class="slide-subtitle">Engenharia Eletrônica • Redes de Computadores I (2026.2)</div>
+      <div class="slide-subtitle">Engenharia Eletrônica • Redes de Computadores I</div>
       <h1>Jogo da Velha Cliente-Servidor</h1>
-      <p style="font-size: 1.15rem; max-width: 800px; margin-bottom: 26px;">
-        Apresentação prática da implementação em Linguagem C utilizando Sockets TCP.
+      <p style="font-size: 1.12rem; max-width: 820px; margin-bottom: 26px;">
+        Apresentação prática da implementação do jogo em Linguagem C utilizando Sockets TCP.
       </p>
 
       <div class="grid-3">
@@ -289,19 +289,19 @@
           </p>
         </div>
         <div class="card">
-          <h3>Docente & Curso</h3>
+          <h3>Disciplina & Docente</h3>
           <p style="font-size: 0.92rem; margin-bottom: 0; line-height: 1.8;">
             • Prof. Cel. Vidal<br>
-            • Instituto Militar de Engenharia<br>
-            • Avaliação Prática para VE
+            • Redes de Computadores I<br>
+            • Instituto Militar de Engenharia
           </p>
         </div>
         <div class="card">
-          <h3>Estrutura dos Arquivos</h3>
+          <h3>Código-Fonte</h3>
           <p style="font-size: 0.92rem; margin-bottom: 0; line-height: 1.8;">
             • <code>servidor_velha.c</code><br>
             • <code>cliente_velha.c</code><br>
-            • Compilação MinGW GCC
+            • Compilação MinGW GCC (Winsock2)
           </p>
         </div>
       </div>
@@ -312,39 +312,39 @@
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">Visão Geral</div>
-      <h2>Como o Jogo Funciona na Rede</h2>
+      <h2>Como Funciona o Jogo na Rede</h2>
       <p>
-        Dois computadores disputam uma partida sobre uma conexão TCP orientada a fluxo na porta 6000:
+        Dois computadores disputam uma partida conectando-se diretamente via TCP na porta 6000:
       </p>
 
       <div class="grid-2">
         <div class="card">
-          <h3>Papéis de Cada Nó</h3>
+          <h3>Papel de Cada Programa</h3>
           <ul>
-            <li><strong>Servidor (Peça 'O'):</strong> É iniciado primeiro, aguarda conexões e exibe seus IPs locais automaticamente no console.</li>
-            <li><strong>Cliente (Peça 'X'):</strong> Inicia em seguida, conecta ao IP do servidor e aguarda o sorteio.</li>
-            <li><strong>Sorteio Inicial:</strong> O servidor joga a moeda (<code>rand() % 2</code>) e sincroniza quem começa.</li>
+            <li><strong>Servidor (Peça 'O'):</strong> É aberto primeiro, libera a porta 6000 e fica aguardando o adversário se conectar.</li>
+            <li><strong>Cliente (Peça 'X'):</strong> É aberto em seguida, conecta no IP do servidor e aguarda o início.</li>
+            <li><strong>Sorteio Inicial:</strong> O servidor joga a moeda (<code>rand() % 2</code>) e avisa quem faz a primeira jogada.</li>
           </ul>
         </div>
 
         <div class="card">
-          <h3>Troca de Mensagens (Protocolo)</h3>
+          <h3>Mensagens Trocadas (Protocolo Simples)</h3>
           <ul>
-            <li><code>START:SERVER</code> ou <code>START:CLIENT</code>: Enviado no início para sincronizar a ordem.</li>
-            <li><code>MOVE:<1-9></code>: Enviado a cada jogada com a célula escolhida (ex: <code>MOVE:5\n</code>).</li>
-            <li><strong>Validação Local:</strong> Ambos os programas atualizam o tabuleiro e avaliam vitória/empate localmente.</li>
+            <li><code>START:SERVER</code> ou <code>START:CLIENT</code>: Enviado uma única vez no início para sincronizar quem começa.</li>
+            <li><code>MOVE:<1-9></code>: Enviado a cada jogada com o número da casa escolhida (exemplo: <code>MOVE:5\n</code>).</li>
+            <li><strong>Tabuleiro Local:</strong> Cada computador atualiza sua tela e confere vitória ou empate após cada movimento.</li>
           </ul>
         </div>
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 3: DIAGRAMA DE CONEXÃO E MENSAGENS (NOVO SLIDE!)
+         SLIDE 3: DIAGRAMA DE CONEXÃO E MENSAGENS
          ========================================== -->
     <section class="slide">
-      <div class="slide-subtitle">Arquitetura de Sockets</div>
-      <h2>Diagrama de Conexão e Troca de Mensagens</h2>
-      <p>Fluxo das chamadas de sockets e pacotes transmitidos (modelo clássico Stevens / Kurose):</p>
+      <div class="slide-subtitle">Fluxo de Comunicação</div>
+      <h2>Conexão e Troca de Mensagens</h2>
+      <p>Passo a passo das chamadas de sockets durante uma partida:</p>
 
       <div class="diagram-container">
         <svg class="seq-diagram" viewBox="0 0 940 430">
@@ -374,15 +374,15 @@
           <!-- Step 1: Handshake -->
           <rect x="70" y="70" width="180" height="46" rx="4" fill="#070d1a" stroke="#334155"/>
           <text x="160" y="89" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="monospace">socket() &gt; bind(6000)</text>
-          <text x="160" y="105" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">listen() &gt; accept() [bloq]</text>
+          <text x="160" y="105" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">listen() &gt; accept() [aguarda]</text>
 
           <rect x="690" y="70" width="180" height="46" rx="4" fill="#070d1a" stroke="#334155"/>
           <text x="780" y="89" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="monospace">socket()</text>
           <text x="780" y="105" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">connect(IP, 6000)</text>
 
-          <!-- Arrow Connect (Three-way Handshake) -->
+          <!-- Arrow Connect -->
           <line x1="690" y1="95" x2="260" y2="95" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
-          <text x="475" y="86" fill="#e2e8f0" font-size="12" font-weight="600" text-anchor="middle" font-family="sans-serif">1. Three-Way Handshake TCP (SYN → SYN-ACK → ACK)</text>
+          <text x="475" y="86" fill="#e2e8f0" font-size="12" font-weight="600" text-anchor="middle" font-family="sans-serif">1. Conexão TCP estabelecida (connect ➔ accept)</text>
 
           <!-- Step 2: Coin Toss -->
           <rect x="70" y="135" width="180" height="34" rx="4" fill="#070d1a" stroke="#334155"/>
@@ -396,17 +396,17 @@
 
           <!-- Step 3: Turn Loop Box -->
           <rect x="140" y="195" width="660" height="135" rx="6" fill="rgba(56, 189, 248, 0.04)" stroke="#38bdf8" stroke-width="1" stroke-dasharray="3"/>
-          <text x="155" y="214" fill="#38bdf8" font-size="11" font-weight="bold" font-family="sans-serif">CICLO DE TURNOS (while jogo_ativo)</text>
+          <text x="155" y="214" fill="#38bdf8" font-size="11" font-weight="bold" font-family="sans-serif">RODADAS DO JOGO (while jogo_ativo)</text>
 
           <!-- Turn 1: Move from Server -->
           <line x1="250" y1="235" x2="680" y2="235" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
-          <text x="475" y="227" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle" font-family="monospace">send("MOVE:5\n")  ─────────►  recv() atualiza 'O'</text>
+          <text x="475" y="227" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle" font-family="monospace">send("MOVE:5\n")  ─────────►  recv() marca 'O'</text>
 
           <!-- Turn 2: Move from Client -->
           <line x1="690" y1="285" x2="260" y2="285" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
-          <text x="475" y="277" fill="#34d399" font-size="12" font-weight="bold" text-anchor="middle" font-family="monospace">recv() atualiza 'X'  ◄─────────  send("MOVE:1\n")</text>
+          <text x="475" y="277" fill="#34d399" font-size="12" font-weight="bold" text-anchor="middle" font-family="monospace">recv() marca 'X'  ◄─────────  send("MOVE:1\n")</text>
 
-          <text x="475" y="318" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="sans-serif">Ambos executam verificar_termino() a cada jogada</text>
+          <text x="475" y="318" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="sans-serif">Cada lado confere vitória ou empate a cada jogada</text>
 
           <!-- Step 4: Teardown -->
           <rect x="70" y="355" width="180" height="42" rx="4" fill="#070d1a" stroke="#334155"/>
@@ -418,7 +418,7 @@
           <text x="780" y="389" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="monospace">WSACleanup()</text>
 
           <line x1="250" y1="375" x2="680" y2="375" stroke="#fbbf24" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow-amber)"/>
-          <text x="475" y="367" fill="#fbbf24" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">Finalização: Encerramento Limpo (TCP FIN-ACK)</text>
+          <text x="475" y="367" fill="#fbbf24" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">4. Fim de jogo: Encerramento limpo das conexões</text>
         </svg>
       </div>
     </section>
@@ -428,24 +428,24 @@
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">servidor_velha.c</div>
-      <h2>O Nó Servidor: Conexão e Sorteio</h2>
-      <p>Como o servidor inicializa a rede, aguarda o cliente e sorteia quem começa:</p>
+      <h2>Servidor: Inicialização e Sorteio</h2>
+      <p>Como o servidor prepara o socket, aguarda o cliente e sorteia quem começa:</p>
 
       <div class="grid-2">
-        <pre><span class="com">// 1. Cria o socket TCP e aguarda conexao</span>
+        <pre><span class="com">// 1. Cria o socket TCP e escuta na porta 6000</span>
 listen_sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 <span class="fn">bind</span>(listen_sd, (<span class="kw">struct</span> sockaddr *)&servAddr, <span class="kw">sizeof</span>(servAddr));
 <span class="fn">listen</span>(listen_sd, <span class="num">1</span>);
 
-<span class="com">// 2. Bloqueia ate o cliente conectar</span>
+<span class="com">// 2. Aguarda o cliente conectar</span>
 client_sd = <span class="fn">accept</span>(listen_sd, (<span class="kw">struct</span> sockaddr *)&cliAddr, &cliLen);
-<span class="hl"><span class="fn">closesocket</span>(listen_sd); <span class="com">// Fecha o listener, jogo eh para 2!</span></span>
+<span class="hl"><span class="fn">closesocket</span>(listen_sd); <span class="com">// Fecha a escuta: ja temos os 2 jogadores</span></span>
 
-<span class="com">// 3. Sorteio aleatorio da moeda</span>
+<span class="com">// 3. Sorteia quem comeca a jogar</span>
 <span class="fn">srand</span>((<span class="kw">unsigned</span>)<span class="fn">time</span>(NULL));
 <span class="kw">int</span> vez_do_servidor = <span class="fn">rand</span>() % <span class="num">2</span>;
 
-<span class="hl"><span class="com">// 4. Envia mensagem de inicio ao cliente</span></span>
+<span class="hl"><span class="com">// 4. Avisa o cliente quem foi o sorteado</span></span>
 <span class="kw">if</span> (vez_do_servidor)
     <span class="fn">send</span>(client_sd, <span class="str">"START:SERVER\n"</span>, <span class="num">13</span>, <span class="num">0</span>);
 <span class="kw">else</span>
@@ -453,11 +453,12 @@ client_sd = <span class="fn">accept</span>(listen_sd, (<span class="kw">struct</
 </pre>
 
         <div class="card">
-          <h3>Pontos Importantes do Código</h3>
+          <h3>O que essa parte faz</h3>
           <ul>
-            <li><strong>SO_REUSEADDR:</strong> Usamos <code>setsockopt</code> para liberar a porta 6000 imediatamente se precisarmos reiniciar o servidor.</li>
-            <li><strong>Fechamento do Listener:</strong> Logo após o <code>accept()</code>, fechamos <code>listen_sd</code> porque a partida já tem 2 jogadores. Isso economiza recursos e bloqueia conexões invasoras.</li>
-            <li><strong>Sorteio Imparcial:</strong> O <code>time(NULL)</code> garante que cada partida tenha um resultado genuinamente imprevisível.</li>
+            <li><strong>socket, bind, listen:</strong> Inicializa a rede e coloca a porta 6000 pronta para receber uma conexão.</li>
+            <li><strong>accept():</strong> O servidor pausa nessa linha até o cliente conectar. Quando conecta, cria um socket específico para a conversa (<code>client_sd</code>).</li>
+            <li><strong>closesocket(listen_sd):</strong> Como a partida é exclusiva entre 2 jogadores, não precisamos aceitar mais ninguém, então fechamos a escuta.</li>
+            <li><strong>Sorteio:</strong> <code>rand() % 2</code> gera 0 ou 1 para decidir de forma justa quem começa.</li>
           </ul>
         </div>
       </div>
@@ -468,37 +469,37 @@ client_sd = <span class="fn">accept</span>(listen_sd, (<span class="kw">struct</
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">cliente_velha.c</div>
-      <h2>O Nó Cliente: Conexão e Sincronia</h2>
-      <p>Como o cliente se conecta ao servidor e descobre se joga primeiro:</p>
+      <h2>Cliente: Conexão e Início</h2>
+      <p>Como o cliente localiza o servidor e descobre se começa jogando:</p>
 
       <div class="grid-2">
-        <pre><span class="com">// 1. Entrada flexivel de IP (argumento ou prompt)</span>
+        <pre><span class="com">// 1. Entrada de IP (se teclar Enter, usa 127.0.0.1)</span>
 <span class="kw">if</span> (<span class="fn">strlen</span>(server_ip_str) == <span class="num">0</span>) {
     <span class="fn">printf</span>(<span class="str">"Digite o IP do servidor [Enter para 127.0.0.1]: "</span>);
     <span class="fn">fgets</span>(server_ip_str, <span class="kw">sizeof</span>(server_ip_str), stdin);
-    <span class="com">// Se teclar Enter -> conecta na mesma maquina</span>
 }
 
-<span class="com">// 2. Conecta ao servidor TCP</span>
+<span class="com">// 2. Conecta ao servidor TCP na porta 6000</span>
 sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 <span class="hl"><span class="fn">connect</span>(sd, (<span class="kw">struct</span> sockaddr *)&servAddr, <span class="kw">sizeof</span>(servAddr));</span>
 
-<span class="com">// 3. Aguarda o resultado do sorteio da moeda</span>
+<span class="com">// 3. Aguarda a mensagem com o resultado do sorteio</span>
 <span class="hl"><span class="fn">recv</span>(sd, buffer, <span class="kw">sizeof</span>(buffer) - <span class="num">1</span>, <span class="num">0</span>);</span>
 
 <span class="kw">if</span> (<span class="fn">strstr</span>(buffer, <span class="str">"START:CLIENT"</span>)) {
-    vez_do_cliente = <span class="num">1</span>; <span class="com">// Voce comeca!</span>
+    vez_do_cliente = <span class="num">1</span>; <span class="com">// Voce comeca jogando!</span>
 } <span class="kw">else</span> {
-    vez_do_cliente = <span class="num">0</span>; <span class="com">// Servidor comeca</span>
+    vez_do_cliente = <span class="num">0</span>; <span class="com">// O servidor comeca</span>
 }
 </pre>
 
         <div class="card">
-          <h3>Facilidade para a Apresentação</h3>
+          <h3>O que essa parte faz</h3>
           <ul>
-            <li><strong>Sem Recompilar:</strong> Para jogar entre computadores diferentes no laboratório, basta passar o IP (ex: <code>.\cliente_velha.exe 172.16.1.160</code>).</li>
-            <li><strong>Teste Local com 1 Clique:</strong> Se estiver no mesmo PC, basta dar <span style="color:var(--accent);">Enter</span> e o código assume <code>127.0.0.1</code> automaticamente.</li>
-            <li><strong>Bloqueio no <code>recv()</code>:</strong> O cliente não toma nenhuma decisão até que o servidor termine o sorteio e envie a mensagem de controle.</li>
+            <li><strong>IP Flexível:</strong> O cliente pode receber o IP por linha de comando (ex: <code>.\cliente_velha 192.168.1.15</code>) ou digitando na hora.</li>
+            <li><strong>Teste Rápido no Mesmo PC:</strong> Se apenas apertar <span style="color:var(--accent);">Enter</span>, o programa assume <code>127.0.0.1</code> automaticamente, facilitando testar em uma máquina só.</li>
+            <li><strong>connect():</strong> Dispara o pedido de conexão TCP com o servidor.</li>
+            <li><strong>recv():</strong> Fica aguardando a mensagem do servidor informando quem começa a rodada.</li>
           </ul>
         </div>
       </div>
@@ -508,9 +509,9 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
          SLIDE 6: O CICLO DE TURNOS
          ========================================== -->
     <section class="slide">
-      <div class="slide-subtitle">A Máquina de Estados</div>
-      <h2>O Ciclo de Turnos: Envio e Recepção</h2>
-      <p>O coração do jogo é um laço <code>while (jogo_ativo)</code> que alterna entre quem joga e quem aguarda:</p>
+      <div class="slide-subtitle">Lógica do Jogo</div>
+      <h2>Alternância de Turnos</h2>
+      <p>Um laço <code>while (jogo_ativo)</code> que alterna entre quem faz a jogada e quem fica esperando:</p>
 
       <div class="grid-2">
         <pre><span class="com">// === QUANDO EH A MINHA VEZ ===</span>
@@ -520,22 +521,22 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     tabuleiro[jogada - <span class="num">1</span>] = MEU_SIMBOLO;
     <span class="fn">exibir_tabuleiro</span>(tabuleiro);
 
-    <span class="hl"><span class="com">// 2. Envia a coordenada pela rede</span></span>
+    <span class="hl"><span class="com">// 2. Envia a jogada pela rede</span></span>
     <span class="fn">snprintf</span>(buffer, <span class="kw">sizeof</span>(buffer), <span class="str">"MOVE:%d\n"</span>, jogada);
     <span class="fn">send</span>(socket_sd, buffer, <span class="fn">strlen</span>(buffer), <span class="num">0</span>);
 
     <span class="com">// 3. Checa se o jogo acabou</span>
     <span class="kw">if</span> (<span class="fn">verificar_termino</span>(tabuleiro) != -<span class="num">1</span>)
         jogo_ativo = <span class="num">0</span>;
-    minha_vez = <span class="num">0</span>; <span class="com">// Passa a vez</span>
+    minha_vez = <span class="num">0</span>; <span class="com">// Passa a vez para o outro</span>
 }
 </pre>
 
         <pre><span class="com">// === QUANDO EH A VEZ DO ADVERSARIO ===</span>
 <span class="kw">else</span> {
-    <span class="fn">printf</span>(<span class="str">"Aguardando jogada do adversario...\n"</span>);
+    <span class="fn">printf</span>(<span class="str">"Aguardando a jogada do oponente...\n"</span>);
 
-    <span class="hl"><span class="com">// 1. Bloqueia ate receber dados da rede</span></span>
+    <span class="hl"><span class="com">// 1. Pausa no recv ate chegar a jogada</span></span>
     <span class="kw">int</span> rc = <span class="fn">recv</span>(socket_sd, buffer, <span class="kw">sizeof</span>(buffer)-<span class="num">1</span>, <span class="num">0</span>);
 
     <span class="kw">if</span> (rc > <span class="num">0</span>) {
@@ -550,7 +551,7 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         <span class="com">// 3. Checa se o jogo acabou</span>
         <span class="kw">if</span> (<span class="fn">verificar_termino</span>(tabuleiro) != -<span class="num">1</span>)
             jogo_ativo = <span class="num">0</span>;
-        minha_vez = <span class="num">1</span>; <span class="com">// Agora eh a minha vez!</span>
+        minha_vez = <span class="num">1</span>; <span class="com">// Agora eh a minha vez</span>
     }
 }
 </pre>
@@ -562,19 +563,19 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">verificar_termino()</div>
-      <h2>Lógica de Vitória e Empate</h2>
-      <p>A função que avalia as 8 linhas de vitória e a ocorrência de empate em tempo constante $O(1)$:</p>
+      <h2>Como o Código Verifica Vitória e Empate</h2>
+      <p>A função percorre as 8 retas possíveis de vitória e checa se ainda restam casas vazias:</p>
 
       <div class="grid-2">
         <pre><span class="kw">int</span> <span class="fn">verificar_termino</span>(<span class="kw">const</span> <span class="kw">char</span> tab[<span class="num">9</span>]) {
-    <span class="com">// Matriz com as 8 retas possiveis de vitoria</span>
+    <span class="com">// As 8 retas possiveis de vitoria</span>
     <span class="kw">const</span> <span class="kw">int</span> linhas[<span class="num">8</span>][<span class="num">3</span>] = {
-        {<span class="num">0</span>, <span class="num">1</span>, <span class="num">2</span>}, {<span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>}, {<span class="num">6</span>, <span class="num">7</span>, <span class="num">8</span>}, <span class="com">// 3 Horizontais</span>
-        {<span class="num">0</span>, <span class="num">3</span>, <span class="num">6</span>}, {<span class="num">1</span>, <span class="num">4</span>, <span class="num">7</span>}, {<span class="num">2</span>, <span class="num">5</span>, <span class="num">8</span>}, <span class="com">// 3 Verticais</span>
+        {<span class="num">0</span>, <span class="num">1</span>, <span class="num">2</span>}, {<span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>}, {<span class="num">6</span>, <span class="num">7</span>, <span class="num">8</span>}, <span class="com">// 3 Linhas</span>
+        {<span class="num">0</span>, <span class="num">3</span>, <span class="num">6</span>}, {<span class="num">1</span>, <span class="num">4</span>, <span class="num">7</span>}, {<span class="num">2</span>, <span class="num">5</span>, <span class="num">8</span>}, <span class="com">// 3 Colunas</span>
         {<span class="num">0</span>, <span class="num">4</span>, <span class="num">8</span>}, {<span class="num">2</span>, <span class="num">4</span>, <span class="num">6</span>}             <span class="com">// 2 Diagonais</span>
     };
 
-    <span class="hl"><span class="com">// 1. Checa se alguem fechou uma reta</span></span>
+    <span class="hl"><span class="com">// 1. Confere se alguma reta tem 3 pecas iguais</span></span>
     <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i < <span class="num">8</span>; i++) {
         <span class="kw">int</span> a = linhas[i][<span class="num">0</span>], b = linhas[i][<span class="num">1</span>], c = linhas[i][<span class="num">2</span>];
         <span class="kw">if</span> (tab[a] != <span class="str">' '</span> && tab[a] == tab[b] && tab[b] == tab[c]) {
@@ -583,25 +584,26 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         }
     }
 
-    <span class="hl"><span class="com">// 2. Se ha casa vazia, o jogo continua</span></span>
+    <span class="hl"><span class="com">// 2. Se houver alguma casa vazia, o jogo continua</span></span>
     <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i < <span class="num">9</span>; i++) {
         <span class="kw">if</span> (tab[i] == <span class="str">' '</span>) <span class="kw">return</span> -<span class="num">1</span>;
     }
 
-    <span class="kw">return</span> <span class="num">0</span>; <span class="com">// Todas cheias sem vencedor: Empate!</span>
+    <span class="kw">return</span> <span class="num">0</span>; <span class="com">// Tabuleiro cheio sem vencedor: Deu velha!</span>
 }
 </pre>
 
         <div class="card">
-          <h3>Como Tratamos o Encerramento</h3>
+          <h3>O que essa parte faz</h3>
           <ul>
-            <li><strong>Validação Independente:</strong> Servidor e Cliente executam essa função em seus computadores. Nenhum nó precisa mandar mensagem de "você perdeu" — o tabuleiro decide.</li>
-            <li><strong>Mensagens na Tela:</strong><br>
-              • Se status for minha vitória: <em>"Você venceu!"</em><br>
-              • Se status for do oponente: <em>"Você perdeu!"</em><br>
-              • Se status for 0: <em>"Empate!"</em>
+            <li><strong>Validação Local:</strong> Tanto o Servidor quanto o Cliente executam essa função após cada jogada. Como ambos mantêm o mesmo tabuleiro sincronizado, chegam ao mesmo resultado sem precisar de mensagens extras.</li>
+            <li><strong>Valores de Retorno:</strong><br>
+              • <code>1</code>: Vitória de 'X' (Cliente)<br>
+              • <code>2</code>: Vitória de 'O' (Servidor)<br>
+              • <code>0</code>: Empate (deu velha)<br>
+              • <code>-1</code>: Jogo segue em andamento
             </li>
-            <li><strong>Fechamento:</strong> Logo após, chamamos <code>closesocket()</code> e <code>WSACleanup()</code>.</li>
+            <li><strong>Fim de Jogo:</strong> Quando o retorno é diferente de -1, o jogo encerra o laço e fecha a conexão.</li>
           </ul>
         </div>
       </div>
@@ -612,41 +614,39 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">obter_jogada_usuario()</div>
-      <h2>Validação e Sanitização de Entrada</h2>
-      <p>Como garantimos que o jogo não trave e rejeite qualquer digitação incorreta:</p>
+      <h2>Entrada Segura: Evitando Travamentos</h2>
+      <p>Como o código trata o que o usuário digita para não quebrar a execução:</p>
 
       <div class="grid-2">
-        <pre><span class="com">// 1. Leitura segura com fgets (evita estouro de buffer)</span>
+        <pre><span class="com">// 1. Leitura segura com fgets (evita travar se digitar letras)</span>
 <span class="fn">fgets</span>(linha, <span class="kw">sizeof</span>(linha), stdin);
 
-<span class="com">// 2. Se digitou mais de 127 caracteres, drena o buffer</span>
-<span class="kw">if</span> (<span class="fn">strchr</span>(linha, <span class="str">'\n'</span>) == NULL) {
-    <span class="kw">int</span> c;
-    <span class="kw">while</span> ((c = <span class="fn">getchar</span>()) != <span class="str">'\n'</span> && c != EOF);
-}
-
-<span class="com">// 3. Remove quebras de linha e espacos nas bordas</span>
+<span class="com">// 2. Remove quebras de linha e espacos extras</span>
 linha[<span class="fn">strcspn</span>(linha, <span class="str">"\r\n"</span>)] = <span class="str">'\0'</span>;
 
-<span class="hl"><span class="com">// 4. Exige EXATAMENTE 1 unico caractere de '1' a '9'</span></span>
+<span class="hl"><span class="com">// 3. Exige exatamente um digito de '1' a '9'</span></span>
 <span class="kw">if</span> (<span class="fn">strlen</span>(inicio) != <span class="num">1</span> || inicio[<span class="num">0</span>] < <span class="str">'1'</span> || inicio[<span class="num">0</span>] > <span class="str">'9'</span>) {
     <span class="fn">printf</span>(<span class="str">"Entrada invalida! Digite apenas de 1 a 9.\n"</span>);
-    <span class="kw">continue</span>;
+    <span class="kw">continue</span>; <span class="com">// Pede para digitar novamente</span>
 }
 
-<span class="hl"><span class="com">// 5. Impede jogar em casa ja ocupada</span></span>
+<span class="com">// 4. Converte o caractere no indice do vetor (0 a 8)</span>
+<span class="kw">int</span> celula = inicio[<span class="num">0</span>] - <span class="str">'1'</span>;
+
+<span class="hl"><span class="com">// 5. Nao permite jogar em casa ja preenchida</span></span>
 <span class="kw">if</span> (tabuleiro[celula] != <span class="str">' '</span>) {
-    <span class="fn">printf</span>(<span class="str">"Posicao ocupada! Escolha outra.\n"</span>);
+    <span class="fn">printf</span>(<span class="str">"Posicao ja ocupada! Escolha outra casa.\n"</span>);
     <span class="kw">continue</span>;
 }
 </pre>
 
         <div class="card">
-          <h3>Por que NÃO usamos <code>scanf("%d")</code>?</h3>
+          <h3>Por que não usamos <code>scanf("%d")</code>?</h3>
           <ul>
-            <li><strong>O Problema do <code>scanf</code>:</strong> Se o usuário digitar acidentalmente uma letra (ex: <code>"a"</code>), o <code>scanf</code> falha, não consome a entrada e o programa entra em loop infinito.</li>
-            <li><strong>A Solução com <code>fgets</code>:</strong> Lemos a linha como texto, limpamos os espaços e validamos se é exatamente um dígito entre 1 e 9.</li>
-            <li><strong>Proteção de Célula:</strong> O código checa <code>tabuleiro[celula] != ' '</code> antes de aceitar a jogada.</li>
+            <li><strong>O Problema do <code>scanf</code>:</strong> Se o usuário digitar acidentalmente uma letra (como 'a' ou uma palavra inteira), o <code>scanf("%d")</code> falha, não remove os caracteres do teclado e o programa entra em loop infinito.</li>
+            <li><strong>A Vantagem do <code>fgets</code>:</strong> Lemos a linha digitada como texto comum. Assim, qualquer digitação errada é tratada com calma e o programa apenas pede o número de novo.</li>
+            <li><strong>Subtrair '1':</strong> Como os caracteres '1' a '9' são sequenciais na tabela ASCII, subtrair <code>'1'</code> transforma o caractere diretamente no índice de 0 a 8 do nosso vetor.</li>
+            <li><strong>Posição Livre:</strong> Checa se a casa está com espaço <code>' '</code> antes de confirmar a jogada.</li>
           </ul>
         </div>
       </div>
@@ -657,8 +657,8 @@ linha[<span class="fn">strcspn</span>(linha, <span class="str">"\r\n"</span>)] =
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">Demonstração & Encerramento</div>
-      <h2>Execução Real no Laboratório</h2>
-      <p>Os dois nós conectados e rodando perfeitamente sincronizados:</p>
+      <h2>Execução Real no Terminal</h2>
+      <p>Os dois nós conectados e rodando sincronizados:</p>
 
       <div class="grid-2">
         <div class="card" style="padding: 10px;">
@@ -672,7 +672,7 @@ linha[<span class="fn">strcspn</span>(linha, <span class="str">"\r\n"</span>)] =
       </div>
 
       <div class="card" style="text-align: center; margin-top: 18px; padding: 18px; border-color: rgba(56, 189, 248, 0.4);">
-        <h2 style="font-size: 1.3rem; margin-bottom: 6px;">Vamos rodar o código ao vivo! 🚀</h2>
+        <h2 style="font-size: 1.3rem; margin-bottom: 6px;">Vamos rodar o código e ver na prática! 🚀</h2>
         <p style="font-size: 0.92rem; margin-bottom: 0; color: var(--accent);">
           Pedro Augusto • João Victor Pariz • Mateus Roma
         </p>
