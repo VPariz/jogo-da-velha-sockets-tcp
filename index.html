@@ -517,7 +517,7 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
       <div class="slide-footer-note">
         <span>💡</span>
-        <div><strong>Interação na Rede:</strong> Enquanto o servidor pausa no <code>accept()</code>, o cliente dispara o <code>connect()</code>. Logo após aceitar o cliente, o servidor fecha o socket de escuta (<code>listen_sd</code>) para proteger a partida contra outras conexões.</div>
+        <div><strong>Interação na Rede:</strong> O servidor faz o <code>bind</code> padrão em <code>INADDR_ANY</code> (e usa <code>gethostbyname</code> só para imprimir seu IP na tela e dispensar <code>ipconfig</code>). Enquanto ele pausa no <code>accept()</code>, o cliente dispara o <code>connect()</code>.</div>
       </div>
     </section>
 
