@@ -636,12 +636,12 @@ minha_vez = <span class="num">1</span>;
     </section>
 
     <!-- ==========================================
-         SLIDE 5: ETAPA 4 - REGRAS E FIM DE JOGO
+         SLIDE 5: VERIFICAR_TERMINO
          ========================================== -->
     <section class="slide">
-      <div class="slide-subtitle">Etapa 4 • Regras do Jogo</div>
-      <h2>Como os Nós Avaliam Vitória e Empate</h2>
-      <p>Função executada localmente por ambos os nós para verificar as 8 combinações vencedoras:</p>
+      <div class="slide-subtitle">verificar_termino()</div>
+      <h2>Verificação de Vitória e Empate</h2>
+      <p>Função que analisa o tabuleiro para identificar vencedor ou empate:</p>
 
       <div class="grid-code-explanation">
         <div class="code-box">
@@ -675,28 +675,24 @@ minha_vez = <span class="num">1</span>;
         </div>
 
         <div class="card">
-          <h3>Validação Local Determinística</h3>
+          <h3>Como a Função Funciona</h3>
           <ul>
-            <li><strong>Sem Pacotes Extras:</strong> Como ambos os computadores mantêm seus tabuleiros rigorosamente iguais, nenhum nó precisa mandar mensagem dizendo "eu ganhei". O próprio código local identifica o término.</li>
-            <li><strong>Retornos da Função:</strong><br>
-              • <code>1</code>: Vitória de 'X' (Cliente)<br>
-              • <code>2</code>: Vitória de 'O' (Servidor)<br>
-              • <code>0</code>: Empate (deu velha)<br>
-              • <code>-1</code>: Partida continua em andamento
-            </li>
-            <li><strong>Encerramento:</strong> Ao detectar término (retorno $\neq -1$), o laço finaliza e os sockets são fechados com <code>closesocket()</code>.</li>
+            <li><strong>Varredura das 8 Retas:</strong> Testa as 3 linhas, 3 colunas e 2 diagonais. Se encontrar 3 peças iguais, encerra e retorna o vencedor (1 para 'X', 2 para 'O').</li>
+            <li><strong>Casas em Aberto:</strong> Se ainda restar alguma casa com espaço (<code>' '</code>), o jogo continua (retorna -1).</li>
+            <li><strong>Detecção de Empate:</strong> Se todas as 9 casas estiverem cheias sem vencedor, retorna 0 (deu velha).</li>
+            <li><strong>Execução Local:</strong> Ambos os computadores chamam essa função após cada movimento no próprio tabuleiro.</li>
           </ul>
         </div>
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 6: ETAPA 5 - VALIDAÇÃO DE ENTRADA
+         SLIDE 6: OBTER_JOGADA_USUARIO
          ========================================== -->
     <section class="slide">
-      <div class="slide-subtitle">Etapa 5 • Sanitização</div>
-      <h2>Leitura Segura: Evitando Travamentos</h2>
-      <p>Como a função <code>obter_jogada_usuario()</code> trata a entrada do teclado para não quebrar o programa:</p>
+      <div class="slide-subtitle">obter_jogada_usuario()</div>
+      <h2>Leitura e Validação da Jogada</h2>
+      <p>Função que captura a jogada no terminal e valida a célula escolhida:</p>
 
       <div class="grid-code-explanation">
         <div class="code-box">
@@ -704,7 +700,7 @@ minha_vez = <span class="num">1</span>;
             <span class="badge-srv">LÓGICA COMPARTILHADA</span>
             <span>obter_jogada_usuario()</span>
           </div>
-          <pre><span class="com">// 1. Leitura segura com fgets (evita travar se digitar letras)</span>
+          <pre><span class="com">// 1. Le a linha digitada pelo usuario</span>
 <span class="fn">fgets</span>(linha, <span class="kw">sizeof</span>(linha), stdin);
 
 <span class="com">// 2. Remove quebras de linha e espacos extras</span>
@@ -728,12 +724,12 @@ linha[<span class="fn">strcspn</span>(linha, <span class="str">"\r\n"</span>)] =
         </div>
 
         <div class="card">
-          <h3>Por que não usamos <code>scanf("%d")</code>?</h3>
+          <h3>Como a Função Funciona</h3>
           <ul>
-            <li><strong>O Problema do <code>scanf</code>:</strong> Se o usuário digitar acidentalmente uma letra (ex: <code>a</code>) ou palavra, o <code>scanf</code> falha, não consome a entrada do buffer do teclado e o programa entra em loop infinito.</li>
-            <li><strong>A Vantagem do <code>fgets</code>:</strong> Lê a linha inteira como texto. Qualquer caractere indesejado é tratado com calma e o programa apenas pede o número de novo.</li>
-            <li><strong>Subtrair '1':</strong> Como os caracteres '1' a '9' são sequenciais na tabela ASCII, subtrair <code>'1'</code> converte diretamente para o índice de 0 a 8 do nosso vetor.</li>
-            <li><strong>Célula Livre:</strong> Checa <code>tabuleiro[celula] != ' '</code> antes de aceitar.</li>
+            <li><strong>1. Leitura:</strong> <code>fgets</code> lê o que o jogador digitou no terminal.</li>
+            <li><strong>2. Limpeza:</strong> <code>strcspn</code> remove quebras de linha (<code>\r\n</code>).</li>
+            <li><strong>3. Validação do Dígito:</strong> Exige exatamente um único caractere entre '1' e '9'. Caso contrário, solicita novamente.</li>
+            <li><strong>4. Checagem da Célula:</strong> Subtrai <code>'1'</code> para obter o índice (0 a 8) e confirma que a casa está vazia antes de aceitar.</li>
           </ul>
         </div>
       </div>
