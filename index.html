@@ -12,6 +12,7 @@
       --text-muted: #94a3b8;
       --accent: #38bdf8;
       --green: #34d399;
+      --amber: #fbbf24;
       --border: #1e293b;
       --code-bg: #070d1a;
       --font-mono: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
@@ -47,7 +48,7 @@
 
     /* Header */
     header {
-      padding: 14px 28px;
+      padding: 12px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -90,8 +91,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 30px 20px 80px 20px;
-      max-width: 1200px;
+      padding: 24px 20px 75px 20px;
+      max-width: 1220px;
       margin: 0 auto;
       width: 100%;
     }
@@ -102,9 +103,9 @@
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 36px 44px;
+      padding: 32px 40px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-      animation: fadeIn 0.25s ease-out;
+      animation: fadeIn 0.22s ease-out;
     }
     .slide.active {
       display: block;
@@ -118,7 +119,7 @@
     /* Typography */
     .slide-subtitle {
       color: var(--accent);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -128,45 +129,45 @@
       font-size: 2.2rem;
       font-weight: 800;
       line-height: 1.2;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       color: #ffffff;
     }
     h2 {
-      font-size: 1.65rem;
+      font-size: 1.6rem;
       font-weight: 700;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       color: #ffffff;
     }
     h3 {
-      font-size: 1.1rem;
+      font-size: 1.08rem;
       font-weight: 600;
       color: var(--accent);
       margin-bottom: 10px;
     }
     p {
       color: var(--text-muted);
-      font-size: 1.02rem;
+      font-size: 1rem;
       line-height: 1.6;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     /* Grids & Cards */
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 24px;
+      gap: 22px;
       align-items: start;
     }
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
+      gap: 16px;
     }
     .card {
       background: rgba(7, 13, 26, 0.6);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 20px;
+      padding: 18px 20px;
     }
 
     /* Code Snippets */
@@ -174,13 +175,13 @@
       background: var(--code-bg);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 16px 18px;
+      padding: 14px 16px;
       overflow-x: auto;
       font-family: var(--font-mono);
-      font-size: 0.86rem;
+      font-size: 0.84rem;
       line-height: 1.5;
       color: #e2e8f0;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .kw { color: #f472b6; font-weight: 600; }
     .fn { color: #60a5fa; font-weight: 600; }
@@ -197,12 +198,27 @@
 
     ul, ol {
       color: var(--text-muted);
-      font-size: 0.95rem;
-      line-height: 1.8;
+      font-size: 0.94rem;
+      line-height: 1.75;
       margin-left: 20px;
     }
     li strong {
       color: var(--text);
+    }
+
+    /* Diagram Canvas */
+    .diagram-container {
+      background: rgba(7, 13, 26, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+    }
+    svg.seq-diagram {
+      width: 100%;
+      max-width: 960px;
+      height: auto;
     }
 
     /* Bottom Footer Bar */
@@ -211,7 +227,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      padding: 12px 28px;
+      padding: 10px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -230,8 +246,8 @@
 
     @media (max-width: 900px) {
       .grid-2, .grid-3 { grid-template-columns: 1fr; }
-      .slide { padding: 24px; }
-      h1 { font-size: 1.7rem; }
+      .slide { padding: 22px; }
+      h1 { font-size: 1.6rem; }
     }
   </style>
 </head>
@@ -259,7 +275,7 @@
     <section class="slide active">
       <div class="slide-subtitle">Engenharia Eletrônica • Redes de Computadores I (2026.2)</div>
       <h1>Jogo da Velha Cliente-Servidor</h1>
-      <p style="font-size: 1.15rem; max-width: 800px; margin-bottom: 28px;">
+      <p style="font-size: 1.15rem; max-width: 800px; margin-bottom: 26px;">
         Apresentação prática da implementação em Linguagem C utilizando Sockets TCP.
       </p>
 
@@ -285,7 +301,7 @@
           <p style="font-size: 0.92rem; margin-bottom: 0; line-height: 1.8;">
             • <code>servidor_velha.c</code><br>
             • <code>cliente_velha.c</code><br>
-            • Compilação MinGW (GCC)
+            • Compilação MinGW GCC
           </p>
         </div>
       </div>
@@ -298,16 +314,16 @@
       <div class="slide-subtitle">Visão Geral</div>
       <h2>Como o Jogo Funciona na Rede</h2>
       <p>
-        O jogo coloca dois computadores em disputa direta através de uma conexão TCP confiável na porta 6000:
+        Dois computadores disputam uma partida sobre uma conexão TCP orientada a fluxo na porta 6000:
       </p>
 
       <div class="grid-2">
         <div class="card">
-          <h3>Papéis de Cada Lado</h3>
+          <h3>Papéis de Cada Nó</h3>
           <ul>
-            <li><strong>Servidor (Peça 'O'):</strong> É iniciado primeiro, aguarda conexões e descobre seus IPs locais automaticamente.</li>
+            <li><strong>Servidor (Peça 'O'):</strong> É iniciado primeiro, aguarda conexões e exibe seus IPs locais automaticamente no console.</li>
             <li><strong>Cliente (Peça 'X'):</strong> Inicia em seguida, conecta ao IP do servidor e aguarda o sorteio.</li>
-            <li><strong>Sorteio Inicial:</strong> O servidor joga uma moeda (<code>rand() % 2</code>) e avisa quem começa.</li>
+            <li><strong>Sorteio Inicial:</strong> O servidor joga a moeda (<code>rand() % 2</code>) e sincroniza quem começa.</li>
           </ul>
         </div>
 
@@ -316,14 +332,99 @@
           <ul>
             <li><code>START:SERVER</code> ou <code>START:CLIENT</code>: Enviado no início para sincronizar a ordem.</li>
             <li><code>MOVE:<1-9></code>: Enviado a cada jogada com a célula escolhida (ex: <code>MOVE:5\n</code>).</li>
-            <li><strong>Validação Local:</strong> Ambos os programas atualizam o tabuleiro e checam vitória/empate localmente.</li>
+            <li><strong>Validação Local:</strong> Ambos os programas atualizam o tabuleiro e avaliam vitória/empate localmente.</li>
           </ul>
         </div>
       </div>
     </section>
 
     <!-- ==========================================
-         SLIDE 3: CÓDIGO DO SERVIDOR
+         SLIDE 3: DIAGRAMA DE CONEXÃO E MENSAGENS (NOVO SLIDE!)
+         ========================================== -->
+    <section class="slide">
+      <div class="slide-subtitle">Arquitetura de Sockets</div>
+      <h2>Diagrama de Conexão e Troca de Mensagens</h2>
+      <p>Fluxo das chamadas de sockets e pacotes transmitidos (modelo clássico Stevens / Kurose):</p>
+
+      <div class="diagram-container">
+        <svg class="seq-diagram" viewBox="0 0 940 430">
+          <defs>
+            <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+            </marker>
+            <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399"/>
+            </marker>
+            <marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24"/>
+            </marker>
+          </defs>
+
+          <!-- Columns Headers -->
+          <rect x="50" y="15" width="220" height="42" rx="6" fill="#131d35" stroke="#38bdf8" stroke-width="1.5"/>
+          <text x="160" y="41" fill="#38bdf8" font-size="14" font-weight="700" text-anchor="middle" font-family="sans-serif">SERVIDOR TCP ('O')</text>
+
+          <rect x="670" y="15" width="220" height="42" rx="6" fill="#131d35" stroke="#34d399" stroke-width="1.5"/>
+          <text x="780" y="41" fill="#34d399" font-size="14" font-weight="700" text-anchor="middle" font-family="sans-serif">CLIENTE TCP ('X')</text>
+
+          <!-- Lifelines -->
+          <line x1="160" y1="57" x2="160" y2="415" stroke="#1e293b" stroke-width="2" stroke-dasharray="4"/>
+          <line x1="780" y1="57" x2="780" y2="415" stroke="#1e293b" stroke-width="2" stroke-dasharray="4"/>
+
+          <!-- Step 1: Handshake -->
+          <rect x="70" y="70" width="180" height="46" rx="4" fill="#070d1a" stroke="#334155"/>
+          <text x="160" y="89" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="monospace">socket() &gt; bind(6000)</text>
+          <text x="160" y="105" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">listen() &gt; accept() [bloq]</text>
+
+          <rect x="690" y="70" width="180" height="46" rx="4" fill="#070d1a" stroke="#334155"/>
+          <text x="780" y="89" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="monospace">socket()</text>
+          <text x="780" y="105" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">connect(IP, 6000)</text>
+
+          <!-- Arrow Connect (Three-way Handshake) -->
+          <line x1="690" y1="95" x2="260" y2="95" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+          <text x="475" y="86" fill="#e2e8f0" font-size="12" font-weight="600" text-anchor="middle" font-family="sans-serif">1. Three-Way Handshake TCP (SYN → SYN-ACK → ACK)</text>
+
+          <!-- Step 2: Coin Toss -->
+          <rect x="70" y="135" width="180" height="34" rx="4" fill="#070d1a" stroke="#334155"/>
+          <text x="160" y="156" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">Sorteio: rand() % 2</text>
+
+          <rect x="690" y="135" width="180" height="34" rx="4" fill="#070d1a" stroke="#334155"/>
+          <text x="780" y="156" fill="#34d399" font-size="11" text-anchor="middle" font-family="monospace">recv() [aguarda sorteio]</text>
+
+          <line x1="250" y1="152" x2="680" y2="152" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
+          <text x="475" y="144" fill="#34d399" font-size="12" font-weight="bold" text-anchor="middle" font-family="monospace">2. START:SERVER\n  ou  START:CLIENT\n</text>
+
+          <!-- Step 3: Turn Loop Box -->
+          <rect x="140" y="195" width="660" height="135" rx="6" fill="rgba(56, 189, 248, 0.04)" stroke="#38bdf8" stroke-width="1" stroke-dasharray="3"/>
+          <text x="155" y="214" fill="#38bdf8" font-size="11" font-weight="bold" font-family="sans-serif">CICLO DE TURNOS (while jogo_ativo)</text>
+
+          <!-- Turn 1: Move from Server -->
+          <line x1="250" y1="235" x2="680" y2="235" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+          <text x="475" y="227" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle" font-family="monospace">send("MOVE:5\n")  ─────────►  recv() atualiza 'O'</text>
+
+          <!-- Turn 2: Move from Client -->
+          <line x1="690" y1="285" x2="260" y2="285" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
+          <text x="475" y="277" fill="#34d399" font-size="12" font-weight="bold" text-anchor="middle" font-family="monospace">recv() atualiza 'X'  ◄─────────  send("MOVE:1\n")</text>
+
+          <text x="475" y="318" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="sans-serif">Ambos executam verificar_termino() a cada jogada</text>
+
+          <!-- Step 4: Teardown -->
+          <rect x="70" y="355" width="180" height="42" rx="4" fill="#070d1a" stroke="#334155"/>
+          <text x="160" y="373" fill="#e2e8f0" font-size="11" text-anchor="middle" font-family="monospace">closesocket(client_sd)</text>
+          <text x="160" y="389" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="monospace">WSACleanup()</text>
+
+          <rect x="690" y="355" width="180" height="42" rx="4" fill="#070d1a" stroke="#334155"/>
+          <text x="780" y="373" fill="#e2e8f0" font-size="11" text-anchor="middle" font-family="monospace">closesocket(sd)</text>
+          <text x="780" y="389" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="monospace">WSACleanup()</text>
+
+          <line x1="250" y1="375" x2="680" y2="375" stroke="#fbbf24" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow-amber)"/>
+          <text x="475" y="367" fill="#fbbf24" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">Finalização: Encerramento Limpo (TCP FIN-ACK)</text>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 4: CÓDIGO DO SERVIDOR
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">servidor_velha.c</div>
@@ -363,7 +464,7 @@ client_sd = <span class="fn">accept</span>(listen_sd, (<span class="kw">struct</
     </section>
 
     <!-- ==========================================
-         SLIDE 4: CÓDIGO DO CLIENTE
+         SLIDE 5: CÓDIGO DO CLIENTE
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">cliente_velha.c</div>
@@ -404,7 +505,7 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     </section>
 
     <!-- ==========================================
-         SLIDE 5: O CICLO DE TURNOS
+         SLIDE 6: O CICLO DE TURNOS
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">A Máquina de Estados</div>
@@ -457,7 +558,7 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     </section>
 
     <!-- ==========================================
-         SLIDE 6: REGRAS E FIM DE JOGO
+         SLIDE 7: REGRAS E FIM DE JOGO
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">verificar_termino()</div>
@@ -507,7 +608,7 @@ sd = <span class="fn">socket</span>(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     </section>
 
     <!-- ==========================================
-         SLIDE 7: VALIDAÇÃO DE ENTRADA
+         SLIDE 8: VALIDAÇÃO DE ENTRADA
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">obter_jogada_usuario()</div>
@@ -552,7 +653,7 @@ linha[<span class="fn">strcspn</span>(linha, <span class="str">"\r\n"</span>)] =
     </section>
 
     <!-- ==========================================
-         SLIDE 8: DEMONSTRAÇÃO PRÁTICA
+         SLIDE 9: DEMONSTRAÇÃO PRÁTICA
          ========================================== -->
     <section class="slide">
       <div class="slide-subtitle">Demonstração & Encerramento</div>
@@ -582,7 +683,7 @@ linha[<span class="fn">strcspn</span>(linha, <span class="str">"\r\n"</span>)] =
 
   <!-- Bottom Navigation -->
   <footer>
-    <div class="counter" id="counter">Slide 1 de 8</div>
+    <div class="counter" id="counter">Slide 1 de 9</div>
     <div class="controls">
       <button class="nav-btn" id="prev-btn" onclick="prevSlide()">◀ Anterior</button>
       <button class="nav-btn" id="next-btn" onclick="nextSlide()">Próximo ▶</button>
