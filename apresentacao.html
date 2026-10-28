@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apresentação: Jogo da Velha TCP em C | IME Redes I</title>
+  <style>
+    :root {
+      --bg-dark: #0a0f1d;
+      --bg-card: #131b2e;
+      --bg-card-hover: #1b2640;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #34d399;
+      --accent-amber: #fbbf24;
+      --accent-red: #f87171;
+      --accent-purple: #a78bfa;
+      --border-color: #1e293b;
+      --code-bg: #0d1117;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      user-select: none;
+    }
+
+    /* Top Progress Bar */
+    #progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 100;
+    }
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+      transition: width 0.3s ease;
+    }
+
+    /* Header Controls */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 15, 29, 0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 90;
+    }
+    .header-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .header-badge {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent-blue);
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Presentation Deck Container */
+    #deck {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 70px 20px 80px 20px;
+      max-width: 1300px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 36px 44px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .slide.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Slide Typography */
+    .slide-tag {
+      display: inline-block;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      color: var(--accent-blue);
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ffffff 30%, var(--accent-blue) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+    h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      margin-bottom: 8px;
+    }
+    p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    /* Feature Cards */
+    .card {
+      background: rgba(13, 17, 23, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    .card:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+      transform: translateY(-2px);
+    }
+    .card-icon {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    /* Code Blocks */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: #e2e8f0;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    code {
+      font-family: var(--font-mono);
+    }
+    .code-badge {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    /* Syntax Highlighting Tokens */
+    .c-kw { color: #f472b6; font-weight: 600; }     /* Keywords: int, if, while, struct */
+    .c-fn { color: #60a5fa; font-weight: 600; }     /* Functions: socket, bind, connect */
+    .c-str { color: #34d399; }                      /* Strings: "MOVE:%d" */
+    .c-num { color: #fbbf24; }                      /* Numbers: 6000, 1 */
+    .c-com { color: #64748b; font-style: italic; }  /* Comments: // ... */
+    .c-typ { color: #38bdf8; }                      /* Types: SOCKET, WSADATA */
+
+    /* Protocol Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.95rem;
+    }
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    th {
+      background: rgba(13, 17, 23, 0.8);
+      color: var(--accent-blue);
+      font-weight: 600;
+    }
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Step Timeline */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .timeline-item {
+      display: flex;
+      gap: 16px;
+      background: rgba(13, 17, 23, 0.5);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 16px;
+      align-items: center;
+    }
+    .timeline-step {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid var(--accent-blue);
+      color: var(--accent-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+    .timeline-content strong {
+      color: #ffffff;
+      font-size: 0.95rem;
+    }
+    .timeline-content span {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* Tabs for Code Comparison */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .tab-btn {
+      background: rgba(13, 17, 23, 0.7);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: var(--bg-card);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Bottom Control Bar */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 15, 29, 0.9);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border-color);
+      z-index: 90;
+    }
+    .footer-hints {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 16px;
+    }
+    .key-badge {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #e2e8f0;
+    }
+    .footer-nav {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Quick Menu Drawer */
+    #menu-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(4px);
+    }
+    #menu-modal.open {
+      display: flex;
+    }
+    .menu-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    }
+    .menu-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .menu-list {
+      padding: 12px 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .menu-item {
+      padding: 10px 14px;
+      border-radius: 6px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-main);
+      text-align: left;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.15s;
+    }
+    .menu-item:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-color);
+    }
+    .menu-item.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+      font-weight: 600;
+    }
+
+    /* Highlight Callout */
+    .callout {
+      border-left: 4px solid var(--accent-blue);
+      background: rgba(56, 189, 248, 0.08);
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      margin: 14px 0;
+    }
+    .callout-success {
+      border-left-color: var(--accent-green);
+      background: rgba(52, 211, 153, 0.08);
+    }
+    .callout-warning {
+      border-left-color: var(--accent-amber);
+      background: rgba(251, 191, 36, 0.08);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .slide { padding: 24px; }
+      h1 { font-size: 1.7rem; }
+      .footer-hints { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Progress Bar -->
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="header-title">
+      <span class="header-badge">IME • REDES I</span>
+      <span>Jogo da Velha Cliente-Servidor (TCP Sockets em C)</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn" onclick="toggleMenu()">Índice dos Slides 📑</button>
+      <button class="btn" onclick="toggleFullScreen()">Tela Cheia ⛶</button>
+      <span class="slide-counter" id="counter">1 / 12</span>
+    </div>
+  </header>
+
+  <!-- Presentation Deck -->
+  <main id="deck">
+
+    <!-- ==========================================
+         SLIDE 1: CAPA
+         ========================================== -->
+    <section class="slide active" data-index="1">
+      <span class="slide-tag">Engenharia Eletrônica • Redes de Computadores I</span>
+      <h1>Jogo da Velha Cliente-Servidor via Sockets TCP</h1>
+      <p style="font-size: 1.15rem; max-width: 800px; margin-bottom: 24px;">
+        Implementação robusta em Linguagem C utilizando a biblioteca Winsock2 no Windows.
+        Comunicação bidirecional confiável, tratamento de erros, autodescoberta de IPs e validação de regras.
+      </p>
+
+      <div class="grid-3" style="margin-top: 20px;">
+        <div class="card">
+          <div class="card-icon">👨‍💻</div>
+          <h3>Equipe de Projeto</h3>
+          <p style="font-size: 0.9rem; margin-bottom: 0;">
+            • <strong>Pedro Augusto (Peu)</strong><br>
+            • <strong>João Victor Pariz</strong><br>
+            • <strong>Mateus Roma</strong>
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🏛️</div>
+          <h3>Contexto Acadêmico</h3>
+          <p style="font-size: 0.9rem; margin-bottom: 0;">
+            • Instituto Militar de Engenharia (IME)<br>
+            • Prof. Cel. Vidal<br>
+            • Avaliação Prática para VE (3,0 pts)
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚙️</div>
+          <h3>Tecnologias Envolvidas</h3>
+          <p style="font-size: 0.9rem; margin-bottom: 0;">
+            • <strong>Linguagem:</strong> C (C99 / MinGW GCC)<br>
+            • <strong>API de Rede:</strong> Winsock 2.2 (ws2_32)<br>
+            • <strong>Transporte:</strong> TCP (SOCK_STREAM)
+          </p>
+        </div>
+      </div>
+
+      <div class="callout callout-success" style="margin-top: 28px;">
+        💡 <strong>Objetivo da Apresentação:</strong> Demonstrar o ciclo de vida dos sockets, protocolo de aplicação, prevenção de falhas de I/O e a arquitetura das chamadas de rede no código-fonte.
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 2: VISÃO GERAL DA ARQUITETURA
+         ========================================== -->
+    <section class="slide" data-index="2">
+      <span class="slide-tag">Módulo 1 • Arquitetura</span>
+      <h2>Modelo Cliente-Servidor e Transporte TCP</h2>
+      <p>
+        Diferente de aplicações cliente-servidor tradicionais de consulta (como Web ou DNS), o Jogo da Velha opera como uma <strong>sessão interativa de estado contínuo</strong>.
+      </p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Nó Servidor (Passivo / Peça 'O')</h3>
+          <ul style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; margin-left: 20px;">
+            <li>Inicia primeiro e anuncia os IPs locais no console.</li>
+            <li>Aloca o socket passivo na porta <code>6000</code>.</li>
+            <li>Executa <code>bind()</code> e <code>listen()</code> aguardando conexões.</li>
+            <li>Ao aceitar o cliente com <code>accept()</code>, gera um socket de dados dedicado.</li>
+            <li>Realiza o sorteio da moeda (quem começa) e sincroniza com o cliente.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Nó Cliente (Ativo / Peça 'X')</h3>
+          <ul style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; margin-left: 20px;">
+            <li>Inicia após o servidor estar em escuta.</li>
+            <li>Pode receber o IP por linha de comando ou prompt interativo (Enter = <code>127.0.0.1</code>).</li>
+            <li>Dispara o <em>Three-Way Handshake</em> através de <code>connect()</code>.</li>
+            <li>Aguarda a mensagem de controle inicial de sorteio (<code>recv()</code>).</li>
+            <li>Entra em sincronia de turnos com o servidor.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top: 20px;">
+        🌐 <strong>Por que TCP e não UDP?</strong> O jogo exige <em>ordem estrita de pacotes</em> e <em>garantia absoluta de entrega</em>. Se uma jogada fosse perdida ou invertida em UDP, os tabuleiros ficariam dessincronizados e o jogo corrompido.
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 3: CICLO DE VIDA DOS SOCKETS TCP
+         ========================================== -->
+    <section class="slide" data-index="3">
+      <span class="slide-tag">Módulo 2 • Camada de Transporte</span>
+      <h2>O Ciclo de Vida Completo do Socket no Código</h2>
+      <p>Mapeamento exato das funções da API Winsock2 chamadas no Servidor e no Cliente:</p>
+
+      <div class="grid-2">
+        <div>
+          <h3>Servidor (Fluxo Passivo)</h3>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-step">1</div>
+              <div class="timeline-content">
+                <strong>WSAStartup(MAKEWORD(2,2), &wsa)</strong>
+                <span>Carrega a biblioteca dinâmica ws2_32.dll no Windows</span>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-step">2</div>
+              <div class="timeline-content">
+                <strong>socket(AF_INET, SOCK_STREAM, 0)</strong>
+                <span>Aloca o descritor de socket passivo no Sistema Operacional</span>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-step">3</div>
+              <div class="timeline-content">
+                <strong>bind() & listen(sd, 1)</strong>
+                <span>Associa o socket à porta local 6000 e entra no estado LISTEN</span>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-step">4</div>
+              <div class="timeline-content">
+                <strong>accept() -> client_sd</strong>
+                <span>Bloqueia até o handshake terminar; retorna novo socket de dados</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3>Cliente (Fluxo Ativo)</h3>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-step">1</div>
+              <div class="timeline-content">
+                <strong>WSAStartup(MAKEWORD(2,2), &wsa)</strong>
+                <span>Carrega a pilha Winsock no processo cliente</span>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-step">2</div>
+              <div class="timeline-content">
+                <strong>socket(AF_INET, SOCK_STREAM, 0)</strong>
+                <span>Cria o socket ativo para estabelecer a sessão TCP</span>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-step">3</div>
+              <div class="timeline-content">
+                <strong>connect(sd, &servAddr, sizeof)</strong>
+                <span>Dispara SYN, aguarda SYN-ACK e envia ACK ao Servidor</span>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-step">4</div>
+              <div class="timeline-content">
+                <strong>send() & recv() / closesocket()</strong>
+                <span>Comunicação contínua em loop e encerramento com FIN-ACK</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 4: ESTRUTURAS DE ENDEREÇO & ENDIANNESS
+         ========================================== -->
+    <section class="slide" data-index="4">
+      <span class="slide-tag">Módulo 3 • Estruturas de Rede</span>
+      <h2>A Estrutura <code>sockaddr_in</code> e o Byte Order</h2>
+      <p>Para interligar arquiteturas diferentes na rede, a convenção padrão é o <strong>Big-Endian (Network Byte Order)</strong>.</p>
+
+      <div class="grid-2">
+        <pre><span class="code-badge">C Code (Winsock)</span>
+<span class="c-typ">struct</span> sockaddr_in servAddr;
+
+<span class="c-com">// 1. Familia de enderecos (IPv4)</span>
+servAddr.<span class="c-kw">sin_family</span> = AF_INET;
+
+<span class="c-com">// 2. Endereco IP (INADDR_ANY no server ou inet_addr no client)</span>
+servAddr.<span class="c-kw">sin_addr</span>.s_addr = <span class="c-fn">htonl</span>(INADDR_ANY);
+
+<span class="c-com">// 3. Conversao da Porta de Host para Network (16 bits)</span>
+servAddr.<span class="c-kw">sin_port</span> = <span class="c-fn">htons</span>((u_short)porta);
+</pre>
+
+        <div class="card">
+          <h3>Funções de Conversão Cruciais:</h3>
+          <ul style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.8; margin-left: 18px;">
+            <li><code>htons()</code> — <em>Host to Network Short</em>: Converte porta (16 bits) de Little-Endian (x86/x64) para Big-Endian.</li>
+            <li><code>htonl()</code> — <em>Host to Network Long</em>: Converte endereço de 32 bits (ex: <code>INADDR_ANY</code>).</li>
+            <li><code>ntohs()</code> — <em>Network to Host Short</em>: Converte porta remota recebida de volta para formato do host.</li>
+            <li><code>inet_ntoa()</code> — Converte binário IPv4 em string legível (ex: <code>"172.16.1.160"</code>).</li>
+            <li><code>inet_addr()</code> — Converte texto pontuado para binário de rede de 32 bits.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout callout-warning">
+        ⚠️ <strong>O que aconteceria sem <code>htons(6000)</code>?</strong> Na máquina x86 Little-Endian, o valor 6000 (<code>0x1770</code>) seria interpretado pela rede como <code>0x7017</code> (porta 28695). O cliente nunca conseguiria se conectar!
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 5: AUTODESCOBERTA DE IPS LOCAIS
+         ========================================== -->
+    <section class="slide" data-index="5">
+      <span class="slide-tag">Módulo 4 • Usabilidade em Aula</span>
+      <h2>Autodescoberta de IPs Locais (Sem <code>ipconfig</code>)</h2>
+      <p>Em laboratório de redes com DHCP, o IP da máquina pode variar. O servidor descobre e exibe todos os seus IPs automaticamente:</p>
+
+      <pre><span class="code-badge">servidor_velha.c</span>
+<span class="c-typ">void</span> <span class="c-fn">exibir_ips_locais</span>(<span class="c-typ">int</span> porta) {
+    <span class="c-typ">char</span> hostname[256];
+    <span class="c-fn">gethostname</span>(hostname, <span class="c-kw">sizeof</span>(hostname));
+    <span class="c-typ">struct</span> hostent *host_info = <span class="c-fn">gethostbyname</span>(hostname);
+
+    <span class="c-kw">if</span> (host_info != NULL && host_info->h_addr_list != NULL) {
+        <span class="c-fn">printf</span>(<span class="c-str">"[INFO] Enderecos IP para o Cliente conectar:\n"</span>);
+        <span class="c-kw">for</span> (<span class="c-typ">int</span> i = 0; host_info->h_addr_list[i] != NULL; i++) {
+            <span class="c-typ">struct</span> in_addr addr;
+            <span class="c-fn">memcpy</span>(&addr, host_info->h_addr_list[i], <span class="c-kw">sizeof</span>(<span class="c-typ">struct</span> in_addr));
+            <span class="c-fn">printf</span>(<span class="c-str">"       -> %s (Rede Local)\n"</span>, <span class="c-fn">inet_ntoa</span>(addr));
+        }
+        <span class="c-fn">printf</span>(<span class="c-str">"       -> 127.0.0.1 (se Cliente e Servidor estiverem no mesmo PC)\n"</span>);
+    }
+}
+</pre>
+
+      <div class="grid-2" style="margin-top: 14px;">
+        <div class="card">
+          <h3>Como funciona na prática?</h3>
+          <p style="font-size: 0.9rem;">
+            O ponteiro duplo <code>h_addr_list</code> armazena uma lista terminada em <code>NULL</code> de ponteiros para as interfaces ativas (Wi-Fi, Ethernet, adaptadores virtuais).
+          </p>
+        </div>
+        <div class="card">
+          <h3>Vantagem durante a apresentação</h3>
+          <p style="font-size: 0.9rem;">
+            O apresentador não precisa pausar, abrir prompt e digitar <code>ipconfig</code>. Ao iniciar <code>servidor_velha.exe</code>, o IP de conexão já surge na tela imediatamente!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 6: PROTOCOLO DA CAMADA DE APLICAÇÃO
+         ========================================== -->
+    <section class="slide" data-index="6">
+      <span class="slide-tag">Módulo 5 • Protocolo de Aplicação</span>
+      <h2>Mensagens e Gramática do Protocolo de Jogo</h2>
+      <p>Desenvolvemos um protocolo textual, leve e síncrono sobre o fluxo de bytes do TCP:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Mensagem</th>
+            <th>Origem &rarr; Destino</th>
+            <th>Semântica / Propósito</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>START:SERVER\n</code></td>
+            <td>Servidor &rarr; Cliente</td>
+            <td>Notifica o cliente de que o sorteio definiu que o <strong>Servidor ('O')</strong> joga primeiro.</td>
+          </tr>
+          <tr>
+            <td><code>START:CLIENT\n</code></td>
+            <td>Servidor &rarr; Cliente</td>
+            <td>Notifica o cliente de que o sorteio definiu que o <strong>Cliente ('X')</strong> joga primeiro.</td>
+          </tr>
+          <tr>
+            <td><code>MOVE:&lt;1-9&gt;\n</code></td>
+            <td>Bidirecional</td>
+            <td>Informa a célula do tabuleiro escolhida pelo jogador ativo (ex: <code>MOVE:5\n</code> marca o centro).</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="grid-2" style="margin-top: 16px;">
+        <div class="card">
+          <h3>Por que mensagens com terminação <code>\n</code>?</h3>
+          <p style="font-size: 0.9rem;">
+            O TCP é orientado a fluxo contínuo de bytes (<em>byte stream</em>), sem conceito nativo de fronteira de mensagem. O delimitador <code>\n</code> permite delimitar o fim do comando com clareza.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Sorteio Pseudoaleatório Imparcial</h3>
+          <p style="font-size: 0.9rem;">
+            <code>srand((unsigned int)time(NULL));</code><br>
+            <code>int vez_do_servidor = rand() % 2;</code><br>
+            A semente do relógio assegura que cada execução sorteie quem inicia de forma genuinamente alternada.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 7: VALIDAÇÃO E I/O ROBUSTO
+         ========================================== -->
+    <section class="slide" data-index="7">
+      <span class="slide-tag">Módulo 6 • Segurança e Validação</span>
+      <h2>Leitura Robusta de Entrada: <code>obter_jogada_usuario</code></h2>
+      <p>Evitando armadilhas clássicas de C (Buffer Overflow, caracteres residuais, loops infinitos):</p>
+
+      <div class="grid-2">
+        <pre><span class="code-badge">Código C - Sanitização</span>
+<span class="c-com">// 1. Leitura com fgets (limite estrito de bytes)</span>
+<span class="c-kw">if</span> (<span class="c-fn">fgets</span>(linha, <span class="c-kw">sizeof</span>(linha), stdin) == NULL) { ... }
+
+<span class="c-com">// 2. Drena caracteres se ultrapassar o buffer</span>
+<span class="c-kw">if</span> (<span class="c-fn">strchr</span>(linha, <span class="c-str">'\n'</span>) == NULL) {
+    <span class="c-typ">int</span> c;
+    <span class="c-kw">while</span> ((c = <span class="c-fn">getchar</span>()) != <span class="c-str">'\n'</span> && c != EOF);
+}
+
+<span class="c-com">// 3. Remove \r e \n</span>
+linha[<span class="c-fn">strcspn</span>(linha, <span class="c-str">"\r\n"</span>)] = <span class="c-str">'\0'</span>;
+
+<span class="c-com">// 4. Remove espacos em branco nas pontas (trim)</span>
+<span class="c-com">// 5. Exige comprimento EXATO de 1 caractere ('1' a '9')</span>
+<span class="c-com">// 6. Impede marcar celula ja ocupada</span>
+</pre>
+
+        <div class="card">
+          <h3>Vulnerabilidades Eliminadas:</h3>
+          <ul style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.8; margin-left: 18px;">
+            <li>❌ <strong>Uso de <code>scanf("%d")</code>:</strong> Se o usuário digitasse uma letra, <code>scanf</code> falharia e entraria em loop infinito. Resolvido com <code>fgets</code>!</li>
+            <li>❌ <strong>Múltiplos dígitos (ex: <code>15</code>, <code>abc</code>):</strong> Rejeitado pela verificação de <code>strlen(inicio) == 1</code>.</li>
+            <li>❌ <strong>Quebras de linha Windows:</strong> Suporte tanto a <code>\r\n</code> quanto a <code>\n</code> puro.</li>
+            <li>❌ <strong>Jogada sobreposta:</strong> O tabuleiro local é inspecionado antes de validar a entrada.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 8: LÓGICA DO TABULEIRO E VERIFICAÇÃO DE TÉRMINO
+         ========================================== -->
+    <section class="slide" data-index="8">
+      <span class="slide-tag">Módulo 7 • Regras do Jogo</span>
+      <h2>Verificação de Vitória, Derrota e Empate</h2>
+      <p>O tabuleiro 3x3 é mapeado em um vetor unidimensional de 9 posições (índices 0 a 8):</p>
+
+      <div class="grid-2">
+        <pre><span class="code-badge">Matriz de Retas Vencedoras</span>
+<span class="c-typ">int</span> <span class="c-fn">verificar_termino</span>(<span class="c-kw">const</span> <span class="c-typ">char</span> tab[9]) {
+    <span class="c-kw">const</span> <span class="c-typ">int</span> linhas[8][3] = {
+        {0, 1, 2}, {3, 4, 5}, {6, 7, 8}, <span class="c-com">// 3 Horizontais</span>
+        {0, 3, 6}, {1, 4, 7}, {2, 5, 8}, <span class="c-com">// 3 Verticais</span>
+        {0, 4, 8}, {2, 4, 6}             <span class="c-com">// 2 Diagonais</span>
+    };
+
+    <span class="c-kw">for</span> (<span class="c-typ">int</span> i = 0; i < 8; i++) {
+        <span class="c-typ">int</span> a = linhas[i][0], b = linhas[i][1], c = linhas[i][2];
+        <span class="c-kw">if</span> (tab[a] != <span class="c-str">' '</span> && tab[a] == tab[b] && tab[b] == tab[c]) {
+            <span class="c-kw">if</span> (tab[a] == <span class="c-str">'X'</span>) <span class="c-kw">return</span> 1; <span class="c-com">// Vitoria Cliente</span>
+            <span class="c-kw">if</span> (tab[a] == <span class="c-str">'O'</span>) <span class="c-kw">return</span> 2; <span class="c-com">// Vitoria Servidor</span>
+        }
+    }
+
+    <span class="c-com">// Se ainda resta espaco vazio</span>
+    <span class="c-kw">for</span> (<span class="c-typ">int</span> i = 0; i < 9; i++) {
+        <span class="c-kw">if</span> (tab[i] == <span class="c-str">' '</span>) <span class="c-kw">return</span> -1; <span class="c-com">// Jogo ativo</span>
+    }
+    <span class="c-kw">return</span> 0; <span class="c-com">// Empate ("Deu velha")</span>
+}
+</pre>
+
+        <div class="card">
+          <h3>Validação Dupla e Independente</h3>
+          <p style="font-size: 0.9rem; margin-bottom: 12px;">
+            Uma boa prática essencial de sistemas distribuídos: <strong>não confie cegamente no nó remoto</strong>.
+          </p>
+          <ul style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.7; margin-left: 18px;">
+            <li>Tanto o Servidor quanto o Cliente executam a função <code>verificar_termino()</code> localmente.</li>
+            <li>Nenhum nó pode forjar uma mensagem de "você perdeu". O resultado decorre do estado sincronizado da matriz.</li>
+            <li>Se o adversário enviar uma jogada em casa já ocupada, a conexão é abortada por violação de protocolo.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 9: TRATAMENTO DE ERROS DE REDE E DESCONEXÃO
+         ========================================== -->
+    <section class="slide" data-index="9">
+      <span class="slide-tag">Módulo 8 • Resiliência</span>
+      <h2>Tratamento de Quedas e Fechamento Gracioso</h2>
+      <p>Como o código lida com o fechamento intencional ou repentino da conexão TCP:</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-icon">🟢</div>
+          <h3><code>rc &gt; 0</code> (Dados Recebidos)</h3>
+          <p style="font-size: 0.88rem;">
+            O socket leu com sucesso <code>rc</code> bytes da rede. Colocamos o caractere nulo <code>buffer[rc] = '\0'</code> e fazemos o parsing da mensagem com <code>sscanf()</code>.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🟡</div>
+          <h3><code>rc == 0</code> (Fechamento Gracioso)</h3>
+          <p style="font-size: 0.88rem;">
+            Indica que o outro lado fechou o socket ou encerrou o programa (o SO enviou o pacote <strong>TCP FIN</strong>). A aplicação avisa o encerramento sem acusar erro indevido.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🔴</div>
+          <h3><code>rc &lt; 0</code> (Falha ou Queda de Conexão)</h3>
+          <p style="font-size: 0.88rem;">
+            Indica erro de I/O, cabo desconectado ou interrupção forçada (RST). O programa captura o código detalhado com <code>WSAGetLastError()</code> e libera a memória.
+          </p>
+        </div>
+      </div>
+
+      <pre style="margin-top: 18px;"><span class="code-badge">Finalizacao Limpa (Teardown)</span>
+<span class="c-kw">if</span> (client_sd != INVALID_SOCKET) {
+    <span class="c-fn">closesocket</span>(client_sd); <span class="c-com">// Transmite o pacote TCP FIN e fecha o canal</span>
+}
+<span class="c-fn">WSACleanup</span>();                <span class="c-com">// Descarrega a biblioteca Winsock do espaco de enderecamento</span>
+</pre>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 10: COMPARAÇÃO DO CÓDIGO FONTE
+         ========================================== -->
+    <section class="slide" data-index="10">
+      <span class="slide-tag">Módulo 9 • Código-Fonte</span>
+      <h2>Visão Comparativa do Loop Principal</h2>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('tab-serv')">Servidor (servidor_velha.c)</button>
+        <button class="tab-btn" onclick="switchTab('tab-cli')">Cliente (cliente_velha.c)</button>
+      </div>
+
+      <div id="tab-serv" class="tab-content active">
+        <pre><span class="code-badge">Loop no Servidor</span>
+<span class="c-kw">while</span> (jogo_ativo) {
+    <span class="c-kw">if</span> (vez_do_servidor) {
+        <span class="c-typ">int</span> jogada = <span class="c-fn">obter_jogada_usuario</span>(tabuleiro, SIMBOLO_SERVIDOR);
+        tabuleiro[jogada - 1] = SIMBOLO_SERVIDOR;
+        <span class="c-fn">exibir_tabuleiro</span>(tabuleiro);
+
+        <span class="c-fn">snprintf</span>(buffer, <span class="c-kw">sizeof</span>(buffer), <span class="c-str">"MOVE:%d\n"</span>, jogada);
+        <span class="c-fn">send</span>(client_sd, buffer, (<span class="c-typ">int</span>)<span class="c-fn">strlen</span>(buffer), 0);
+
+        <span class="c-typ">int</span> status = <span class="c-fn">verificar_termino</span>(tabuleiro);
+        <span class="c-kw">if</span> (status == 2) { <span class="c-fn">printf</span>(<span class="c-str">"Você venceu!\n"</span>); jogo_ativo = 0; }
+        <span class="c-kw">else</span> <span class="c-kw">if</span> (status == 0) { <span class="c-fn">printf</span>(<span class="c-str">"Empate!\n"</span>); jogo_ativo = 0; }
+        <span class="c-kw">else</span> { vez_do_servidor = 0; }
+    } <span class="c-kw">else</span> {
+        <span class="c-typ">int</span> rc = <span class="c-fn">recv</span>(client_sd, buffer, <span class="c-kw">sizeof</span>(buffer) - 1, 0);
+        <span class="c-com">// Parser MOVE:%d, atualizacao com 'X', checagem de vitoria e alternancia</span>
+    }
+}
+</pre>
+      </div>
+
+      <div id="tab-cli" class="tab-content">
+        <pre><span class="code-badge">Loop no Cliente</span>
+<span class="c-kw">while</span> (jogo_ativo) {
+    <span class="c-kw">if</span> (vez_do_cliente) {
+        <span class="c-typ">int</span> jogada = <span class="c-fn">obter_jogada_usuario</span>(tabuleiro, SIMBOLO_CLIENTE);
+        tabuleiro[jogada - 1] = SIMBOLO_CLIENTE;
+        <span class="c-fn">exibir_tabuleiro</span>(tabuleiro);
+
+        <span class="c-fn">snprintf</span>(buffer, <span class="c-kw">sizeof</span>(buffer), <span class="c-str">"MOVE:%d\n"</span>, jogada);
+        <span class="c-fn">send</span>(sd, buffer, (<span class="c-typ">int</span>)<span class="c-fn">strlen</span>(buffer), 0);
+
+        <span class="c-typ">int</span> status = <span class="c-fn">verificar_termino</span>(tabuleiro);
+        <span class="c-kw">if</span> (status == 1) { <span class="c-fn">printf</span>(<span class="c-str">"Você venceu!\n"</span>); jogo_ativo = 0; }
+        <span class="c-kw">else</span> <span class="c-kw">if</span> (status == 0) { <span class="c-fn">printf</span>(<span class="c-str">"Empate!\n"</span>); jogo_ativo = 0; }
+        <span class="c-kw">else</span> { vez_do_cliente = 0; }
+    } <span class="c-kw">else</span> {
+        <span class="c-typ">int</span> rc = <span class="c-fn">recv</span>(sd, buffer, <span class="c-kw">sizeof</span>(buffer) - 1, 0);
+        <span class="c-com">// Parser MOVE:%d, atualizacao com 'O', checagem de vitoria e alternancia</span>
+    }
+}
+</pre>
+      </div>
+
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 10px;">
+        💡 <strong>Simetria Elegante:</strong> A estrutura dos nós é espelhada. Ambos utilizam as mesmas funções de validação, renderização e encerramento.
+      </p>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 11: ROTEIRO PRÁTICO PARA A APRESENTAÇÃO
+         ========================================== -->
+    <section class="slide" data-index="11">
+      <span class="slide-tag">Módulo 10 • Demonstração em Aula</span>
+      <h2>Roteiro Passo a Passo para Demonstrar na Aula</h2>
+      <p>Checklist para realizar a demonstração prática perante o professor e os colegas:</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Cenário 1: Duas Máquinas no Laboratório (LAN / Wi-Fi)</h3>
+          <ol style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.8; margin-left: 20px;">
+            <li><strong>No PC do Servidor:</strong> Abrir o terminal e rodar <code>.\servidor_velha.exe</code>.</li>
+            <li>Apontar para o IP exibido na tela (ex: <code>172.16.1.160</code>).</li>
+            <li><strong>No PC do Cliente:</strong> Rodar <code>.\cliente_velha.exe 172.16.1.160</code>.</li>
+            <li>Destacar o sorteio aleatório sendo impresso em ambos os terminais.</li>
+            <li>Realizar jogadas válidas e demonstrar a tentativa de jogada inválida (letra ou casa ocupada).</li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h3>Cenário 2: Na Mesma Máquina (Loopback)</h3>
+          <ol style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.8; margin-left: 20px;">
+            <li>Abrir Terminal 1 e rodar <code>.\servidor_velha.exe</code>.</li>
+            <li>Abrir Terminal 2 e rodar <code>.\cliente_velha.exe</code>.</li>
+            <li>Pressionar <span class="key-badge">Enter</span> para aceitar o IP padrão <code>127.0.0.1</code>.</li>
+            <li>Completar uma partida com vitória e outra com empate para comprovar as duas saídas do algoritmo.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="callout callout-success" style="margin-top: 18px;">
+        ✅ <strong>Script Pronto:</strong> O arquivo <code>jogar_local.bat</code> no repositório abre automaticamente os dois terminais lado a lado!
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 12: CONCLUSÃO & PERGUNTAS
+         ========================================== -->
+    <section class="slide" data-index="12">
+      <span class="slide-tag">Conclusão</span>
+      <h1>Conclusão & Abertura para Perguntas</h1>
+      <p style="font-size: 1.15rem; max-width: 850px; margin-bottom: 24px;">
+        A aplicação consolidou na prática todos os conceitos fundamentais da disciplina de Redes de Computadores I:
+      </p>
+
+      <div class="grid-4" style="margin-bottom: 24px;">
+        <div class="card">
+          <div class="card-icon">🔌</div>
+          <h3>API Sockets</h3>
+          <p style="font-size: 0.85rem;">Prática com chamadas de sistema, estruturas sockaddr e Winsock2.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📦</div>
+          <h3>Transporte TCP</h3>
+          <p style="font-size: 0.85rem;">Handshake de 3 vias, transmissão orientada a fluxo e fechamento FIN.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <h3>Segurança em I/O</h3>
+          <p style="font-size: 0.85rem;">Prevenção de overflow, sanitização rigorosa e tolerância a falhas.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🚀</div>
+          <h3>Autonomia</h3>
+          <p style="font-size: 0.85rem;">Autodescoberta de IPs e independência de recompilação entre máquinas.</p>
+        </div>
+      </div>
+
+      <div class="card" style="text-align: center; padding: 28px; background: rgba(56, 189, 248, 0.05); border-color: rgba(56, 189, 248, 0.3);">
+        <h2 style="margin-bottom: 8px;">Obrigado pela atenção! 🤝</h2>
+        <p style="margin-bottom: 12px; color: var(--accent-blue);">
+          Pedro Augusto • João Victor Pariz • Mateus Roma
+        </p>
+        <span class="header-badge" style="font-size: 0.85rem; padding: 4px 12px;">
+          Repositório: github.com/VPariz/jogo-da-velha-sockets-tcp
+        </span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation Bar -->
+  <footer>
+    <div class="footer-hints">
+      <span>Navegar: <span class="key-badge">←</span> <span class="key-badge">→</span> ou <span class="key-badge">Espaço</span></span>
+      <span>Menu: <span class="key-badge">M</span></span>
+      <span>Tela Cheia: <span class="key-badge">F</span></span>
+    </div>
+    <div class="footer-nav">
+      <button class="btn" id="prev-btn" onclick="prevSlide()">◀ Anterior</button>
+      <button class="btn" id="next-btn" onclick="nextSlide()">Próximo ▶</button>
+    </div>
+  </footer>
+
+  <!-- Slide Index Modal Drawer -->
+  <div id="menu-modal" onclick="if(event.target === this) toggleMenu()">
+    <div class="menu-box">
+      <div class="menu-header">
+        <h3 style="margin: 0;">Índice dos Slides</h3>
+        <button class="btn" onclick="toggleMenu()" style="padding: 4px 8px;">✕</button>
+      </div>
+      <div class="menu-list" id="menu-list">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 1;
+
+    const counterEl = document.getElementById('counter');
+    const progressBar = document.getElementById('progress-bar');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const menuList = document.getElementById('menu-list');
+
+    // Build Menu
+    slides.forEach((slide, idx) => {
+      const num = idx + 1;
+      const title = slide.querySelector('h1, h2').innerText;
+      const btn = document.createElement('button');
+      btn.className = 'menu-item' + (num === 1 ? ' active' : '');
+      btn.innerHTML = `<span><strong>${num}.</strong> ${title}</span> <span>➔</span>`;
+      btn.onclick = () => {
+        goToSlide(num);
+        toggleMenu();
+      };
+      menuList.appendChild(btn);
+    });
+
+    function updatePresentation() {
+      slides.forEach((s, idx) => {
+        s.classList.toggle('active', (idx + 1) === currentSlide);
+      });
+
+      counterEl.textContent = `${currentSlide} / ${totalSlides}`;
+      progressBar.style.width = `${((currentSlide - 1) / (totalSlides - 1)) * 100}%`;
+
+      prevBtn.disabled = currentSlide === 1;
+      nextBtn.disabled = currentSlide === totalSlides;
+      prevBtn.style.opacity = currentSlide === 1 ? '0.5' : '1';
+      nextBtn.style.opacity = currentSlide === totalSlides ? '0.5' : '1';
+
+      // Update menu active state
+      const menuItems = menuList.querySelectorAll('.menu-item');
+      menuItems.forEach((item, idx) => {
+        item.classList.toggle('active', (idx + 1) === currentSlide);
+      });
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updatePresentation();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updatePresentation();
+      }
+    }
+
+    function goToSlide(n) {
+      if (n >= 1 && n <= totalSlides) {
+        currentSlide = n;
+        updatePresentation();
+      }
+    }
+
+    function toggleMenu() {
+      document.getElementById('menu-modal').classList.toggle('open');
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+      if (tabId === 'tab-serv') {
+        document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+        document.getElementById('tab-serv').classList.add('active');
+      } else {
+        document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+        document.getElementById('tab-cli').classList.add('active');
+      }
+    }
+
+    // Keyboard controls
+    window.addEventListener('keydown', (e) => {
+      if (document.getElementById('menu-modal').classList.contains('open')) {
+        if (e.key === 'Escape') toggleMenu();
+        return;
+      }
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'PageDown':
+        case ' ':
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'ArrowLeft':
+        case 'PageUp':
+        case 'Backspace':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'Home':
+          e.preventDefault();
+          goToSlide(1);
+          break;
+        case 'End':
+          e.preventDefault();
+          goToSlide(totalSlides);
+          break;
+        case 'f':
+        case 'F':
+          toggleFullScreen();
+          break;
+        case 'm':
+        case 'M':
+          toggleMenu();
+          break;
+      }
+    });
+
+    updatePresentation();
+  </script>
+</body>
+</html>
