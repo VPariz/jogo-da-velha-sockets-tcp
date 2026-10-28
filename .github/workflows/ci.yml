@@ -8,25 +8,14 @@ on:
 
 jobs:
   build:
-    name: Build on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest]
+    name: Build on Windows (MinGW GCC)
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build with GCC (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          gcc -Wall -Wextra -Werror -O2 servidor_velha.c -o servidor_velha
-          gcc -Wall -Wextra -Werror -O2 cliente_velha.c -o cliente_velha
-
-      - name: Build with GCC (Windows)
-        if: runner.os == 'Windows'
+      - name: Build with GCC
         run: |
           gcc -Wall -Wextra -Werror -O2 servidor_velha.c -o servidor_velha.exe -lws2_32
           gcc -Wall -Wextra -Werror -O2 cliente_velha.c -o cliente_velha.exe -lws2_32

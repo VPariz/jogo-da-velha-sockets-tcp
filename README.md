@@ -1,14 +1,14 @@
-# Client-Server Tic-Tac-Toe in C over TCP Sockets (POSIX & Winsock2)
+# Client-Server Tic-Tac-Toe in C over TCP Sockets (Winsock2)
 
 [![Build & CI](https://github.com/VPariz/jogo-da-velha-sockets-tcp/actions/workflows/ci.yml/badge.svg)](https://github.com/VPariz/jogo-da-velha-sockets-tcp/actions/workflows/ci.yml)
 [![Language](https://img.shields.io/badge/Language-C-00599C?style=flat-square&logo=c&logoColor=white)](https://en.wikipedia.org/wiki/C_(programming_language))
-[![Sockets](https://img.shields.io/badge/Networking-POSIX_%7C_Winsock2_TCP-2D3748?style=flat-square)](https://en.wikipedia.org/wiki/Berkeley_sockets)
-[![Platform](https://img.shields.io/badge/Platform-Linux_%7C_Windows-informational?style=flat-square&logo=linux&logoColor=white)](https://kernel.org/)
+[![Sockets](https://img.shields.io/badge/Networking-Winsock2_TCP-2D3748?style=flat-square)](https://learn.microsoft.com/en-us/windows/win32/winsock/windows-sockets-start-page-2)
+[![Platform](https://img.shields.io/badge/Platform-Windows_%7C_MinGW-0078D6?style=flat-square&logo=windows&logoColor=white)](https://www.mingw-w64.org/)
 [![Institution](https://img.shields.io/badge/IME-Computer_Networks_I-104911?style=flat-square)](https://ime.eb.mil.br/)
 [![Slide Deck](https://img.shields.io/badge/Slide_Deck-HTML5_Presentation-E34F26?style=flat-square&logo=html5&logoColor=white)](index.html)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-A cross-platform network application for two-player **Tic-Tac-Toe (Jogo da Velha)** written in C using low-level **TCP Sockets (POSIX & Winsock2)** with dual-stack compatibility, custom application-layer protocol, pseudo-random turn synchronization, and independent matrix verification. Developed for the **Computer Networks I** course at the **Military Institute of Engineering (IME)**.
+A network application for two-player **Tic-Tac-Toe (Jogo da Velha)** written in C using low-level **TCP Sockets (Winsock2 API)** on Windows. Features automatic local IP discovery, custom application-layer protocol, pseudo-random turn synchronization, defensive terminal I/O, and independent matrix verification. Developed for the **Computer Networks I** course at the **Military Institute of Engineering (IME)**.
 
 ---
 
@@ -93,9 +93,11 @@ sequenceDiagram
 ```
 jogo-da-velha-sockets-tcp/
 ├── index.html                   # Interactive HTML slide deck for project defense/presentation
-├── servidor_velha.c             # Server source: listener, IP autodiscovery, coin toss & turn loop
-├── cliente_velha.c              # Client source: connection, interactive terminal UI & move receiver
-├── Makefile                     # Cross-platform Makefile (Windows MinGW & POSIX Linux)
+├── servidor_velha.c             # Server source: listener, IP autodiscovery, coin toss & turn loop (Winsock2)
+├── cliente_velha.c              # Client source: connection, interactive terminal UI & move receiver (Winsock2)
+├── compilar.bat                 # Automated Windows batch compiler via MinGW GCC
+├── jogar_local.bat              # Helper script to launch local loopback game instances
+├── Makefile                     # Makefile for Windows MinGW build
 ├── docs/
 │   ├── RELATORIO_JOGO_DA_VELHA.pdf # Full LaTeX technical report (IME official submission)
 │   ├── RELATORIO_JOGO_DA_VELHA.tex # LaTeX report source code
@@ -131,23 +133,20 @@ To present: simply open `index.html` in any browser!
 
 ### 1. Compilation
 
-#### Using GNU Make (Recommended):
-```bash
-make
+#### Using the automated batch script (Windows):
+```cmd
+compilar.bat
 ```
 
-#### Or using GCC directly:
-
-**On Windows (MinGW):**
+#### Or using GCC (MinGW) directly:
 ```cmd
 gcc -Wall -Wextra -O2 servidor_velha.c -o servidor_velha.exe -lws2_32
 gcc -Wall -Wextra -O2 cliente_velha.c -o cliente_velha.exe -lws2_32
 ```
 
-**On Linux / POSIX:**
+#### Or using Make:
 ```bash
-gcc -Wall -Wextra -O2 servidor_velha.c -o servidor_velha
-gcc -Wall -Wextra -O2 cliente_velha.c -o cliente_velha
+make
 ```
 
 ### 2. Execution
