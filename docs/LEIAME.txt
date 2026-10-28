@@ -2,13 +2,11 @@
 INSTITUTO MILITAR DE ENGENHARIA - IME
 DISCIPLINA: REDES DE COMPUTADORES I (2026.2)
 ***REMOVED***
-TRABALHO DE SOCKETS TCP: JOGO DA VELHA CLIENTE-SERVIDOR
+TRABALHO DE SOCKETS TCP: JOGO DA VELHA CLIENTE-SERVIDOR (VALOR: 3,0 VE)
 ================================================================================
 
-EQUIPE DE DESENVOLVIMENTO:
-- João Victor Pariz
+AUTOR:
 - Joao Victor Pariz
-- João Victor Pariz
 
 CONTEUDO DESTE PACOTE:
 1. servidor_velha.c        - Codigo-fonte do Servidor (TCP / Winsock2)

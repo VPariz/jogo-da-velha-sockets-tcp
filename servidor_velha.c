@@ -6,10 +6,8 @@
  * PROJETO: JOGO DA VELHA DISTRIBUIDO VIA SOCKETS TCP (POSIX / WINSOCK2)
  * ARQUIVO: servidor_velha.c
  * 
- * AUTORES:
- *   - João Victor Pariz
+ * AUTOR:
  *   - Joao Victor Pariz
- *   - João Victor Pariz
  * 
  * DESCRICAO:
  *   Implementacao do no servidor para partida multiplayer de Jogo da Velha

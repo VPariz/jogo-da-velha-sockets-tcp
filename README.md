@@ -14,9 +14,7 @@ A cross-platform network application for two-player **Tic-Tac-Toe (Jogo da Velha
 
 ## 👤 Author & Academic Context
 
-* **João Victor Pariz** — Electronics Engineering, IME
 * **João Victor Pariz** ([@VPariz](https://github.com/VPariz)) — Electronics Engineering, IME
-* **João Victor Pariz** — Electronics Engineering, IME
 
 *Course:* Computer Networks for Electronics Engineering I (2026.2)  
 *Institution:* Instituto Militar de Engenharia (IME), Rio de Janeiro, Brazil.
