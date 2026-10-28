@@ -92,13 +92,12 @@ sequenceDiagram
 
 ```
 jogo-da-velha-sockets-tcp/
-├── index.html                   # Interactive HTML slide deck for project defense/presentation
-├── servidor_velha.c             # Server source: listener, IP autodiscovery, coin toss & turn loop (Winsock2)
-├── cliente_velha.c              # Client source: connection, interactive terminal UI & move receiver (Winsock2)
-├── compilar.bat                 # Automated Windows batch compiler via MinGW GCC
-├── jogar_local.bat              # Helper script to launch local loopback game instances
-├── Makefile                     # Makefile for Windows MinGW build
+├── Makefile                     # Cross-platform build automation (Linux, macOS, Windows)
+├── servidor_velha.c             # Server source: listener, IP autodiscovery, coin toss & turn loop (POSIX & Winsock2)
+├── cliente_velha.c              # Client source: connection, interactive terminal UI & move receiver (POSIX & Winsock2)
 ├── docs/
+│   ├── slides/
+│   │   └── index.html           # Interactive HTML slide deck for project defense and presentation
 │   ├── RELATORIO_JOGO_DA_VELHA.pdf # Full LaTeX technical report (IME official submission)
 │   ├── RELATORIO_JOGO_DA_VELHA.tex # LaTeX report source code
 │   ├── RELATORIO.md            # Detailed engineering notes in Markdown
@@ -115,17 +114,14 @@ jogo-da-velha-sockets-tcp/
 
 ## 🖥️ Interactive HTML Presentation (Slide Deck)
 
-An interactive HTML slide presentation is available in [`index.html`](index.html), also hosted live via [GitHub Pages](https://vpariz.github.io/jogo-da-velha-sockets-tcp/).
-It was created specifically for classroom presentations and project defense, containing:
+An interactive HTML slide presentation is available in [`docs/slides/index.html`](docs/slides/index.html), and can be viewed directly in any browser or hosted via GitHub Pages:
 * **TCP Socket Lifecycle:** Interactive timeline of `WSAStartup`, `socket`, `bind`, `listen`, `accept`, `connect`, `send`, `recv`, `closesocket`, `WSACleanup`.
 * **Network Byte Order & Endianness:** Detailed breakdown of `sockaddr_in`, `htons`, `htonl`, `inet_ntoa` and `inet_addr`.
 * **Automatic Local IP Detection:** Explanation of `gethostname()` / `gethostbyname()` for zero-config lab demos.
 * **Application Layer Protocol:** Message semantics (`START:SERVER\n`, `START:CLIENT\n`, `MOVE:<1-9>\n`).
 * **Source Code Walkthrough:** Side-by-side interactive tab comparison between Server and Client loops.
 * **Defensive I/O Programming:** Detailed explanation of `fgets` vs `scanf`, input trimming, buffer draining, and cell occupancy checks.
-* **Slide Features:** Fullscreen mode (<kbd>F</kbd>), keyboard navigation (<kbd>&larr;</kbd>/<kbd>&rarr;</kbd>/<kbd>Space</kbd>), and slide index drawer (<kbd>M</kbd>).
-
-To present: simply open `index.html` in any browser!
+* **Slide Controls:** Fullscreen mode (<kbd>F</kbd>), keyboard navigation (<kbd>&larr;</kbd>/<kbd>&rarr;</kbd>/<kbd>Space</kbd>), and slide index drawer (<kbd>M</kbd>).
 
 ---
 
@@ -133,10 +129,22 @@ To present: simply open `index.html` in any browser!
 
 ### 1. Compilation
 
-#### Using the automated batch script (Windows):
-```cmd
-compilar.bat
+#### Using the cross-platform Makefile:
+```bash
+make
 ```
+
+#### Or compile manually via GCC:
+* **Linux / macOS (POSIX):**
+  ```bash
+  gcc -Wall -Wextra -O2 servidor_velha.c -o servidor_velha
+  gcc -Wall -Wextra -O2 cliente_velha.c -o cliente_velha
+  ```
+* **Windows (MinGW / Winsock2):**
+  ```cmd
+  gcc -Wall -Wextra -O2 servidor_velha.c -o servidor_velha.exe -lws2_32
+  gcc -Wall -Wextra -O2 cliente_velha.c -o cliente_velha.exe -lws2_32
+  ```
 
 #### Or using GCC (MinGW) directly:
 ```cmd
@@ -144,26 +152,31 @@ gcc -Wall -Wextra -O2 servidor_velha.c -o servidor_velha.exe -lws2_32
 gcc -Wall -Wextra -O2 cliente_velha.c -o cliente_velha.exe -lws2_32
 ```
 
-#### Or using Make:
-```bash
-make
-```
-
 ### 2. Execution
 
 #### Scenario A: Local Testing (Same Computer / Loopback)
-```cmd
-# Terminal 1:
-.\servidor_velha.exe
+* **Linux / macOS:**
+  ```bash
+  # Terminal 1:
+  ./servidor_velha
 
-# Terminal 2:
-.\cliente_velha.exe
-# Press Enter to connect to default 127.0.0.1
-```
+  # Terminal 2:
+  ./cliente_velha
+  # Press Enter to connect to default 127.0.0.1
+  ```
+* **Windows:**
+  ```cmd
+  # Terminal 1:
+  .\servidor_velha.exe
+
+  # Terminal 2:
+  .\cliente_velha.exe
+  # Press Enter to connect to default 127.0.0.1
+  ```
 
 #### Scenario B: Two Distinct Machines on Local Network (LAN / Wi-Fi)
-1. On the **Server Machine**, run `.\servidor_velha.exe`. Note the printed IP (e.g., `192.168.1.150`).
-2. On the **Client Machine**, run `.\cliente_velha.exe 192.168.1.150` (or enter the IP when prompted).
+1. On the **Server Machine**, run `./servidor_velha` (or `.\servidor_velha.exe`). Note the printed IP (e.g., `192.168.1.150`).
+2. On the **Client Machine**, run `./cliente_velha 192.168.1.150` (or `.\cliente_velha.exe 192.168.1.150`).
 
 ---
 
