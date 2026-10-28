@@ -353,7 +353,7 @@
       <p>Visão completa do ciclo de vida: o Servidor aguarda na porta 6000 e o Cliente conecta diretamente via TCP:</p>
 
       <div class="diagram-container">
-        <svg class="seq-diagram" viewBox="0 0 940 430">
+        <svg class="seq-diagram" viewBox="0 0 940 435">
           <defs>
             <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
               <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
@@ -361,70 +361,110 @@
             <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
               <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399"/>
             </marker>
+            <marker id="arrow-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#94a3b8"/>
+            </marker>
             <marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
               <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24"/>
             </marker>
           </defs>
 
-          <!-- Columns Headers -->
-          <rect x="50" y="15" width="220" height="42" rx="6" fill="#131d35" stroke="#38bdf8" stroke-width="1.5"/>
-          <text x="160" y="41" fill="#38bdf8" font-size="14" font-weight="700" text-anchor="middle" font-family="sans-serif">SERVIDOR TCP ('O')</text>
-
-          <rect x="670" y="15" width="220" height="42" rx="6" fill="#131d35" stroke="#34d399" stroke-width="1.5"/>
-          <text x="780" y="41" fill="#34d399" font-size="14" font-weight="700" text-anchor="middle" font-family="sans-serif">CLIENTE TCP ('X')</text>
-
           <!-- Lifelines -->
-          <line x1="160" y1="57" x2="160" y2="415" stroke="#1e293b" stroke-width="2" stroke-dasharray="4"/>
-          <line x1="780" y1="57" x2="780" y2="415" stroke="#1e293b" stroke-width="2" stroke-dasharray="4"/>
+          <line x1="85" y1="58" x2="85" y2="425" stroke="#1e293b" stroke-width="1.8" stroke-dasharray="4"/>
+          <line x1="295" y1="50" x2="295" y2="425" stroke="#1e293b" stroke-width="1.8" stroke-dasharray="4"/>
+          <line x1="645" y1="50" x2="645" y2="425" stroke="#1e293b" stroke-width="1.8" stroke-dasharray="4"/>
+          <line x1="855" y1="58" x2="855" y2="425" stroke="#1e293b" stroke-width="1.8" stroke-dasharray="4"/>
 
-          <!-- Step 1: Handshake -->
-          <rect x="70" y="70" width="180" height="46" rx="4" fill="#070d1a" stroke="#334155"/>
-          <text x="160" y="89" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="monospace">socket() &gt; bind(6000)</text>
-          <text x="160" y="105" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">listen() &gt; accept() [aguarda]</text>
+          <!-- ==================== HEADER: ACTORS & NODES ==================== -->
+          <!-- Col 1: Server Player ('O') -->
+          <circle cx="85" cy="14" r="7" fill="none" stroke="#38bdf8" stroke-width="1.8"/>
+          <line x1="85" y1="21" x2="85" y2="35" stroke="#38bdf8" stroke-width="1.8"/>
+          <line x1="75" y1="26" x2="95" y2="26" stroke="#38bdf8" stroke-width="1.8"/>
+          <line x1="85" y1="35" x2="76" y2="47" stroke="#38bdf8" stroke-width="1.8"/>
+          <line x1="85" y1="35" x2="94" y2="47" stroke="#38bdf8" stroke-width="1.8"/>
+          <text x="85" y="58" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle" font-family="sans-serif">Jogador ('O')</text>
 
-          <rect x="690" y="70" width="180" height="46" rx="4" fill="#070d1a" stroke="#334155"/>
-          <text x="780" y="89" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="monospace">socket()</text>
-          <text x="780" y="105" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">connect(IP, 6000)</text>
+          <!-- Col 2: Server TCP Node (Port 6000) -->
+          <rect x="205" y="10" width="180" height="34" rx="6" fill="#131d35" stroke="#38bdf8" stroke-width="1.5"/>
+          <text x="295" y="32" fill="#38bdf8" font-size="12" font-weight="700" text-anchor="middle" font-family="sans-serif">Servidor TCP (Porta 6000)</text>
 
-          <!-- Arrow Connect -->
-          <line x1="690" y1="95" x2="260" y2="95" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
-          <text x="475" y="86" fill="#e2e8f0" font-size="12" font-weight="600" text-anchor="middle" font-family="sans-serif">1. Conexão TCP estabelecida (connect ➔ accept)</text>
+          <!-- Col 3: Client TCP Node -->
+          <rect x="555" y="10" width="180" height="34" rx="6" fill="#131d35" stroke="#34d399" stroke-width="1.5"/>
+          <text x="645" y="32" fill="#34d399" font-size="12" font-weight="700" text-anchor="middle" font-family="sans-serif">Cliente TCP</text>
 
-          <!-- Step 2: Coin Toss -->
-          <rect x="70" y="135" width="180" height="34" rx="4" fill="#070d1a" stroke="#334155"/>
-          <text x="160" y="156" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">Sorteio: rand() % 2</text>
+          <!-- Col 4: Client Player ('X') -->
+          <circle cx="855" cy="14" r="7" fill="none" stroke="#34d399" stroke-width="1.8"/>
+          <line x1="855" y1="21" x2="855" y2="35" stroke="#34d399" stroke-width="1.8"/>
+          <line x1="845" y1="26" x2="865" y2="26" stroke="#34d399" stroke-width="1.8"/>
+          <line x1="855" y1="35" x2="846" y2="47" stroke="#34d399" stroke-width="1.8"/>
+          <line x1="855" y1="35" x2="864" y2="47" stroke="#34d399" stroke-width="1.8"/>
+          <text x="855" y="58" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle" font-family="sans-serif">Jogador ('X')</text>
 
-          <rect x="690" y="135" width="180" height="34" rx="4" fill="#070d1a" stroke="#334155"/>
-          <text x="780" y="156" fill="#34d399" font-size="11" text-anchor="middle" font-family="monospace">recv() [aguarda sorteio]</text>
+          <!-- ==================== STEP 1: CONEXÃO TCP ==================== -->
+          <rect x="215" y="66" width="160" height="20" rx="4" fill="#070d1a" stroke="#334155"/>
+          <text x="295" y="80" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="monospace">socket(), bind(), listen()</text>
 
-          <line x1="250" y1="152" x2="680" y2="152" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
-          <text x="475" y="144" fill="#34d399" font-size="12" font-weight="bold" text-anchor="middle" font-family="monospace">2. START:SERVER\n  ou  START:CLIENT\n</text>
+          <rect x="565" y="66" width="160" height="20" rx="4" fill="#070d1a" stroke="#334155"/>
+          <text x="645" y="80" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="monospace">socket(), connect()</text>
 
-          <!-- Step 3: Turn Loop Box -->
-          <rect x="140" y="195" width="660" height="135" rx="6" fill="rgba(56, 189, 248, 0.04)" stroke="#38bdf8" stroke-width="1" stroke-dasharray="3"/>
-          <text x="155" y="214" fill="#38bdf8" font-size="11" font-weight="bold" font-family="sans-serif">RODADAS DO JOGO (while jogo_ativo)</text>
+          <!-- Handshake Arrow -->
+          <line x1="645" y1="102" x2="295" y2="102" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrow-blue)"/>
+          <circle cx="470" cy="94" r="8" fill="#38bdf8"/>
+          <text x="470" y="97.5" fill="#0b1120" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">1</text>
+          <text x="470" y="86" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle" font-family="sans-serif">Three-Way TCP Handshake</text>
 
-          <!-- Turn 1: Move from Server -->
-          <line x1="250" y1="235" x2="680" y2="235" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
-          <text x="475" y="227" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle" font-family="monospace">send("MOVE:5\n")  ─────────►  recv() marca 'O'</text>
+          <rect x="205" y="112" width="180" height="20" rx="4" fill="#070d1a" stroke="#38bdf8"/>
+          <text x="295" y="126" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">accept() conexão estabelecida</text>
 
-          <!-- Turn 2: Move from Client -->
-          <line x1="690" y1="285" x2="260" y2="285" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
-          <text x="475" y="277" fill="#34d399" font-size="12" font-weight="bold" text-anchor="middle" font-family="monospace">recv() marca 'X'  ◄─────────  send("MOVE:1\n")</text>
+          <!-- ==================== STEP 2: SORTEIO DA MOEDA ==================== -->
+          <rect x="215" y="138" width="160" height="20" rx="4" fill="#070d1a" stroke="#fbbf24"/>
+          <text x="295" y="152" fill="#fbbf24" font-size="10" font-weight="bold" text-anchor="middle" font-family="monospace">Sorteio: rand() % 2</text>
 
-          <text x="475" y="318" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="sans-serif">Cada nó confere vitória ou empate a cada jogada</text>
+          <line x1="295" y1="168" x2="645" y2="168" stroke="#34d399" stroke-width="1.8" marker-end="url(#arrow-green)"/>
+          <circle cx="470" cy="160" r="8" fill="#34d399"/>
+          <text x="470" y="163.5" fill="#0b1120" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">2</text>
+          <text x="470" y="152" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle" font-family="monospace">START:SERVER  ou  START:CLIENT</text>
 
-          <!-- Step 4: Teardown -->
-          <rect x="70" y="355" width="180" height="42" rx="4" fill="#070d1a" stroke="#334155"/>
-          <text x="160" y="373" fill="#e2e8f0" font-size="11" text-anchor="middle" font-family="monospace">closesocket(client_sd)</text>
-          <text x="160" y="389" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="monospace">WSACleanup()</text>
+          <!-- ==================== STEP 3: LOOP DE TURNOS ==================== -->
+          <rect x="30" y="190" width="880" height="162" rx="6" fill="rgba(56, 189, 248, 0.03)" stroke="#38bdf8" stroke-width="1" stroke-dasharray="3"/>
+          <rect x="30" y="190" width="46" height="17" rx="3" fill="#1e293b"/>
+          <text x="53" y="202" fill="#38bdf8" font-size="10" font-weight="700" text-anchor="middle" font-family="sans-serif">loop</text>
+          <text x="86" y="202" fill="#94a3b8" font-size="11" font-weight="600" font-family="sans-serif">[Ciclo de Rodadas até Vitória ou Empate]</text>
 
-          <rect x="690" y="355" width="180" height="42" rx="4" fill="#070d1a" stroke="#334155"/>
-          <text x="780" y="373" fill="#e2e8f0" font-size="11" text-anchor="middle" font-family="monospace">closesocket(sd)</text>
-          <text x="780" y="389" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="monospace">WSACleanup()</text>
+          <!-- 3.1: Jogada do Servidor -->
+          <line x1="85" y1="225" x2="295" y2="225" stroke="#94a3b8" stroke-width="1.3" marker-end="url(#arrow-gray)"/>
+          <circle cx="190" cy="217" r="7" fill="#38bdf8"/>
+          <text x="190" y="220.5" fill="#0b1120" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">3</text>
+          <text x="190" y="210" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="sans-serif">Digita célula (1-9)</text>
 
-          <line x1="250" y1="375" x2="680" y2="375" stroke="#fbbf24" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow-amber)"/>
-          <text x="475" y="367" fill="#fbbf24" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">4. Fim de jogo: Encerramento limpo das conexões</text>
+          <line x1="295" y1="244" x2="645" y2="244" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+          <circle cx="470" cy="236" r="8" fill="#38bdf8"/>
+          <text x="470" y="239.5" fill="#0b1120" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">4</text>
+          <text x="470" y="228" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle" font-family="monospace">MOVE:&lt;N&gt;\n</text>
+
+          <rect x="545" y="253" width="200" height="18" rx="3" fill="#070d1a" stroke="#334155"/>
+          <text x="645" y="266" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="sans-serif">Renderiza tabuleiro e avalia estado</text>
+
+          <!-- 3.2: Jogada do Cliente -->
+          <line x1="855" y1="290" x2="645" y2="290" stroke="#94a3b8" stroke-width="1.3" marker-end="url(#arrow-gray)"/>
+          <circle cx="750" cy="282" r="7" fill="#34d399"/>
+          <text x="750" y="285.5" fill="#0b1120" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">5</text>
+          <text x="750" y="275" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="sans-serif">Digita célula (1-9)</text>
+
+          <line x1="645" y1="309" x2="295" y2="309" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
+          <circle cx="470" cy="301" r="8" fill="#34d399"/>
+          <text x="470" y="304.5" fill="#0b1120" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">6</text>
+          <text x="470" y="293" fill="#34d399" font-size="12" font-weight="bold" text-anchor="middle" font-family="monospace">MOVE:&lt;N&gt;\n</text>
+
+          <rect x="195" y="318" width="200" height="18" rx="3" fill="#070d1a" stroke="#334155"/>
+          <text x="295" y="331" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="sans-serif">Renderiza tabuleiro e avalia estado</text>
+
+          <!-- ==================== STEP 4: FINALIZAÇÃO ==================== -->
+          <rect x="255" y="366" width="430" height="22" rx="4" fill="#070d1a" stroke="#334155"/>
+          <text x="470" y="381" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="sans-serif">Validação local independente (vitória ou empate)</text>
+
+          <rect x="255" y="396" width="430" height="24" rx="4" fill="#131d35" stroke="#fbbf24" stroke-width="1.2"/>
+          <text x="470" y="412" fill="#fbbf24" font-size="11" font-weight="700" text-anchor="middle" font-family="monospace">Encerramento gracioso: closesocket(), WSACleanup()</text>
         </svg>
       </div>
     </section>
